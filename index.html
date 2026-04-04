@@ -55,7 +55,32 @@
       grid-template-columns: 340px 1fr;
       gap:16px;
       align-items:start;
+      transition:grid-template-columns .22s ease;
     }
+    .layout.sidebar-collapsed{
+      grid-template-columns: 0px 1fr;
+    }
+    .layout.sidebar-collapsed .profile{
+      display:none;
+    }
+
+    /* ── sidebar toggle (root) ── */
+    .sidebar-toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      padding:7px 13px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.72);
+      backdrop-filter: blur(10px);
+      cursor:pointer;
+      font-size:12px;
+      color:var(--ink);
+      white-space:nowrap;
+      transition:.12s;
+    }
+    .sidebar-toggle:hover{border-color:rgba(135,191,255,.65)}
 
     .card{
       border:1px solid var(--line);
@@ -192,6 +217,10 @@
           <div><span>AI · Paper review · Projects (KR/EN)</span></div>
         </div>
       </div>
+      <button class="sidebar-toggle" id="sidebarToggle" title="사이드바 숨기기/보이기">
+        <span id="toggleIcon">◀</span>
+        <span id="toggleLabel">프로필 숨기기</span>
+      </button>
       <div class="meta">KIKI Archive</div>
     </div>
 
@@ -274,6 +303,34 @@
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    // ── sidebar toggle ──────────────────────────────────────────────────────
+    const STORAGE_KEY = "root_sidebar_hidden";
+    const layoutEl = document.querySelector(".layout");
+    const toggleBtn = document.getElementById("sidebarToggle");
+    const toggleIcon = document.getElementById("toggleIcon");
+    const toggleLabel = document.getElementById("toggleLabel");
+
+    function applySidebarState(hidden) {
+      if (hidden) {
+        layoutEl.classList.add("sidebar-collapsed");
+        toggleIcon.textContent = "▶";
+        toggleLabel.textContent = "프로필 보이기";
+      } else {
+        layoutEl.classList.remove("sidebar-collapsed");
+        toggleIcon.textContent = "◀";
+        toggleLabel.textContent = "프로필 숨기기";
+      }
+    }
+
+    applySidebarState(localStorage.getItem(STORAGE_KEY) === "1");
+
+    toggleBtn.addEventListener("click", () => {
+      const nowHidden = !layoutEl.classList.contains("sidebar-collapsed");
+      localStorage.setItem(STORAGE_KEY, nowHidden ? "1" : "0");
+      applySidebarState(nowHidden);
+    });
+    // ────────────────────────────────────────────────────────────────────────
   </script>
 </body>
 </html>

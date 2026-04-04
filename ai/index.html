@@ -50,7 +50,6 @@
     .crumb-link:hover{border-color:rgba(135,191,255,.65)}
     .crumb-sep{color:var(--muted);font-size:12px}
     .page-title{
-      margin-left:auto;
       font-size:13px;font-weight:700;
       color:var(--muted);
     }
@@ -61,6 +60,10 @@
       grid-template-columns:300px 1fr;
       flex:1;
       min-height:0;
+      transition:grid-template-columns .22s ease;
+    }
+    .body.sidebar-collapsed{
+      grid-template-columns:0px 1fr;
     }
 
     /* ── left list panel ── */
@@ -70,7 +73,29 @@
       display:flex;
       flex-direction:column;
       overflow:hidden;
+      transition:width .22s ease;
     }
+    .body.sidebar-collapsed .sidebar{
+      border-right:none;
+    }
+
+    /* ── sidebar toggle button ── */
+    .sidebar-toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.85);
+      cursor:pointer;
+      font-size:12px;
+      color:var(--ink);
+      white-space:nowrap;
+      transition:.12s;
+      margin-left:auto;
+    }
+    .sidebar-toggle:hover{border-color:rgba(135,191,255,.65)}
     .sidebar-head{
       padding:12px 12px 8px;
       border-bottom:1px solid var(--line);
@@ -135,7 +160,9 @@
     @media(max-width:700px){
       body{height:auto}
       .body{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+      .body.sidebar-collapsed{grid-template-columns:1fr;grid-template-rows:0px 1fr}
       .sidebar{border-right:none;border-bottom:1px solid var(--line);max-height:260px}
+      .body.sidebar-collapsed .sidebar{max-height:0;border-bottom:none}
       .viewer iframe{height:60vh}
     }
   </style>
@@ -147,6 +174,10 @@
     <span class="crumb-sep">/</span>
     <span class="crumb-sep" style="font-weight:700;color:var(--ink)">AI</span>
     <div class="page-title">KIKI Archive · AI</div>
+    <button class="sidebar-toggle" id="sidebarToggle" title="사이드바 숨기기/보이기">
+      <span id="toggleIcon">◀</span>
+      <span id="toggleLabel">목록 숨기기</span>
+    </button>
   </nav>
 
   <div class="body">
@@ -250,6 +281,35 @@
     }
 
     qEl.addEventListener("input", renderList);
+
+    // ── sidebar toggle ──────────────────────────────────────────────────────
+    const STORAGE_KEY = "ai_sidebar_hidden";
+    const bodyEl = document.querySelector(".body");
+    const toggleBtn = document.getElementById("sidebarToggle");
+    const toggleIcon = document.getElementById("toggleIcon");
+    const toggleLabel = document.getElementById("toggleLabel");
+
+    function applySidebarState(hidden) {
+      if (hidden) {
+        bodyEl.classList.add("sidebar-collapsed");
+        toggleIcon.textContent = "▶";
+        toggleLabel.textContent = "목록 보이기";
+      } else {
+        bodyEl.classList.remove("sidebar-collapsed");
+        toggleIcon.textContent = "◀";
+        toggleLabel.textContent = "목록 숨기기";
+      }
+    }
+
+    // restore from localStorage
+    applySidebarState(localStorage.getItem(STORAGE_KEY) === "1");
+
+    toggleBtn.addEventListener("click", () => {
+      const nowHidden = !bodyEl.classList.contains("sidebar-collapsed");
+      localStorage.setItem(STORAGE_KEY, nowHidden ? "1" : "0");
+      applySidebarState(nowHidden);
+    });
+    // ────────────────────────────────────────────────────────────────────────
 
     // deep-link via hash
     const hash = decodeURIComponent((location.hash || "").slice(1));

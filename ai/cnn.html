@@ -53,9 +53,9 @@ h1{font-size:17px;font-weight:600;margin-bottom:1.25rem}
 </style>
 </head>
 <body>
-<nav style="margin-bottom:1rem;display:flex;gap:8px;flex-wrap:wrap">
-  <a href="/" style="display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid #ccc;background:#fff;color:#1a1a1a;text-decoration:none;font-size:13px;">← Home</a>
-  <a href="/ai/" style="display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid rgba(135,191,255,.6);background:rgba(135,191,255,.12);color:#1a1a1a;text-decoration:none;font-size:13px;">← AI</a>
+<nav id="standalone-nav" style="margin-bottom:1rem;display:flex;gap:8px;flex-wrap:wrap">
+  <a href="/" target="_top" style="display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid #ccc;background:#fff;color:#1a1a1a;text-decoration:none;font-size:13px;">← Home</a>
+  <a href="/ai/" target="_top" style="display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid rgba(135,191,255,.6);background:rgba(135,191,255,.12);color:#1a1a1a;text-decoration:none;font-size:13px;">← AI</a>
 </nav>
 <div class="wrapper">
 <h1>CNN Shape 변환 해설 — CIFAR-10 &amp; 한글 감성분석 (Keras vs PyTorch)</h1>
@@ -200,6 +200,12 @@ function selTrain(t,idx){
 }
 
 render('cifar');
+
+// Hide standalone nav when viewed inside an iframe (split-view mode)
+if (window.self !== window.top) {
+  var nav = document.getElementById('standalone-nav');
+  if (nav) nav.style.display = 'none';
+}
 </script>
 </body>
 </html>

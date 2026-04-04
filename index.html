@@ -140,27 +140,10 @@
     }
     .hero p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
 
-    .sect{margin-top:12px}
-    .sectHead{
-      display:flex;align-items:baseline;justify-content:space-between;gap:10px;
-      margin:10px 0 10px;
-    }
-    .sectHead h3{
-      margin:0;
-      font-size:14px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:#2a3950;
-    }
-    .sectHead .hint{color:var(--muted);font-size:12px}
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap:12px;
-    }
-    .proj{
-      padding:14px;
+    .sections{display:flex;flex-direction:column;gap:10px}
+    .section-btn{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:14px 16px;
       border-radius:16px;
       border:1px solid var(--line);
       background:rgba(255,255,255,.82);
@@ -168,25 +151,23 @@
       transition:.15s;
       position:relative;overflow:hidden;
     }
-    .proj:before{
+    .section-btn:before{
       content:"";
       position:absolute; inset:-46px -46px auto auto;
       width:160px;height:160px;
       background: radial-gradient(circle at 30% 30%, rgba(135,191,255,.55), transparent 60%);
       transform: rotate(18deg);
     }
-    .proj:hover{transform:translateY(-2px);border-color:rgba(135,191,255,.72)}
-    .ptitle{position:relative;margin:0 0 6px;font-weight:700;font-size:15px}
-    .pdesc{position:relative;margin:0 0 10px;color:var(--muted);font-size:13px;line-height:1.55;min-height:40px}
-    .tags{position:relative;display:flex;flex-wrap:wrap;gap:8px}
-    .tag{
-      font-size:11px;
-      padding:6px 9px;
-      border-radius:999px;
-      border:1px solid rgba(135,191,255,.35);
-      background: rgba(135,191,255,.10);
-      color:#2a3950;
+    .section-btn:hover{transform:translateY(-2px);border-color:rgba(135,191,255,.72)}
+    .section-btn-title{
+      position:relative;
+      font-family: Gaegu, Pretendard, sans-serif;
+      font-size:22px;
+      font-weight:700;
+      margin:0 0 4px;
     }
+    .section-btn-desc{position:relative;color:var(--muted);font-size:13px}
+    .section-btn-arrow{position:relative;font-size:20px;color:rgba(135,191,255,.9)}
 
     .footer{
       margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
@@ -246,51 +227,42 @@
       <!-- RIGHT -->
       <main class="card main">
         <section class="hero">
-          <h2>AI</h2>
+          <h2>KIKI Archive</h2>
+          <p>AI공부 기록 + 프로젝트정리</p>
         </section>
 
-        <!-- AI -->
-        <section class="sect">
-          <div class="sectHead">
-            <h3>AI</h3>
-          </div>
-          <div class="grid">
-            <a class="proj" href="/projects/ai/cnn/">
-              <h4 class="ptitle">CNN Shape Guide</h4>
-              <p class="pdesc">CIFAR-10 & Korean sentiment CNN — Keras vs PyTorch, shape 흐름 + 학습 루프.</p>
-              <div class="tags">
-                <span class="tag">CNN</span>
-                <span class="tag">CIFAR-10</span>
-                <span class="tag">Sentiment</span>
-                <span class="tag">Keras</span>
-                <span class="tag">PyTorch</span>
-              </div>
-            </a>
+        <div class="sections">
+          <!-- AI 섹션 -->
+          <a class="section-btn" href="/ai/">
+            <div>
+              <div class="section-btn-title">AI</div>
+              <div class="section-btn-desc">CNN · 딥러닝 · Keras · PyTorch 학습 기록</div>
+            </div>
+            <div class="section-btn-arrow">→</div>
+          </a>
 
-          </div>
-        </section>
+          <!--
+          Review 섹션 (콘텐츠 추가 후 주석 해제)
+          <a class="section-btn" href="/review/">
+            <div>
+              <div class="section-btn-title">Review</div>
+              <div class="section-btn-desc">논문 리뷰</div>
+            </div>
+            <div class="section-btn-arrow">→</div>
+          </a>
+          -->
 
-        <!--
-        논문리뷰 섹션 (콘텐츠 준비 후 주석 해제)
-        <section class="sect">
-          <div class="sectHead">
-            <h3>논문리뷰</h3>
-          </div>
-          <div class="grid">
-          </div>
-        </section>
-        -->
-
-        <!--
-        Project 섹션 (콘텐츠 준비 후 주석 해제)
-        <section class="sect">
-          <div class="sectHead">
-            <h3>Project</h3>
-          </div>
-          <div class="grid">
-          </div>
-        </section>
-        -->
+          <!--
+          Project 섹션 (콘텐츠 추가 후 주석 해제)
+          <a class="section-btn" href="/project/">
+            <div>
+              <div class="section-btn-title">Project</div>
+              <div class="section-btn-desc">프로젝트 정리</div>
+            </div>
+            <div class="section-btn-arrow">→</div>
+          </a>
+          -->
+        </div>
 
         <div class="footer">
           <div>© <span id="y"></span> KIKI</div>

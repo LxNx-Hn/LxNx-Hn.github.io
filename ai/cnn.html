@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNN 해설 — CIFAR-10 & 한글 감성분석 (Keras vs PyTorch)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;padding:1.5rem}
+h1{font-size:17px;font-weight:600;margin-bottom:1.25rem}
+.tabs{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap}
+.tab{padding:8px 20px;border:1px solid #ccc;border-radius:8px;cursor:pointer;font-size:13px;color:#555;background:#fff;transition:0.15s}
+.tab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a;font-weight:500}
+.stabs{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
+.stab{padding:5px 14px;border:1px solid #ccc;border-radius:20px;cursor:pointer;font-size:11px;color:#555;background:#fff;transition:0.15s}
+.stab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a;font-weight:500}
+.slabel{font-size:10px;font-weight:600;color:#888;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.pipe{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:4px 0 14px;scrollbar-width:thin}
+.nwrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0;cursor:pointer}
+.nbox{padding:8px 9px;border-radius:8px;text-align:center;width:84px;border:1px solid transparent;transition:0.15s}
+.nbox:hover{filter:brightness(0.94)}
+.nbox.sel{border-width:2px!important}
+.nname{font-size:10px;font-weight:600;line-height:1.3;word-break:break-word}
+.nshape{font-size:9px;font-family:'Courier New',monospace;margin-top:3px;opacity:.75}
+.arr{color:#bbb;padding:0 2px;margin-top:16px;font-size:14px;flex-shrink:0}
+.detail{background:#fff;border:1px solid #e5e5df;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem;min-height:80px}
+.dtitle{font-size:14px;font-weight:600;margin-bottom:6px}
+.dexplain{font-size:12px;color:#555;line-height:1.7;margin-bottom:10px}
+.calc{font-size:11px;font-family:'Courier New',monospace;background:#f8f7f2;border:1px solid #e5e5df;border-radius:6px;padding:9px 12px;margin-bottom:10px;line-height:1.7;white-space:pre;overflow-x:auto}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.clabel{font-size:9px;font-weight:700;color:#888;margin-bottom:5px;text-transform:uppercase;letter-spacing:.07em}
+.code{background:#f8f7f2;border:1px solid #e5e5df;border-radius:6px;padding:10px 12px;font-family:'Courier New',monospace;font-size:11px;line-height:1.7;white-space:pre;overflow-x:auto;min-height:52px}
+.psteps{margin-bottom:1.25rem}
+.pstep{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.pnum{width:22px;height:22px;border-radius:50%;background:#f0f0ea;border:1px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#555;flex-shrink:0;margin-top:2px}
+.ptitle{font-size:13px;font-weight:600;margin-bottom:4px}
+.pdesc{font-size:12px;color:#555;line-height:1.6;margin-bottom:9px}
+.tsect{display:none}
+.tsect.active{display:block}
+.subsect{display:none}
+.subsect.active{display:block}
+.hint{font-size:12px;color:#bbb;text-align:center;padding:1.5rem 0}
+.wrapper{max-width:860px;margin:0 auto}
+.train-pipe{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:4px 0 14px}
+.tnwrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0;cursor:pointer}
+.tnbox{padding:8px 10px;border-radius:8px;text-align:center;width:100px;border:1px solid rgba(0,184,148,0.35);background:rgba(0,184,148,0.06);transition:0.15s}
+.tnbox:hover{filter:brightness(0.94)}
+.tnbox.sel{border:2px solid #00b894}
+.tnstep{font-size:9px;font-weight:700;color:#00b894;margin-bottom:3px}
+.tnname{font-size:10px;font-weight:600;line-height:1.3;word-break:break-word;color:#1a1a1a}
+.tarr{color:#bbb;padding:0 2px;margin-top:17px;font-size:14px;flex-shrink:0}
+@media(max-width:520px){.cgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav style="margin-bottom:1rem;display:flex;gap:8px;flex-wrap:wrap">
+  <a href="/" style="display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid #ccc;background:#fff;color:#1a1a1a;text-decoration:none;font-size:13px;">← Home</a>
+  <a href="/ai/" style="display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid rgba(135,191,255,.6);background:rgba(135,191,255,.12);color:#1a1a1a;text-decoration:none;font-size:13px;">← AI</a>
+</nav>
+<div class="wrapper">
+<h1>CNN Shape 변환 해설 — CIFAR-10 &amp; 한글 감성분석 (Keras vs PyTorch)</h1>
+<div class="tabs">
+  <button class="tab active" onclick="switchTopic('cifar')">CIFAR-10 CNN</button>
+  <button class="tab" onclick="switchTopic('sentiment')">한글 감성분석 CNN</button>
+</div>
+<div id="cifar" class="tsect active"></div>
+<div id="sentiment" class="tsect"></div>
+</div>
+<script>
+const T={
+cifar:{
+  preproc:[
+    {title:"데이터 로드",desc:"CIFAR-10 = 훈련 50,000장 + 테스트 10,000장. 32×32 컬러, 10개 클래스.",
+     keras:"(x_train, y_train), (x_test, y_test) =\n    cifar10.load_data()\n# x: (50000, 32, 32, 3)  uint8",
+     pytorch:"import torchvision.transforms as T\ntf = T.Compose([\n    T.ToTensor(),           # (H,W,C)→(C,H,W), 0~1\n    T.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))])\ntrain = torchvision.datasets.CIFAR10(\n    root='./data', train=True,\n    download=True, transform=tf)"},
+    {title:"픽셀 정규화",desc:"0~255 정수를 0.0~1.0 실수로. Keras는 나눗셈, PyTorch는 transforms에 포함.",
+     keras:"x_train = x_train / 255.0\nx_test  = x_test  / 255.0\n# (50000,32,32,3) float32",
+     pytorch:"# ToTensor()가 자동으로 /255 수행\n# Normalize()로 -1~1로 추가 정규화\n# 별도 나눗셈 코드 불필요"},
+    {title:"레이블 One-hot",desc:"레이블 3 → [0,0,0,1,0,0,0,0,0,0]. PyTorch CrossEntropyLoss는 정수 그대로.",
+     keras:"y_train = to_categorical(y_train)\n# (50000,1) → (50000,10)  float32",
+     pytorch:"# CrossEntropyLoss가 정수 레이블 직접 처리\n# one-hot 변환 불필요\n# y shape: (N,)  dtype=torch.long"}
+  ],
+  layers:[
+    {name:"Input",shape:"32×32×3",c:"#888",bg:"rgba(128,128,128,0.08)",title:"Input — 입력 이미지",exp:"원본 CIFAR-10 이미지. 가로 32px, 세로 32px, RGB 채널 3개.",calc:"Shape: (batch, 32, 32, 3)\nKeras:   (N, H, W, C)  ← 채널 마지막\nPyTorch: (N, C, H, W)  ← 채널 먼저!",keras:"# input_shape=(32, 32, 3) 으로 명시",pytorch:"# 텐서 shape: (N, 3, 32, 32)\n# Keras와 채널 위치가 반대!"},
+    {name:"Conv2D(32) 3×3",shape:"30×30×32",c:"#6c5ce7",bg:"rgba(108,92,231,0.08)",title:"Conv2D(32, 3×3, relu) — 1번째 합성곱",exp:"3×3 필터 32개로 이미지를 스캔. 선/가장자리 같은 단순 패턴 감지.",calc:"출력 = 입력 - 커널 + 1 = 32-3+1 = 30\nShape: (batch, 30, 30, 32)\n파라미터: 3×3×3×32 + 32 = 896",keras:"layers.Conv2D(32, (3,3), activation='relu',\n    input_shape=(32,32,3))",pytorch:"nn.Conv2d(3, 32, kernel_size=3)\nnn.ReLU()"},
+    {name:"MaxPool 2×2",shape:"15×15×32",c:"#e17055",bg:"rgba(225,112,85,0.08)",title:"MaxPooling2D(2×2) — 1번째 풀링",exp:"2×2 칸마다 최댓값만 남김. 크기 절반, 이동 불변성.",calc:"= floor(30/2) = 15\nShape: (batch, 15, 15, 32)\n파라미터 없음",keras:"layers.MaxPooling2D((2,2))",pytorch:"nn.MaxPool2d(kernel_size=2, stride=2)"},
+    {name:"Conv2D(64) 3×3",shape:"13×13×64",c:"#6c5ce7",bg:"rgba(108,92,231,0.08)",title:"Conv2D(64, 3×3) — 2번째 합성곱",exp:"필터 32→64개. 복잡한 패턴 학습.",calc:"= 15-3+1 = 13\nShape: (batch, 13, 13, 64)\n파라미터: 3×3×32×64+64 = 18,496",keras:"layers.Conv2D(64, (3,3), activation='relu')",pytorch:"nn.Conv2d(32, 64, kernel_size=3)\nnn.ReLU()"},
+    {name:"MaxPool 2×2",shape:"6×6×64",c:"#e17055",bg:"rgba(225,112,85,0.08)",title:"MaxPooling2D(2×2) — 2번째 풀링",exp:"13은 홀수이므로 floor(13/2)=6.",calc:"= floor(13/2) = 6\nShape: (batch, 6, 6, 64)",keras:"layers.MaxPooling2D((2,2))",pytorch:"nn.MaxPool2d(kernel_size=2, stride=2)"},
+    {name:"Conv2D(64) 3×3",shape:"4×4×64",c:"#6c5ce7",bg:"rgba(108,92,231,0.08)",title:"Conv2D(64, 3×3) — 3번째 합성곱",exp:"고수준 개념(비행기 vs 자동차) 인코딩.",calc:"= 6-3+1 = 4\nShape: (batch, 4, 4, 64)\n파라미터: 3×3×64×64+64 = 36,928",keras:"layers.Conv2D(64, (3,3), activation='relu')",pytorch:"nn.Conv2d(64, 64, kernel_size=3)\nnn.ReLU()"},
+    {name:"Flatten",shape:"1024",c:"#d4a017",bg:"rgba(212,160,23,0.09)",title:"Flatten — 3D → 1D",exp:"4×4×64를 1D 벡터로 펼침. Dense 입력용.",calc:"4×4×64 = 1,024\nShape: (batch, 4, 4, 64) → (batch, 1024)",keras:"layers.Flatten()",pytorch:"x = x.view(x.size(0), -1)"},
+    {name:"Dense(64) relu",shape:"64",c:"#0984e3",bg:"rgba(9,132,227,0.08)",title:"Dense(64, relu) — 완전연결층",exp:"1024개를 64개로 연결. 전체 패턴 조합.",calc:"Shape: (batch, 1024) → (batch, 64)\n파라미터: 1024×64+64 = 65,600",keras:"layers.Dense(64, activation='relu')",pytorch:"nn.Linear(1024, 64)\nnn.ReLU()"},
+    {name:"Dense(10) softmax",shape:"10",c:"#00b894",bg:"rgba(0,184,148,0.08)",title:"Dense(10, softmax) — 출력층",exp:"10개 클래스 확률 출력. 합이 항상 1.0.",calc:"Shape: (batch, 10)\n예: [0.02, 0.01, 0.80, ...] → 클래스 2",keras:"layers.Dense(10, activation='softmax')",pytorch:"nn.Linear(64, 10)\n# CrossEntropyLoss가 softmax 내장\n# 별도 Softmax() 붙이면 이중 적용!"}
+  ],
+  training:[
+    {step:"STEP 1",name:"손실함수 & 옵티마이저",exp:"학습 방법을 정의하는 단계. Keras는 model.compile() 한 줄로 끝나지만, PyTorch는 손실함수와 옵티마이저를 별도로 정의합니다.",diff:"Keras: 손실함수 이름을 문자열로 전달\nPyTorch: 객체를 직접 생성, softmax가 CrossEntropyLoss에 내장됨",keras:"model.compile(\n    optimizer='adam',\n    loss='categorical_crossentropy',\n    metrics=['accuracy']\n)",pytorch:"import torch.optim as optim\n\ncriterion = nn.CrossEntropyLoss()\n# ↑ softmax + log + NLLLoss 모두 포함\n\noptimizer = optim.Adam(\n    model.parameters(), lr=0.001\n)"},
+    {step:"STEP 2",name:"데이터 텐서 형태",exp:"Keras는 numpy 배열을 그대로 받지만, PyTorch는 DataLoader로 감싸서 배치를 자동 생성합니다. 채널 순서도 다릅니다.",diff:"Keras 입력: (N, H, W, C) = (N, 32, 32, 3)  numpy\nPyTorch 입력: (N, C, H, W) = (N, 3, 32, 32)  Tensor",keras:"# numpy array 그대로 전달\n# shape: (50000, 32, 32, 3)\n# dtype: float32\n# 레이블: (50000, 10)  one-hot float",pytorch:"from torch.utils.data import DataLoader\n\ntrainloader = DataLoader(\n    trainset,\n    batch_size=64,\n    shuffle=True\n)\n# 배치: (64, 3, 32, 32) Tensor\n# 레이블: (64,)  LongTensor  ← 정수!"},
+    {step:"STEP 3",name:"학습 루프 구조",exp:"Keras는 에포크/배치 루프를 모두 숨깁니다. PyTorch는 직접 작성해야 합니다. 복잡하지만 학습 과정을 완전히 제어할 수 있습니다.",diff:"Keras: fit() 한 줄 = epoch × batch 루프 전체\nPyTorch: 이중 for 루프를 직접 작성",keras:"model.fit(\n    x_train, y_train,\n    epochs=10,\n    batch_size=64,\n    validation_data=(x_test, y_test)\n)\n# 진행바, loss, accuracy 자동 출력",pytorch:"for epoch in range(10):          # 에포크 루프\n    model.train()                # 학습 모드 ON\n    for inputs, labels in trainloader:  # 배치 루프\n        # → STEP 4 참조"},
+    {step:"STEP 4",name:"역전파 (Backprop) 4단계",exp:"PyTorch 학습의 핵심. Keras는 fit() 내부에서 자동으로 수행하지만, PyTorch는 4단계를 직접 호출해야 합니다.",diff:"① zero_grad: 이전 배치 기울기 누적 방지\n② forward: 예측값 계산\n③ backward: 기울기 계산 (자동 미분)\n④ step: 가중치 업데이트",keras:"# fit() 내부에서 자동 수행됨\n# 사용자가 신경 쓸 필요 없음\n\n# (내부 동작)\n# 1. y_pred = model(x)         순전파\n# 2. loss = criterion(y_pred, y)\n# 3. 기울기 자동 계산\n# 4. optimizer로 가중치 갱신",pytorch:"optimizer.zero_grad()    # ① 기울기 초기화\n\noutputs = model(inputs)  # ② 순전파\nloss = criterion(\n    outputs,     # (64, 10) logit\n    labels       # (64,)    정수\n)\n\nloss.backward()          # ③ 역전파\noptimizer.step()         # ④ 가중치 갱신"},
+    {step:"STEP 5",name:"검증 (Validation)",exp:"검증 시에는 드롭아웃을 끄고 기울기 계산을 비활성화해야 합니다. Keras는 자동, PyTorch는 명시적으로 설정해야 합니다.",diff:"model.eval(): Dropout/BatchNorm 동작 변경\ntorch.no_grad(): 기울기 계산 생략 → 메모리/속도 절약",keras:"# fit()의 validation_data 자동 처리\n\ntest_loss, test_acc =\n    model.evaluate(x_test, y_test)\nprint(f'테스트 정확도: {test_acc:.4f}')",pytorch:"model.eval()                    # 평가 모드\ncorrect = total = 0\n\nwith torch.no_grad():           # 기울기 계산 OFF\n    for inputs, labels in testloader:\n        outputs = model(inputs)\n        _, pred = outputs.max(1)\n        correct += (pred==labels).sum()\n        total   += labels.size(0)\n\nprint(f'정확도: {correct/total:.4f}')"}
+  ]
+},
+sentiment:{
+  preproc:[
+    {title:"형태소 분석",desc:"한국어 공백 분리는 부정확. Okt로 형태소 단위 분리.",keras:"from konlpy.tag import Okt\nokt = Okt()\ntokenized = [okt.morphs(s) for s in sentences]",pytorch:"# 동일하게 KoNLPy 사용\n# 전처리 방식은 프레임워크와 무관"},
+    {title:"정수 인코딩",desc:"단어 → 고유 번호. Tokenizer가 빈도순으로 자동 정렬.",keras:"tokenizer = Tokenizer(num_words=5000)\ntokenizer.fit_on_texts(tokenized)\nseqs = tokenizer.texts_to_sequences(tokenized)",pytorch:"# vocab 딕셔너리 직접 구성\nvocab = {w:i+1 for i,w\n         in enumerate(all_words)}"},
+    {title:"패딩",desc:"maxlen=10으로 통일. 짧으면 앞에 0 채움.",keras:"padded = pad_sequences(sequences, maxlen=10)\n# [4,5,6,7,8] → [0,0,0,0,0,4,5,6,7,8]",pytorch:"padded = torch.zeros(N, 10, dtype=torch.long)\nfor i, s in enumerate(seqs):\n    padded[i, -len(s):] = torch.tensor(s)"}
+  ],
+  layers:[
+    {name:"Input",shape:"(10,)",c:"#888",bg:"rgba(128,128,128,0.08)",title:"Input — 패딩된 토큰",exp:"길이 10의 정수 배열. 0=패딩, 1이상=형태소 ID.",calc:"Shape: (batch, 10)\n각 값: 0~4999 정수",keras:"# pad_sequences 결과\n# shape: (N, 10)  int32",pytorch:"# torch.LongTensor: (N, 10)"},
+    {name:"Embedding",shape:"10×128",c:"#a29bfe",bg:"rgba(162,155,254,0.08)",title:"Embedding(5000, 128)",exp:"정수 ID → 128차원 벡터. 의미 유사한 단어는 가까운 벡터로 학습.",calc:"Shape: (N,10) → (N,10,128)\n파라미터: 5000×128 = 640,000",keras:"Embedding(input_dim=5000,\n         output_dim=128,\n         input_length=10)",pytorch:"nn.Embedding(5000, 128)"},
+    {name:"Conv1D(128) k=5",shape:"6×128",c:"#6c5ce7",bg:"rgba(108,92,231,0.08)",title:"Conv1D(128, k=5, relu)",exp:"5개 형태소 조합 패턴을 128개 필터로 감지.",calc:"= 10-5+1 = 6\nShape: (N,6,128)\n파라미터: 5×128×128+128 = 82,048",keras:"Conv1D(filters=128, kernel_size=5,\n       activation='relu')",pytorch:"nn.Conv1d(128, 128, kernel_size=5)\nnn.ReLU()\n# 주의: (N,128,10)으로 permute 필요"},
+    {name:"GlobalMaxPool",shape:"128",c:"#e17055",bg:"rgba(225,112,85,0.08)",title:"GlobalMaxPooling1D",exp:"6위치 중 채널별 최댓값. 문장 길이 무관 고정 크기.",calc:"(N,6,128) → (N,128)\n파라미터 없음",keras:"GlobalMaxPooling1D()",pytorch:"x, _ = x.max(dim=2)\n# 또는:\nx = F.adaptive_max_pool1d(x,1).squeeze(-1)"},
+    {name:"Dense(10) relu",shape:"10",c:"#0984e3",bg:"rgba(9,132,227,0.08)",title:"Dense(10, relu)",exp:"128개 특징을 10개 중간 표현으로 압축.",calc:"Shape: (N,128) → (N,10)\n파라미터: 128×10+10 = 1,290",keras:"Dense(10, activation='relu')",pytorch:"nn.Linear(128, 10)\nnn.ReLU()"},
+    {name:"Dense(1) sigmoid",shape:"1",c:"#00b894",bg:"rgba(0,184,148,0.08)",title:"Dense(1, sigmoid) — 이진분류",exp:"0~1 확률. 0.5 이상=긍정, 미만=부정.",calc:"Shape: (N,1)\n예: 0.89 → 긍정 89%",keras:"Dense(1, activation='sigmoid')",pytorch:"nn.Linear(10, 1)\nnn.Sigmoid()\n# BCEWithLogitsLoss 쓰면 sigmoid 제거"}
+  ],
+  training:[
+    {step:"STEP 1",name:"손실함수 & 옵티마이저",exp:"이진 분류이므로 손실함수가 다릅니다. PyTorch 권장: BCEWithLogitsLoss (sigmoid 내장, 수치 안정성 좋음).",diff:"binary_crossentropy = BCELoss\nBCEWithLogitsLoss = sigmoid 포함 버전 (권장)",keras:"model.compile(\n    optimizer='adam',\n    loss='binary_crossentropy',\n    metrics=['accuracy']\n)",pytorch:"criterion = nn.BCELoss()\n# 또는 (권장)\ncriterion = nn.BCEWithLogitsLoss()\n# ↑ 마지막 sigmoid 없애고 이걸 쓰면\n#   수치 안정성 더 좋음\n\noptimizer = optim.Adam(\n    model.parameters(), lr=0.001\n)"},
+    {step:"STEP 2",name:"데이터 텐서 형태",exp:"텍스트는 정수 시퀀스. BCELoss를 쓰려면 레이블이 float이어야 합니다. LongTensor(시퀀스) vs FloatTensor(레이블) 혼용 주의.",diff:"Keras 레이블: (N,)  float32\nPyTorch 레이블: (N,) float  ← BCELoss 요구사항\n(CrossEntropyLoss와 달리 Long 아님!)",keras:"# 입력: (N, 10)  int32\n# 레이블: (N,)  float32  [1,1,0,0]",pytorch:"X = torch.LongTensor(padded)    # (N,10)\ny = torch.FloatTensor(labels)   # (N,)  ← float!\n\ndataset = TensorDataset(X, y)\nloader  = DataLoader(dataset,\n    batch_size=2, shuffle=True)"},
+    {step:"STEP 3",name:"학습 루프 구조",exp:"구조는 CIFAR-10과 동일. 이중 for 루프.",diff:"문장(정수 시퀀스) → Embedding → Conv1D → 확률",keras:"model.fit(\n    padded_sequences,\n    labels,\n    epochs=5,\n    batch_size=2\n)\n# 4개 샘플, 배치 2 → 에포크당 2 스텝",pytorch:"for epoch in range(5):\n    model.train()\n    for X_batch, y_batch in loader:\n        # → STEP 4 참조"},
+    {step:"STEP 4",name:"역전파 (Backprop) 4단계",exp:"BCELoss 쓸 때 레이블 shape 주의. 출력이 (N,1)이면 squeeze()로 (N,)으로 맞춰야 합니다.",diff:"출력 shape (N,1) vs 레이블 (N,)\n→ squeeze(1) 로 맞추거나 레이블을 unsqueeze(1)",keras:"# fit() 내부 자동 처리\n# binary_crossentropy 적용\n# sigmoid 출력과 레이블 비교",pytorch:"optimizer.zero_grad()\n\noutputs = model(X_batch)     # (2, 1)\noutputs = outputs.squeeze(1) # (2,)  ← shape 맞춤\nloss = criterion(\n    outputs,   # (2,) float\n    y_batch    # (2,) float\n)\n\nloss.backward()\noptimizer.step()"},
+    {step:"STEP 5",name:"예측 & 검증",exp:"Keras는 model.predict()로 바로 확률 출력. PyTorch는 eval() + no_grad()로 감싸고 0.5 임계값을 직접 적용합니다.",diff:"Keras: predict() → 확률 → > 0.5 비교\nPyTorch: eval() + no_grad() + > 0.5",keras:"predictions = model.predict(padded_sequences)\n# shape: (4, 1)\n\nresult = (predictions > 0.5).astype(int)\nprint(result.flatten())\n# [1 1 0 0]",pytorch:"model.eval()\nwith torch.no_grad():\n    out  = model(X)          # (4, 1)\n    prob = out.squeeze(1)    # (4,)\n    pred = (prob > 0.5).int()\n    print(pred)\n    # tensor([1, 1, 0, 0])"}
+  ]
+}
+};
+
+let cur='cifar';
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function switchTopic(t){
+  cur=t;
+  document.querySelectorAll('.tab').forEach((b,i)=>{
+    b.classList.toggle('active',(i===0&&t==='cifar')||(i===1&&t==='sentiment'))
+  });
+  document.querySelectorAll('.tsect').forEach(s=>s.classList.remove('active'));
+  document.getElementById(t).classList.add('active');
+  render(t);
+}
+
+function switchSub(t,sub){
+  ['preproc','layers','training'].forEach(s=>{
+    document.getElementById(`${t}-${s}`).classList.toggle('active',s===sub);
+  });
+  document.querySelectorAll(`#${t} .stab`).forEach((b,i)=>{
+    b.classList.toggle('active',['preproc','layers','training'][i]===sub);
+  });
+}
+
+function render(t){
+  const d=T[t];
+  const el=document.getElementById(t);
+  let h=`<div class="stabs">
+    <button class="stab active" onclick="switchSub('${t}','preproc')">전처리</button>
+    <button class="stab" onclick="switchSub('${t}','layers')">레이어 & Shape</button>
+    <button class="stab" onclick="switchSub('${t}','training')">학습 과정 (fit)</button>
+  </div>`;
+
+  h+=`<div id="${t}-preproc" class="subsect active"><div class="slabel">전처리 단계</div><div class="psteps">`;
+  d.preproc.forEach((s,i)=>{
+    h+=`<div class="pstep"><div class="pnum">${i+1}</div><div style="flex:1;min-width:0"><div class="ptitle">${esc(s.title)}</div><div class="pdesc">${esc(s.desc)}</div><div class="cgrid"><div><div class="clabel">Keras</div><div class="code">${esc(s.keras)}</div></div><div><div class="clabel">PyTorch</div><div class="code">${esc(s.pytorch)}</div></div></div></div></div>`;
+  });
+  h+=`</div></div>`;
+
+  h+=`<div id="${t}-layers" class="subsect"><div class="slabel">레이어별 Shape 변환 — 클릭</div><div class="pipe">`;
+  d.layers.forEach((l,i)=>{
+    if(i>0) h+=`<div class="arr">›</div>`;
+    h+=`<div class="nwrap" onclick="selLayer('${t}',${i})"><div class="nbox" id="${t}-n${i}" style="background:${l.bg};border-color:${l.c}60"><div class="nname" style="color:${l.c}">${esc(l.name)}</div><div class="nshape">${esc(l.shape)}</div></div></div>`;
+  });
+  h+=`</div><div class="detail" id="${t}-ldet"><div class="hint">↑ 레이어를 클릭하면 상세 설명이 나타납니다</div></div></div>`;
+
+  h+=`<div id="${t}-training" class="subsect"><div class="slabel">학습 과정 — 단계별 클릭</div><div class="train-pipe">`;
+  d.training.forEach((s,i)=>{
+    if(i>0) h+=`<div class="tarr">›</div>`;
+    h+=`<div class="tnwrap" onclick="selTrain('${t}',${i})"><div class="tnbox" id="${t}-t${i}"><div class="tnstep">${esc(s.step)}</div><div class="tnname">${esc(s.name)}</div></div></div>`;
+  });
+  h+=`</div><div class="detail" id="${t}-tdet"><div class="hint">↑ 단계를 클릭하면 Keras vs PyTorch 코드를 비교합니다</div></div></div>`;
+
+  el.innerHTML=h;
+}
+
+function selLayer(t,idx){
+  const d=T[t];
+  const l=d.layers[idx];
+  d.layers.forEach((_,i)=>{
+    const n=document.getElementById(`${t}-n${i}`);
+    if(!n)return;
+    n.classList.toggle('sel',i===idx);
+    n.style.borderColor=i===idx?d.layers[i].c:d.layers[i].c+'60';
+  });
+  document.getElementById(`${t}-ldet`).innerHTML=`<div class="dtitle">${esc(l.title)}</div><div class="dexplain">${esc(l.exp)}</div><div class="calc">${esc(l.calc)}</div><div class="cgrid"><div><div class="clabel">Keras</div><div class="code">${esc(l.keras)}</div></div><div><div class="clabel">PyTorch</div><div class="code">${esc(l.pytorch)}</div></div></div>`;
+}
+
+function selTrain(t,idx){
+  const d=T[t];
+  const s=d.training[idx];
+  d.training.forEach((_,i)=>{
+    const n=document.getElementById(`${t}-t${i}`);
+    if(n) n.classList.toggle('sel',i===idx);
+  });
+  document.getElementById(`${t}-tdet`).innerHTML=`<div class="dtitle">${esc(s.name)}</div><div class="dexplain">${esc(s.exp)}</div><div class="calc">${esc(s.diff)}</div><div class="cgrid"><div><div class="clabel">Keras</div><div class="code">${esc(s.keras)}</div></div><div><div class="clabel">PyTorch</div><div class="code">${esc(s.pytorch)}</div></div></div>`;
+}
+
+render('cifar');
+</script>
+</body>
+</html>

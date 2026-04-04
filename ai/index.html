@@ -18,7 +18,7 @@
       --sidebar-bg:#fdfcf9;
       --shadow:0 4px 24px rgba(18,38,63,.09);
       --radius:14px;
-      --sidebar-w:300px;
+      --sidebar-w:260px;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{
@@ -202,31 +202,6 @@
       min-height:calc(100vh - 48px);
     }
 
-    /* ── Floating "show sidebar" button (fixed, visible only when collapsed) ── */
-    .float-open{
-      position:fixed;
-      top:60px;
-      left:0;
-      z-index:200;
-      display:none;
-      align-items:center;
-      gap:4px;
-      padding:7px 10px 7px 8px;
-      border-radius:0 8px 8px 0;
-      border:1px solid rgba(19,21,26,.15);
-      border-left:none;
-      background:var(--paper);
-      box-shadow:2px 2px 10px rgba(0,0,0,.10);
-      cursor:pointer;
-      font-size:11px;
-      font-family:inherit;
-      color:var(--muted);
-      transition:background .12s, color .12s;
-    }
-    .float-open:hover{background:#f0edea;color:var(--ink)}
-    .body.sidebar-collapsed ~ .float-open,
-    .show-float .float-open{display:inline-flex}
-
     @media(max-width:720px){
       body{height:auto;overflow:auto}
       .body{
@@ -254,7 +229,6 @@
         padding:0 12px;
         margin:0;
       }
-      .float-open{top:auto;bottom:20px;border-radius:8px;border:1px solid rgba(19,21,26,.15);left:auto;right:16px}
     }
   </style>
 </head>
@@ -287,12 +261,6 @@
       </div>
     </section>
   </div>
-
-  <!-- Floating re-open button (visible when sidebar is collapsed) -->
-  <button class="float-open" id="floatOpen" title="목록 열기">
-    <span>☰</span>
-    <span>목록</span>
-  </button>
 
   <script>
     // ──────────────────────────────────────────────────────────────────────
@@ -388,7 +356,6 @@
     const toggleBtn = document.getElementById("sidebarToggle");
     const toggleIcon = document.getElementById("toggleIcon");
     const toggleLabel = document.getElementById("toggleLabel");
-    const floatOpenBtn = document.getElementById("floatOpen");
 
     function applySidebarState(hidden) {
       if (hidden) {
@@ -396,13 +363,11 @@
         topbarEl.classList.add("sidebar-collapsed-state");
         toggleIcon.style.opacity = ".45";
         toggleLabel.textContent = "목록";
-        floatOpenBtn.style.display = "inline-flex";
       } else {
         bodyEl.classList.remove("sidebar-collapsed");
         topbarEl.classList.remove("sidebar-collapsed-state");
         toggleIcon.style.opacity = "1";
         toggleLabel.textContent = "목록";
-        floatOpenBtn.style.display = "none";
       }
     }
 
@@ -415,7 +380,6 @@
     }
 
     toggleBtn.addEventListener("click", toggleSidebar);
-    floatOpenBtn.addEventListener("click", toggleSidebar);
     // ────────────────────────────────────────────────────────────────────────
 
     // deep-link via hash

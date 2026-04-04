@@ -1,0 +1,13 @@
+title: KIKI Archive
+description: AI공부 기록 + 프로젝트정리
+baseurl: ""
+url: "https://lxnx-hn.github.io"
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+permalink: pretty
+
+exclude:
+  - README.md

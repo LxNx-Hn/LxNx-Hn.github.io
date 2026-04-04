@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CNN Posts — KIKI Archive</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --sky:#87BFFF;
+      --ink:#13151a;
+      --muted:#5b6472;
+      --paper:#ffffff;
+      --paper-2:#f4f8ff;
+      --line:rgba(19,21,26,.10);
+      --shadow:0 10px 30px rgba(18,38,63,.10);
+      --radius:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      color:var(--ink);
+      background:
+        radial-gradient(900px 520px at 8% 12%, rgba(135,191,255,.30), transparent 56%),
+        radial-gradient(740px 480px at 92% 18%, rgba(191,226,255,.38), transparent 60%),
+        linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height:100vh;
+    }
+
+    .wrap{max-width:1080px;margin:0 auto;padding:24px 18px 56px}
+
+    /* ── Breadcrumb ── */
+    .breadcrumb{
+      display:flex;align-items:center;gap:6px;
+      font-size:12px;color:var(--muted);
+      margin-bottom:18px;flex-wrap:wrap;
+    }
+    .breadcrumb a{
+      color:var(--muted);text-decoration:none;
+      padding:5px 10px;border-radius:999px;
+      border:1px solid var(--line);background:rgba(255,255,255,.72);
+      transition:.15s;
+    }
+    .breadcrumb a:hover{border-color:rgba(135,191,255,.72);color:var(--ink)}
+    .breadcrumb .sep{color:#ccc}
+    .breadcrumb .current{
+      padding:5px 10px;border-radius:999px;
+      border:1px solid rgba(135,191,255,.55);
+      background:rgba(135,191,255,.12);color:#2a3950;font-weight:600;
+    }
+
+    /* ── Page title ── */
+    .page-title{
+      font-family: Gaegu, Pretendard, sans-serif;
+      font-size:28px;font-weight:700;
+      margin-bottom:18px;color:var(--ink);
+    }
+    .page-title span{color:var(--sky)}
+
+    /* ── Layout: list + content ── */
+    .layout{
+      display:grid;
+      grid-template-columns:240px 1fr;
+      gap:14px;
+      align-items:start;
+    }
+
+    /* ── Post list (left) ── */
+    .post-list{
+      border:1px solid var(--line);border-radius:var(--radius);
+      background:rgba(255,255,255,.78);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .list-head{
+      padding:14px 16px 10px;
+      font-size:11px;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:#2a3950;
+      border-bottom:1px solid var(--line);
+    }
+    .post-item{
+      display:flex;flex-direction:column;gap:2px;
+      padding:12px 16px;border:none;background:none;
+      width:100%;text-align:left;cursor:pointer;
+      border-bottom:1px solid var(--line);
+      transition:.15s;
+    }
+    .post-item:last-child{border-bottom:none}
+    .post-item:hover{background:rgba(135,191,255,.08)}
+    .post-item.active{background:rgba(135,191,255,.14);border-left:3px solid var(--sky)}
+    .post-item .item-title{font-size:13px;font-weight:600;color:var(--ink);line-height:1.4}
+    .post-item .item-date{font-size:11px;color:var(--muted)}
+
+    /* ── Post content (right) ── */
+    .post-content{
+      border:1px solid var(--line);border-radius:var(--radius);
+      background:rgba(255,255,255,.78);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+      padding:24px 28px;
+      min-height:400px;
+    }
+    .post-entry{display:none}
+    .post-entry.active{display:block}
+
+    .entry-meta{
+      display:flex;align-items:center;gap:8px;
+      margin-bottom:18px;flex-wrap:wrap;
+    }
+    .entry-date{font-size:12px;color:var(--muted)}
+    .entry-tag{
+      font-size:11px;padding:4px 9px;border-radius:999px;
+      border:1px solid rgba(135,191,255,.35);
+      background:rgba(135,191,255,.10);color:#2a3950;
+    }
+
+    .entry-title{
+      font-family: Gaegu, Pretendard, sans-serif;
+      font-size:24px;font-weight:700;
+      margin-bottom:14px;color:var(--ink);line-height:1.3;
+    }
+    .entry-body{
+      font-size:14px;line-height:1.8;color:#24374f;
+    }
+    .entry-body h3{
+      font-family: Gaegu, Pretendard, sans-serif;
+      font-size:18px;margin:20px 0 8px;color:var(--ink);
+    }
+    .entry-body p{margin-bottom:12px}
+    .entry-body code{
+      font-family:'Courier New',monospace;font-size:12px;
+      background:#f4f8ff;border:1px solid rgba(135,191,255,.35);
+      border-radius:5px;padding:2px 6px;
+    }
+    .entry-body pre{
+      background:#f4f8ff;border:1px solid rgba(135,191,255,.30);
+      border-radius:10px;padding:14px 16px;
+      font-family:'Courier New',monospace;font-size:12px;
+      line-height:1.7;overflow-x:auto;margin-bottom:14px;
+    }
+    .entry-body ul,
+    .entry-body ol{padding-left:20px;margin-bottom:12px}
+    .entry-body li{margin-bottom:5px}
+    .entry-body .note{
+      background:rgba(135,191,255,.12);border-left:3px solid var(--sky);
+      border-radius:0 10px 10px 0;padding:10px 14px;
+      margin-bottom:14px;font-size:13px;color:#24374f;
+    }
+
+    .placeholder{
+      display:flex;flex-direction:column;align-items:center;
+      justify-content:center;height:300px;color:var(--muted);font-size:14px;gap:8px;
+    }
+    .placeholder .icon{font-size:32px}
+
+    @media(max-width:720px){
+      .layout{grid-template-columns:1fr}
+      .post-content{padding:18px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">›</span>
+      <a href="/projects/ai/cnn/">CNN</a>
+      <span class="sep">›</span>
+      <span class="current">Posts</span>
+    </nav>
+
+    <h1 class="page-title">CNN <span>Posts</span></h1>
+
+    <div class="layout">
+
+      <!-- Left: post list -->
+      <aside class="post-list" role="navigation" aria-label="Post list">
+        <div class="list-head">글 목록</div>
+
+        <button class="post-item active" onclick="showPost('post1', this)" aria-current="true">
+          <span class="item-title">정리 1 — Conv 레이어 Shape 흐름</span>
+          <span class="item-date">2026-04-04</span>
+        </button>
+
+        <button class="post-item" onclick="showPost('post2', this)">
+          <span class="item-title">정리 2 — Keras vs PyTorch 비교</span>
+          <span class="item-date">2026-04-05</span>
+        </button>
+
+      </aside>
+
+      <!-- Right: post content -->
+      <main class="post-content">
+
+        <!-- Post 1 -->
+        <article class="post-entry active" id="post1">
+          <div class="entry-meta">
+            <span class="entry-date">2026-04-04</span>
+            <span class="entry-tag">CNN</span>
+            <span class="entry-tag">Shape</span>
+          </div>
+          <h2 class="entry-title">정리 1 — Conv 레이어 Shape 흐름</h2>
+          <div class="entry-body">
+            <p>
+              CNN에서 데이터가 각 레이어를 통과할 때 shape이 어떻게 바뀌는지 정리.
+              CIFAR-10 기준 <code>(32, 32, 3)</code> 입력에서 출발.
+            </p>
+
+            <h3>Conv2D 기본 공식</h3>
+            <pre>출력 H = (입력 H + 2×padding - kernel) / stride + 1
+출력 W = (입력 W + 2×padding - kernel) / stride + 1</pre>
+
+            <h3>CIFAR-10 레이어별 흐름 (Keras 기준)</h3>
+            <ul>
+              <li><strong>Input</strong>: <code>(32, 32, 3)</code></li>
+              <li><strong>Conv2D(32, 3×3, padding='same')</strong>: <code>(32, 32, 32)</code></li>
+              <li><strong>MaxPool2D(2×2)</strong>: <code>(16, 16, 32)</code></li>
+              <li><strong>Conv2D(64, 3×3, padding='same')</strong>: <code>(16, 16, 64)</code></li>
+              <li><strong>MaxPool2D(2×2)</strong>: <code>(8, 8, 64)</code></li>
+              <li><strong>Flatten</strong>: <code>(4096,)</code></li>
+              <li><strong>Dense(64)</strong>: <code>(64,)</code></li>
+              <li><strong>Dense(10, softmax)</strong>: <code>(10,)</code> — 클래스 확률</li>
+            </ul>
+
+            <div class="note">
+              📌 PyTorch는 채널 순서가 반대 → <code>(N, C, H, W)</code>, Keras는 <code>(N, H, W, C)</code>
+            </div>
+
+            <h3>padding='same' vs 'valid'</h3>
+            <p>
+              <code>padding='same'</code>: 출력 H/W = 입력 H/W (stride=1 기준). 제로 패딩 자동 추가.<br/>
+              <code>padding='valid'</code>: 패딩 없음, 가장자리 픽셀 잘림.
+            </p>
+          </div>
+        </article>
+
+        <!-- Post 2 -->
+        <article class="post-entry" id="post2">
+          <div class="entry-meta">
+            <span class="entry-date">2026-04-05</span>
+            <span class="entry-tag">Keras</span>
+            <span class="entry-tag">PyTorch</span>
+          </div>
+          <h2 class="entry-title">정리 2 — Keras vs PyTorch 비교</h2>
+          <div class="entry-body">
+            <p>
+              같은 CNN을 Keras와 PyTorch로 짤 때 코드 구조와 개념이 어떻게 다른지 정리.
+            </p>
+
+            <h3>모델 정의 방식</h3>
+            <pre># Keras
+model = keras.Sequential([
+    layers.Conv2D(32, (3,3), activation='relu', padding='same'),
+    layers.MaxPooling2D(),
+    layers.Conv2D(64, (3,3), activation='relu', padding='same'),
+    layers.MaxPooling2D(),
+    layers.Flatten(),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(10, activation='softmax'),
+])</pre>
+
+            <pre># PyTorch
+class CNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(3, 32, 3, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, 3, padding=1)
+        self.pool  = nn.MaxPool2d(2)
+        self.fc1   = nn.Linear(64*8*8, 64)
+        self.fc2   = nn.Linear(64, 10)
+
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(x.size(0), -1)  # flatten
+        x = F.relu(self.fc1(x))
+        return self.fc2(x)</pre>
+
+            <h3>주요 차이점 요약</h3>
+            <ul>
+              <li><strong>채널 순서</strong>: Keras <code>(N,H,W,C)</code> vs PyTorch <code>(N,C,H,W)</code></li>
+              <li><strong>Activation</strong>: Keras는 레이어 인자로, PyTorch는 forward에서 <code>F.relu()</code></li>
+              <li><strong>Flatten</strong>: Keras <code>layers.Flatten()</code> vs PyTorch <code>x.view()</code></li>
+              <li><strong>Loss</strong>: Keras <code>sparse_categorical_crossentropy</code> vs PyTorch <code>nn.CrossEntropyLoss()</code> (정수 레이블 직접 처리)</li>
+            </ul>
+
+            <div class="note">
+              📌 PyTorch는 <code>nn.Linear</code>의 in_features를 직접 계산해야 함 —
+              Flatten 이후 shape을 미리 확인하는 습관이 중요.
+            </div>
+          </div>
+        </article>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function showPost(id, btn) {
+      document.querySelectorAll('.post-entry').forEach(function(el){ el.classList.remove('active') });
+      document.querySelectorAll('.post-item').forEach(function(el){
+        el.classList.remove('active');
+        el.removeAttribute('aria-current');
+      });
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+      btn.setAttribute('aria-current', 'true');
+    }
+  </script>
+</body>
+</html>

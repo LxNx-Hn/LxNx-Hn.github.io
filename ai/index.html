@@ -363,11 +363,13 @@
         topbarEl.classList.add("sidebar-collapsed-state");
         toggleIcon.style.opacity = ".45";
         toggleLabel.textContent = "목록";
+        toggleBtn.title = "목록 패널 열기";
       } else {
         bodyEl.classList.remove("sidebar-collapsed");
         topbarEl.classList.remove("sidebar-collapsed-state");
         toggleIcon.style.opacity = "1";
         toggleLabel.textContent = "목록";
+        toggleBtn.title = "목록 패널 닫기";
       }
     }
 

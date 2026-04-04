@@ -225,7 +225,8 @@
       .layout{grid-template-columns:1fr}
       .layout.sidebar-collapsed{grid-template-columns:1fr}
       .layout.sidebar-collapsed .main{max-width:100%;margin:0}
-      .layout.sidebar-collapsed .profile{visibility:visible;pointer-events:auto;display:none}
+      /* On mobile, truly hide collapsed profile rather than relying on 0px column clip */
+      .layout.sidebar-collapsed .profile{display:none}
       .grid{grid-template-columns:1fr}
     }
   </style>

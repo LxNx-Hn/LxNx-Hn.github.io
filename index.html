@@ -62,8 +62,12 @@
       grid-template-columns: 0px 1fr;
       gap:0;
     }
+    /* Use visibility instead of display:none so the grid column
+       transition from 0→280px can clip the content via overflow:hidden
+       without the element flashing to full-size on expand */
     .layout.sidebar-collapsed .profile{
-      display:none;
+      visibility:hidden;
+      pointer-events:none;
     }
     /* When profile is hidden, center the main content */
     .layout.sidebar-collapsed .main{
@@ -101,7 +105,8 @@
 
     /* LEFT: Profile */
     .profile{padding:18px;overflow:hidden;min-width:0}
-    .avatarRow{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+    .avatarRow{display:flex;flex-direction:row;gap:12px;align-items:center;margin-bottom:12px;min-width:0}
+    .profile-info{min-width:0;flex:1;overflow:hidden}
     .avatar{
       width:62px;height:62px;border-radius:18px;
       border:1px solid rgba(135,191,255,.55);
@@ -116,8 +121,11 @@
       font-weight:700;
       font-size:34px;
       line-height:1;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
     }
-    .sub{margin-top:4px;color:var(--muted);font-size:13px;line-height:1.4}
+    .sub{margin-top:4px;color:var(--muted);font-size:13px;line-height:1.4;word-break:break-word}
 
     .bio{
       margin:12px 0 14px;
@@ -176,7 +184,7 @@
 
     .sections{display:flex;flex-direction:column;gap:10px}
     .section-btn{
-      display:flex;justify-content:space-between;align-items:center;
+      display:flex;flex-direction:row;justify-content:space-between;align-items:center;
       padding:14px 16px;
       border-radius:16px;
       border:1px solid var(--line);
@@ -184,6 +192,7 @@
       text-decoration:none;color:inherit;
       transition:.15s;
       position:relative;overflow:hidden;
+      min-width:0;
     }
     .section-btn:before{
       content:"";
@@ -193,15 +202,18 @@
       transform: rotate(18deg);
     }
     .section-btn:hover{transform:translateY(-2px);border-color:rgba(135,191,255,.72)}
+    .section-btn-content{position:relative;min-width:0;flex:1;overflow:hidden}
     .section-btn-title{
-      position:relative;
       font-family: Gaegu, Pretendard, sans-serif;
       font-size:22px;
       font-weight:700;
       margin:0 0 4px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
-    .section-btn-desc{position:relative;color:var(--muted);font-size:13px}
-    .section-btn-arrow{position:relative;font-size:20px;color:rgba(135,191,255,.9)}
+    .section-btn-desc{color:var(--muted);font-size:13px;word-break:break-word}
+    .section-btn-arrow{position:relative;font-size:20px;color:rgba(135,191,255,.9);flex:0 0 auto;margin-left:12px}
 
     .footer{
       margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
@@ -213,6 +225,7 @@
       .layout{grid-template-columns:1fr}
       .layout.sidebar-collapsed{grid-template-columns:1fr}
       .layout.sidebar-collapsed .main{max-width:100%;margin:0}
+      .layout.sidebar-collapsed .profile{visibility:visible;pointer-events:auto;display:none}
       .grid{grid-template-columns:1fr}
     }
   </style>
@@ -241,7 +254,7 @@
           <div class="avatar">
             <img alt="GitHub Avatar" src="https://github.com/LxNx-Hn.png" />
           </div>
-          <div>
+          <div class="profile-info">
             <h1 class="name">KIKI</h1>
             <div class="sub">AI공부 기록 + 프로젝트정리</div>
           </div>
@@ -273,7 +286,7 @@
         <div class="sections">
           <!-- AI 섹션 -->
           <a class="section-btn" href="/ai/">
-            <div>
+            <div class="section-btn-content">
               <div class="section-btn-title">AI</div>
               <div class="section-btn-desc">CNN · 딥러닝 · Keras · PyTorch 학습 기록</div>
             </div>
@@ -283,7 +296,7 @@
           <!--
           Review 섹션 (콘텐츠 추가 후 주석 해제)
           <a class="section-btn" href="/review/">
-            <div>
+            <div class="section-btn-content">
               <div class="section-btn-title">Review</div>
               <div class="section-btn-desc">논문 리뷰</div>
             </div>
@@ -294,7 +307,7 @@
           <!--
           Project 섹션 (콘텐츠 추가 후 주석 해제)
           <a class="section-btn" href="/project/">
-            <div>
+            <div class="section-btn-content">
               <div class="section-btn-title">Project</div>
               <div class="section-btn-desc">프로젝트 정리</div>
             </div>

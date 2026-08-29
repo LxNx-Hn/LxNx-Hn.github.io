@@ -27,7 +27,7 @@ test("project data stays inside the verified public repository set", () => {
     assert.ok(project.stack.length >= 3 && project.stack.length <= 5);
     assert.ok(project.contributions.length >= 3 && project.contributions.length <= 5);
     assert.ok(project.cases.length >= 2 && project.cases.length <= 7);
-    assert.ok(project.commits.length >= 4 && project.commits.length <= 6);
+    assert.ok(project.commits.length >= 3 && project.commits.length <= 6);
 
     for (const group of project.stack) {
       assert.ok(group.label);
@@ -71,7 +71,7 @@ test("document keeps the required semantic structure and anchor targets", async 
 
 test("project renderer follows portfolio reading order", async () => {
   const script = await read("script.js");
-  const labels = ["프로젝트 소개", "Tech Stack", "내가 맡은 부분", "문제 해결 과정", "관련 코드 / 커밋"];
+  const labels = ["프로젝트 소개", "Tech Stack", "내가 맡은 부분", "핵심 문제와 판단 과정", "관련 코드 / 커밋"];
   let previous = -1;
   for (const label of labels) {
     const current = script.indexOf(label);

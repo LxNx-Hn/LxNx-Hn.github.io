@@ -4,7 +4,7 @@ export const projects = [
     "repo": "https://github.com/LxNx-Hn/KT-10",
     "label": "이동취약자 맞춤형 경로 추천 · 데이터 수집 / 모델 학습 / 서비스 연결",
     "featured": true,
-    "overview": "이동취약자가 단순 최단시간이 아니라 경사, 도보거리, 환승, 계단·승강기, 저상버스, 그늘 같은 조건까지 보고 경로를 비교할 수 있도록 만든 팀 프로젝트입니다. 여러 경로 공급원에서 실제 후보를 모으고 공간·환경 데이터를 피처로 만든 뒤, 6개 사용자 프로필별 XGBRanker로 다시 평가해 서비스에 연결했습니다. 380개 OD에서 1,137개 실제 경로 후보를 만들고 6개 프로필 기준 6,822개 평가 데이터를 구성했습니다.",
+    "overview": "이동취약자에게 '가장 빠른 길'이 항상 가장 좋은 길은 아니라는 문제에서 시작한 경로 추천 프로젝트입니다. 경사, 도보거리, 환승, 계단·승강기, 저상버스, 그늘처럼 서로 성격이 다른 조건을 실제 경로 후보의 feature로 만들고, 6개 사용자 프로필별로 후보를 다시 평가하는 구조를 만들었습니다. 제가 맡은 범위는 데이터 수집·feature 구성에서 XGBRanker 학습, 후보 재정렬, 서비스 연결까지였습니다.",
     "stack": [
       {
         "label": "AI / Ranking",
@@ -47,84 +47,65 @@ export const projects = [
       }
     ],
     "contributions": [
-      "실제 경로 후보를 수집하고 경사·도보·환승·접근성·환경 정보를 하나의 feature snapshot으로 만드는 AI 파이프라인을 다뤘습니다.",
-      "6개 프로필별 평가 기준과 학습 데이터를 구성하고, 실제 OD 단위 holdout을 적용한 XGBRanker를 학습·검증했습니다.",
-      "학습 artifact의 feature schema, 프로필별 검증 지표, hash와 모델 파일을 확인한 뒤에만 runtime에서 사용할 수 있게 검증 로직을 넣었습니다.",
-      "ODsay·TMAP·BIMS 등 외부 공급원의 지연·누락·중복을 다루고, 사용자에게 보여줄 후보가 실제 데이터 범위 안에서 유지되도록 수집·병합 로직을 수정했습니다.",
-      "화면에 보여줄 topN과 내부 후보군을 분리하고, 사용자 옵션으로 다시 평가하기 전에 경로가 조기 탈락하지 않도록 추천 흐름을 조정했습니다."
+      "경사·도보·환승·접근성·환경 정보를 실제 경로 후보 단위 feature snapshot으로 만들고 추천 모델 입력까지 연결했습니다.",
+      "6개 사용자 프로필별로 무엇을 불편으로 볼지 평가 기준을 만들고 XGBRanker baseline을 학습·검증했습니다.",
+      "화면에 보일 topN과 모델이 판단할 내부 후보군을 분리해 개인화 전에 후보가 잘리지 않도록 추천 흐름을 조정했습니다.",
+      "외부 데이터에 없는 정보는 억지로 채우지 않고 exact / estimated / unavailable을 구분해 추천과 표시 단계에서 품질 한계를 보존했습니다."
     ],
     "cases": [
       {
-        "title": "추천 모델을 평가할 때 같은 실제 OD가 학습과 검증에 섞이지 않게 해야 했음",
-        "problem": "경로 후보가 여러 query group으로 쌓이다 보니 같은 출발지·도착지에서 나온 후보가 train과 validation에 동시에 들어갈 수 있었습니다.",
-        "cause": "단순 group_id만 기준으로 분리하면 실제로 같은 OD인지까지 보장하지 못했습니다.",
-        "approach": "점수가 높게 나오는지보다 검증 데이터가 정말 학습과 분리돼 있는지부터 확인했습니다.",
-        "solution": "실제 OD를 나타내는 holdout_group_id를 별도로 두고, 같은 OD는 항상 같은 split에 들어가도록 검증 로직을 추가했습니다.",
-        "result": "6개 프로필 모두 304개 train OD와 76개 validation OD로 분리했고, NDCG@3 0.9166~0.9596 범위의 baseline을 확인했습니다."
+        "title": "이동취약자에게 '좋은 경로'를 무엇으로 정의할 것인가",
+        "problem": "최단시간 하나로 순위를 정하면 휠체어 사용자에게 계단이 있는 짧은 길이, 짐이 많은 사용자에게 도보가 긴 환승 적은 길이 상위에 올 수 있었습니다. 프로필마다 불편의 종류와 우선순위가 달랐습니다.",
+        "cause": "이 문제에는 모든 사용자에게 통하는 단일 정답 label이 없고, 초기 단계에는 충분한 사람 평가 데이터도 없었습니다.",
+        "approach": "모델부터 학습시키기보다 각 프로필에서 어떤 feature가 부담이 되는지 기준을 먼저 분리했습니다. 동시에 이 기준으로 만든 label을 실제 사람 선호라고 부르면 안 된다고 봤습니다.",
+        "solution": "6개 프로필별 route-fit rubric과 feature burden을 만들고 이를 bootstrap evaluation label로만 사용해 XGBRanker baseline을 학습했습니다. artifact에도 label_origin=bootstrap_evaluation을 남기고 human_validated 모델과 구분했습니다.",
+        "result": "380개 OD의 1,137개 후보로 baseline을 만들고 NDCG@3 0.9166~0.9596을 확인했지만, 이 수치를 실제 사용자 선호를 검증한 production 성능으로 해석하지 않도록 경계를 남겼습니다."
       },
       {
-        "title": "외부 API는 정상인데 실제 직행 버스가 후보에서 빠졌음",
-        "problem": "TMAP 호출 자체는 성공했지만 실제 존재하는 일부 직행 버스가 결과에 나오지 않았습니다.",
-        "cause": "후처리 문제가 아니라 공급원이 해당 경로 자체를 반환하지 않는 경우였습니다.",
-        "approach": "없는 경로를 추정해서 만들기보다 다른 공공 교통 데이터에서 후보를 보완할 수 있는지 확인했습니다.",
-        "solution": "BIMS 노선·정류장 데이터를 추가로 수집해 직행 버스 후보를 보완하고 timeout, cache, 동시 요청 상한도 함께 넣었습니다.",
-        "result": "한 공급원의 누락 때문에 실제 직행 경로가 사라지는 문제를 줄였습니다."
+        "title": "개인화 모델이 보기 전에 후보를 몇 개까지 남겨야 하는가",
+        "problem": "외부 API가 반환한 경로를 시간순 topN으로 바로 잘라 화면과 모델에 같이 쓰면, 특정 사용자에게는 더 적합하지만 일반 기준에서 조금 느린 경로가 개인화 평가를 받기도 전에 사라질 수 있었습니다.",
+        "cause": "'화면에 몇 개를 보여줄지'와 '추천 모델이 몇 개를 비교해야 할지'는 다른 문제인데 같은 topN 값으로 묶여 있었습니다.",
+        "approach": "최종 UI는 단순해야 하지만 내부에서는 개인화가 의미 있게 작동할 만큼 후보 다양성을 보존해야 한다고 봤습니다.",
+        "solution": "UI topN과 내부 candidate pool을 분리해 더 넓은 후보군을 먼저 유지하고, 사용자 프로필로 재평가한 뒤 최종 경로만 화면에 보여주도록 순서를 바꿨습니다.",
+        "result": "일반적인 시간순 필터가 개인화 모델의 선택지를 미리 없애는 구조를 줄이고, 후보 생성과 랭킹의 역할을 분리했습니다."
       },
       {
-        "title": "BIMS를 붙이자 같은 버스가 다른 ID로 두 번 들어옴",
-        "problem": "TMAP과 BIMS에서 같은 노선이 서로 다른 stop id와 geometry로 들어와 중복 후보가 생겼습니다.",
-        "cause": "공급원마다 식별자 체계가 달라 route id 비교만으로는 같은 버스인지 알 수 없었습니다.",
-        "approach": "사용자가 같은 경로라고 보는 기준을 다시 잡았습니다.",
-        "solution": "버스 번호, 승하차 정류장명, 좌표 근접도를 함께 비교해 병합하고, 공급원 정보는 따로 남겼습니다.",
-        "result": "여러 데이터 공급원을 쓰면서도 같은 버스가 중복으로 보이는 문제를 줄였습니다."
-      },
-      {
-        "title": "경로가 많아지는 것보다 틀린 값을 확정값처럼 보여주는 게 더 위험했음",
-        "problem": "일부 철도 노선은 잘못 해석됐고 BIMS에는 실제 도로 선형이 없으며, 연결되지 않은 시간표도 있었습니다.",
-        "cause": "서로 다른 데이터 형식을 하나의 route schema로 합치다 보면 없는 값을 임의로 채우기 쉬웠습니다.",
-        "approach": "사용자 입장에서는 경로 하나가 덜 보이는 것보다 잘못된 시간을 믿는 쪽이 더 큰 문제라고 봤습니다.",
-        "solution": "추정 geometry는 estimated, 확인하지 못한 시간표는 unavailable로 남기고 철도 노선 해석도 다시 맞췄습니다.",
-        "result": "확인된 정보와 추정·미확인 정보를 결과 안에서 구분할 수 있게 했습니다."
+        "title": "데이터가 불완전할 때 추천 모델은 그 값을 어떻게 믿어야 하는가",
+        "problem": "여러 공급원을 합치다 보니 실제 도로 선형이 없는 버스 경로, 연결되지 않은 철도 시간표, 공급원마다 표현이 다른 노선처럼 '값은 필요하지만 확정할 수 없는 정보'가 생겼습니다.",
+        "cause": "추천 시스템은 숫자와 feature가 있으면 계산을 계속할 수 있지만, 임의로 채운 값은 오히려 모델이 거짓 확신을 갖게 만들 수 있었습니다.",
+        "approach": "정보가 비어 있는 것과 실제 값이 0인 것을 같은 것으로 다루지 않고, 사용자에게 보이는 결과에서도 데이터 품질을 숨기지 않는 쪽을 택했습니다.",
+        "solution": "경로 geometry와 시간표 등은 exact / estimated / unavailable을 구분하고, 확인할 수 없는 시간·거리 값을 임의의 0이나 평균값으로 만들지 않았습니다. 공급원 보완도 실제 공공 데이터가 있는 경우에만 추가했습니다.",
+        "result": "후보 수를 늘리는 것보다 잘못된 확정값을 피하는 기준을 추천 파이프라인에 남겼고, 모델과 화면이 같은 데이터 한계를 공유하도록 했습니다."
       }
     ],
     "commits": [
       {
-        "label": "프로필별 XGBRanker baseline",
+        "label": "프로필 평가 기준",
+        "sha": "32aacbd",
+        "url": "https://github.com/LxNx-Hn/KT-10/commit/32aacbd603abb466d0f4fa1b4ace037ca33750fd"
+      },
+      {
+        "label": "프로필 학습 데이터",
+        "sha": "ec3d39a",
+        "url": "https://github.com/LxNx-Hn/KT-10/commit/ec3d39a4603e5a30bfeaa2183da21b14b66ab8c2"
+      },
+      {
+        "label": "XGBRanker baseline",
         "sha": "c75ab5f",
         "url": "https://github.com/LxNx-Hn/KT-10/commit/c75ab5f70ba6f2e63c4a8204ccbc097627e858f0"
       },
       {
-        "label": "OD holdout 계약",
-        "sha": "0d0f687",
-        "url": "https://github.com/LxNx-Hn/KT-10/commit/0d0f687eaeb2cb575566a04ea0c1eca3bbe19e46"
-      },
-      {
-        "label": "ODsay 지연 TMAP hedge",
-        "sha": "2949c50",
-        "url": "https://github.com/LxNx-Hn/KT-10/commit/2949c50586723b559e761e414ba751192d57d856"
-      },
-      {
-        "label": "BIMS 직행 버스 보완",
-        "sha": "12e4b37",
-        "url": "https://github.com/LxNx-Hn/KT-10/commit/12e4b37bcb4f5564894718b5634636911e77ee0c"
-      },
-      {
-        "label": "BIMS/TMAP 중복 병합",
-        "sha": "cc188cc",
-        "url": "https://github.com/LxNx-Hn/KT-10/commit/cc188ccb3b3836871ab4630fc1f79beb5b63731b"
-      },
-      {
-        "label": "후보 풀·철도 정합성",
+        "label": "후보군·개인화 재평가",
         "sha": "c69be12",
         "url": "https://github.com/LxNx-Hn/KT-10/commit/c69be12b69936cb64b27839ac024a0b6a6793ad9"
       }
     ],
     "results": [
-      "380개 OD · 1,137개 실제 경로 후보 · 6,822개 프로필 평가 데이터",
+      "380개 OD · 1,137개 실제 경로 후보 · 6,822개 bootstrap 평가 label",
       "6개 프로필 XGBRanker baseline · NDCG@3 0.9166~0.9596",
-      "실제 OD holdout: 프로필별 304 train / 76 validation OD",
-      "경로 후보 수집부터 feature snapshot, 학습 artifact, runtime 추천까지 한 흐름으로 연결",
-      "현재 모델은 bootstrap_baseline이며 사람 평가 기반 human_validated 모델로 과장하지 않도록 구분"
+      "UI topN과 내부 candidate pool을 분리해 개인화 전 후보 다양성 보존",
+      "bootstrap_baseline과 human_validated 모델을 명시적으로 구분",
+      "확인된 값과 estimated / unavailable 값을 추천·표시 단계에서 구분"
     ]
   },
   {
@@ -132,7 +113,7 @@ export const projects = [
     "repo": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter",
     "label": "KT 디지털인재장학생 · 첫 RAG 프로젝트 · Project Leader",
     "featured": true,
-    "overview": "창업 희망자가 창업 현황, 정책, 검색 트렌드를 질문하면 먼저 질문의 범위를 분류하고 각 질문에 맞는 데이터 경로에서 답을 찾도록 만든 RAG 챗봇입니다. 제가 RAG를 처음 서비스 형태로 다뤄본 프로젝트였고, Project Leader로 전체 아키텍처, FastAPI–React 연결, 배포와 운영 문서까지 맡아 팀 기능을 하나의 서비스로 연결했습니다.",
+    "overview": "창업 희망자의 질문에 정책, 창업 정보, 검색 트렌드를 찾아 답하는 RAG 챗봇입니다. 처음 RAG를 서비스 형태로 다뤘던 프로젝트라 '모델을 어떻게 붙일까'보다 어떤 질문을 서비스가 답해야 하고, 질문 종류에 따라 어떤 데이터를 써야 하는지를 먼저 정하는 과정이 중요했습니다. Project Leader로 질문 분류부터 검색·응답, FastAPI–React 연결과 배포까지 전체 흐름을 맞췄습니다.",
     "stack": [
       {
         "label": "AI",
@@ -171,56 +152,47 @@ export const projects = [
       }
     ],
     "contributions": [
-      "질문 분류 → category별 데이터 source → RAG 응답으로 이어지는 전체 서비스 흐름과 FastAPI–React 구조를 설계했습니다.",
-      "팀원별로 나뉜 데이터·AI·프론트 기능의 입력과 출력 형식을 맞추고 변경 시 연결 부분을 다시 확인할 수 있도록 문서와 배포 기준을 정리했습니다.",
-      "GPU 서버를 직접 상시 운영하는 대신 NVIDIA NIM을 호출하는 경량 FastAPI gateway를 Cloud Run에 배포하고 Netlify frontend와 연결했습니다.",
-      "GitHub Actions에서 image build, Cloud Run 배포, health check, frontend build, Netlify 배포까지 이어지는 CI/CD를 구성했습니다.",
-      "Secret Manager, Cloud Run scale limit, Artifact Registry 정리 정책을 넣어 API key와 데모 비용을 운영 조건 안에서 관리했습니다."
+      "질문을 창업·정책·트렌드·범위 외로 나누고 category별 데이터 source와 응답 경로를 연결했습니다.",
+      "classifier가 설명을 생성하지 않고 routing 값만 반환하도록 출력 형식을 제한하고 분류 성능을 반복 검증했습니다.",
+      "팀원이 만든 데이터·AI·frontend 기능의 입력·출력 기준을 맞춰 하나의 사용자 흐름으로 연결했습니다.",
+      "데모 규모에서는 GPU 모델을 직접 상시 운영하지 않고 NVIDIA NIM gateway + Cloud Run + Netlify 구조로 배포했습니다."
     ],
     "cases": [
       {
-        "title": "모든 질문을 바로 LLM에 넘기면 서비스가 어디까지 답해야 하는지 흐려짐",
-        "problem": "창업지원 서비스가 다루지 않는 질문에도 모델이 답을 만들고, 질문마다 필요한 데이터가 다른데도 같은 검색 흐름을 타게 됐습니다.",
-        "cause": "답변 전에 질문의 목적과 서비스 범위를 나누는 routing 단계가 없었습니다.",
-        "approach": "더 큰 모델을 쓰기보다 먼저 어떤 질문을 어느 데이터로 보내야 하는지 나눴습니다.",
-        "solution": "질문을 창업·정책·트렌드·범위 외로 분류하고 분류 결과에 맞는 검색 경로만 실행했습니다. classifier 출력도 한 글자로 제한했습니다.",
-        "result": "프로젝트 기준 Accuracy 97.14%, Recall 97.94%, Precision 98.07%, F1 97.60을 확인했습니다."
+        "title": "서비스가 어디까지 답하고, 어디서 멈춰야 하는가",
+        "problem": "생성형 AI는 창업과 관련 없어도 그럴듯하게 답할 수 있었고, 정책 질문과 트렌드 질문은 필요한 데이터의 성격도 달랐습니다. 모든 질문을 하나의 RAG 경로로 보내는 게 맞지 않았습니다.",
+        "cause": "RAG의 검색 정확도보다 앞단에서 '이 질문이 서비스 범위 안인지, 어느 정보 경로로 가야 하는지'를 정하는 기준이 필요했습니다.",
+        "approach": "모델에게 더 많은 문서를 주는 대신 질문을 먼저 구조화해 서비스가 책임질 범위를 분명하게 만들었습니다.",
+        "solution": "질문을 창업·정책·트렌드·범위 외 네 종류로 분류하고 결과에 따라 다른 데이터 경로를 실행했습니다. classifier 출력은 한 글자로 제한해 생성형 설명이 routing에 섞이지 않게 했습니다.",
+        "result": "프로젝트 기준 Accuracy 97.14%, Recall 97.94%, Precision 98.07%, F1 97.60을 확인했고, 범위 밖 질문을 별도 처리할 수 있게 됐습니다."
       },
       {
-        "title": "팀원이 만든 기능이 각각 돌아가도 한 서비스에서는 바로 이어지지 않았음",
-        "problem": "데이터 처리, 분류, RAG 응답, frontend가 따로 개발되면서 한쪽 형식이 바뀌면 다른 기능이 깨질 수 있었습니다.",
-        "cause": "기능별 구현은 있었지만 서비스 전체에서 공유하는 입력·출력 기준이 필요했습니다.",
-        "approach": "각 기능을 대신 만드는 것보다 전체 흐름에서 값이 어디서 들어오고 나가는지를 맞췄습니다.",
-        "solution": "FastAPI endpoint와 frontend 호출 형식을 정리하고 category와 data source 연결, runtime config, health endpoint를 문서로 남겼습니다.",
-        "result": "팀 기능을 하나의 사용자 흐름으로 연결하고 이후 배포 환경 변경에도 같은 구조를 유지할 수 있게 했습니다."
-      },
-      {
-        "title": "로컬에서 돌아가는 챗봇을 실제 데모로 올리려면 모델보다 운영 문제가 더 남았음",
-        "problem": "GPU 실행 환경, API key, backend URL, frontend 배포가 서로 다른 환경에 있었습니다.",
-        "cause": "모델 서버를 그대로 상시 운영하면 데모 목적에 비해 비용과 설정이 과했습니다.",
-        "approach": "무엇을 직접 호스팅하고 무엇을 API로 분리할지 다시 봤습니다.",
-        "solution": "NVIDIA NIM을 호출하는 경량 FastAPI gateway만 Cloud Run에 올리고, Netlify frontend와 GitHub Actions로 연결했습니다. Secret Manager와 scale/image 정리 정책도 같이 적용했습니다.",
-        "result": "AI 기능뿐 아니라 secret과 배포 비용까지 포함한 데모 운영 흐름을 만들었습니다."
+        "title": "데모 서비스에서 무엇을 직접 운영하고 무엇을 외부 AI로 맡길 것인가",
+        "problem": "로컬 GPU 환경에서는 동작했지만 실제 데모에서는 모델 서버, API key, backend, frontend, 비용을 함께 고려해야 했습니다. 모든 것을 직접 호스팅하면 프로젝트 규모에 비해 운영 부담이 컸습니다.",
+        "cause": "개발 단계의 '모델이 실행된다'와 서비스 단계의 '반복 배포하고 유지할 수 있다'는 다른 기준이었습니다.",
+        "approach": "AI 모델 자체를 소유하는 것보다 데모에서 필요한 제어 범위와 운영 비용을 기준으로 경계를 다시 나눴습니다.",
+        "solution": "NVIDIA NIM 호출을 담당하는 경량 FastAPI gateway만 Cloud Run에 두고 Netlify frontend와 연결했습니다. Secret Manager, instance 상한, Artifact Registry 정리 정책도 같은 운영 흐름에 포함했습니다.",
+        "result": "AI 기능을 실제 서비스 형태로 배포하면서 모델, backend, secret, 비용을 하나의 운영 조건으로 같이 보게 됐습니다."
       }
     ],
     "commits": [
+      {
+        "label": "초기 서비스 Demo",
+        "sha": "52269ce",
+        "url": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter/commit/52269ceb61332a532e24cc8bf48794181c01ba86"
+      },
       {
         "label": "Cloud Run·Netlify 배포",
         "sha": "d111c15",
         "url": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter/commit/d111c15ac7754c3cc96824f891d5e613a0efe532"
       },
       {
-        "label": "Secret Manager 배포 모드",
+        "label": "Secret Manager 배포",
         "sha": "63a51ac",
         "url": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter/commit/63a51acbdfa51ae147ca1c13936eb065439aaab1"
       },
       {
-        "label": "Cloud Run scale 제한",
-        "sha": "74e88ab",
-        "url": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter/commit/74e88aba215f91bc558347aac5003dad3721a2fb"
-      },
-      {
-        "label": "데모 비용 설정",
+        "label": "데모 비용 조건",
         "sha": "3f2a33c",
         "url": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter/commit/3f2a33c9a92b619555850751005f9bae8d32be9f"
       }
@@ -235,9 +207,9 @@ export const projects = [
   {
     "title": "Hot's POD",
     "repo": "https://github.com/LxNx-Hn/Hot-s-Pod",
-    "label": "자연어 기반 소모임 검색 · RAG 재구현 + 서비스 정합성",
+    "label": "자연어 기반 소모임 검색 · Semantic Search + Structured Filtering",
     "featured": false,
-    "overview": "첫 RAG 프로젝트 이후 구조를 제 손으로 다시 만들어보기 위해 진행한 자연어 기반 소모임 검색 서비스입니다. 장소·category를 해석하고 Sentence Transformer로 벡터 검색한 뒤 MariaDB 조건을 적용하고 LLM이 결과를 설명하도록 연결했습니다. 검색 기능만 만든 것이 아니라 회원, 권한, 댓글, join/leave, cache처럼 실제 서비스에서 서로 맞아야 하는 상태도 함께 다뤘습니다.",
+    "overview": "첫 RAG 프로젝트가 끝난 뒤 구조를 직접 다시 만들어보기 위해 진행한 자연어 소모임 검색 서비스입니다. 사용자가 '주말에 근처에서 가볍게 운동할 모임'처럼 검색하면 의미적으로 비슷한 모임을 찾되, 장소·category처럼 틀리면 안 되는 조건은 DB에서 다시 확인하도록 Vector Search와 RDB filtering을 연결했습니다. LLM은 검색 결과를 만드는 주체가 아니라, 확인된 모임을 사용자에게 설명하는 마지막 단계로 두었습니다.",
     "stack": [
       {
         "label": "AI / Search",
@@ -245,17 +217,16 @@ export const projects = [
           "Sentence Transformers",
           "ChromaDB",
           "Vector Search",
-          "LLM",
-          "Hybrid Search"
+          "LLM"
         ]
       },
       {
-        "label": "Backend",
+        "label": "Backend / Filter",
         "items": [
           "FastAPI",
           "MariaDB",
-          "Pydantic",
-          "SQL"
+          "SQL",
+          "Pydantic"
         ]
       },
       {
@@ -266,45 +237,44 @@ export const projects = [
         ]
       },
       {
-        "label": "Engineering",
+        "label": "Search Design",
         "items": [
-          "Auth / Cookie",
-          "Role Permission",
-          "Transaction",
-          "Cache Invalidation"
+          "Semantic Retrieval",
+          "Structured Filtering",
+          "Similarity Calibration"
         ]
       }
     ],
     "contributions": [
-      "자연어 입력을 Vector Search → RDB 조건 필터 → LLM 응답으로 연결하는 검색 흐름을 다시 직접 구성했습니다.",
-      "벡터 검색의 similarity가 DB 조회 뒤 사라지는 문제를 찾아 최종 결과까지 점수를 유지하도록 수정했습니다.",
-      "실제 검색 결과를 보면서 similarity threshold를 조정하고, 검색용 내부 정보와 사용자에게 보여줄 LLM 출력 규칙을 분리했습니다.",
-      "검색·모임 상세·참가 상태가 화면에서 어긋나는 부분은 React Query와 backend 응답을 같이 보며 맞췄습니다."
+      "자연어 검색에서 의미 유사도와 장소·category 같은 구조화 조건을 어떤 순서로 결합할지 검색 흐름을 설계했습니다.",
+      "Vector Search의 similarity가 RDB filtering 뒤에도 유지되도록 최종 ranking까지 score를 전달했습니다.",
+      "실제 query 결과를 비교하면서 similarity threshold의 precision/recall trade-off를 조정했습니다.",
+      "LLM에는 DB에서 확인된 모임만 context로 넘기고, retrieval용 내부 표현과 사용자 답변 규칙을 분리했습니다."
     ],
     "cases": [
       {
-        "title": "벡터 검색에서는 맞는 결과인데 DB 조건을 거치면 순서가 바뀜",
-        "problem": "ChromaDB에서는 관련도가 높았던 모임이 장소·category 조건을 적용한 최종 결과에서는 아래로 밀렸습니다.",
-        "cause": "RDB에서 id 목록을 다시 조회하는 과정에서 벡터 similarity 순서가 사라졌습니다.",
-        "approach": "threshold만 계속 바꾸지 않고 Vector Search → DB filtering → 최종 응답 순서로 같은 후보의 점수를 따라갔습니다.",
-        "solution": "similarity map을 최종 단계까지 유지하고 DB 결과를 다시 관련도 순으로 정렬했습니다.",
-        "result": "조건 필터를 적용하면서도 의미 검색의 순서를 유지할 수 있게 했습니다."
+        "title": "자연어의 '의도'와 반드시 맞아야 하는 '조건'을 같은 방식으로 검색해도 되는가",
+        "problem": "'운동할 사람', '조용한 모임'처럼 표현이 다양한 의도는 keyword만으로 찾기 어렵지만, 장소나 category는 의미가 비슷하다는 이유로 다른 값을 허용하면 안 됐습니다.",
+        "cause": "Semantic Search는 표현 차이에 강하지만 hard constraint에는 느슨하고, SQL filter는 정확하지만 사용자의 애매한 의도를 이해하지 못합니다.",
+        "approach": "둘 중 하나를 선택하지 않고 어떤 정보는 semantic하게 찾고 어떤 정보는 deterministic하게 확인해야 하는지 역할을 나눴습니다.",
+        "solution": "먼저 embedding으로 의미 후보를 만들고, 그 후보에 장소·category 조건을 RDB에서 적용했습니다. 이후에도 Vector Search의 similarity를 잃지 않도록 score를 보존해 최종 순위를 다시 만들었습니다.",
+        "result": "자연어 표현의 유연성은 가져가면서 구조화 조건은 확정적으로 지키는 hybrid search 흐름을 만들었습니다."
       },
       {
-        "title": "검색 임계값을 높이면 엉뚱한 결과는 줄지만 필요한 모임도 같이 사라짐",
-        "problem": "자연어 검색에서 너무 느슨하면 관련 없는 모임이 섞이고, 너무 엄격하면 표현이 조금 다른 모임까지 빠졌습니다.",
-        "cause": "embedding distance에 하나의 정답 threshold가 있는 게 아니라 실제 데이터와 사용자 표현에 따라 trade-off가 있었습니다.",
-        "approach": "숫자 하나를 이론적으로 정하기보다 여러 자연어 검색 결과를 직접 비교하면서 어디까지 관련 결과로 볼지 확인했습니다.",
-        "solution": "검색 결과를 반복 확인하며 threshold를 조정했고, 그 뒤에도 DB filtering과 최종 정렬이 같은 기준을 유지하는지 같이 봤습니다.",
-        "result": "단순 keyword 검색보다 자연어 표현을 받아들이면서도 관련 없는 결과가 과하게 섞이지 않도록 기준을 조정했습니다."
+        "title": "Similarity threshold에 하나의 정답이 있는가",
+        "problem": "threshold를 높이면 엉뚱한 모임은 줄지만 표현이 조금 다른 유효한 결과도 함께 사라졌고, 낮추면 recall은 늘지만 사용자가 보기엔 관련 없는 결과가 섞였습니다.",
+        "cause": "embedding distance는 서비스 데이터와 query 분포에 따라 의미가 달라져 인터넷의 일반적인 숫자를 그대로 가져올 수 없었습니다.",
+        "approach": "특정 수치를 정답처럼 두지 않고 실제 서비스의 자연어 query를 반복해서 넣어 어떤 결과가 남고 빠지는지 비교했습니다.",
+        "solution": "검색 결과를 직접 보며 threshold를 조정하고, threshold 변경 뒤 DB filtering과 similarity ranking까지 같이 확인했습니다.",
+        "result": "숫자 하나를 '최적값'으로 주장하기보다 현재 데이터에서 필요한 precision/recall 균형을 경험적으로 맞추고 그 기준을 코드에 반영했습니다."
       },
       {
-        "title": "검색을 위해 만든 내부 표현이 사용자 답변에 그대로 노출됨",
-        "problem": "검색 단계에서 사용한 내부 tag와 Markdown 표현이 LLM의 최종 답변에 섞여 나왔습니다.",
-        "cause": "retrieval context와 user-facing response가 같은 표현 규칙을 공유하고 있었습니다.",
-        "approach": "검색 문맥을 단순하게 없애기보다 내부에서 필요한 정보와 최종 출력 규칙을 따로 두는 쪽으로 봤습니다.",
-        "solution": "system message와 출력 규칙을 분리해 내부 tag와 불필요한 Markdown을 최종 응답에서 제외했습니다.",
-        "result": "검색에는 구조화된 문맥을 쓰면서 사용자에게는 자연스러운 답변만 보여줄 수 있게 했습니다."
+        "title": "LLM이 검색 결과를 고르게 할 것인가, 확인된 결과만 설명하게 할 것인가",
+        "problem": "LLM에게 검색과 답변을 함께 맡기면 자연스럽지만, 실제 DB에 없는 모임을 섞거나 retrieval용 tag를 사용자 답변에 드러낼 가능성이 있었습니다.",
+        "cause": "생성 모델의 자연스러운 표현 능력과 검색 시스템의 사실성 책임을 같은 단계에 두고 있었습니다.",
+        "approach": "모임 존재 여부와 순위는 retrieval/DB가 책임지고, LLM은 그 결과를 설명하는 역할로 제한했습니다.",
+        "solution": "확인된 context_pods만 LLM에 넘기고 내부 tag와 Markdown 규칙을 user-facing output과 분리했습니다.",
+        "result": "LLM의 역할을 검색 판단이 아니라 표현 단계로 제한해, 자연스러운 답변과 검색 결과의 사실성을 분리했습니다."
       }
     ],
     "aiNote": {
@@ -314,42 +284,26 @@ export const projects = [
     },
     "commits": [
       {
-        "label": "RAG 결과 정렬",
+        "label": "RAG 검색 기준 조정",
+        "sha": "15605d7",
+        "url": "https://github.com/LxNx-Hn/Hot-s-Pod/commit/15605d78415bda211ef026341a2a60346065ebad"
+      },
+      {
+        "label": "Similarity ranking 보존",
         "sha": "bde5c71",
         "url": "https://github.com/LxNx-Hn/Hot-s-Pod/commit/bde5c71527ad0b3447d8b2f38f900aeea29ce6af"
       },
       {
-        "label": "LLM 출력 규칙",
+        "label": "LLM 출력 경계",
         "sha": "50a42ce",
         "url": "https://github.com/LxNx-Hn/Hot-s-Pod/commit/50a42cede6af5d0da5b32c8992a5c82b2bc1a9a5"
-      },
-      {
-        "label": "계층형 댓글 삭제",
-        "sha": "4262beb",
-        "url": "https://github.com/LxNx-Hn/Hot-s-Pod/commit/4262beb4ea7093cb572fdaabb2a414f3272e4bed"
-      },
-      {
-        "label": "회원 상태 cache 동기화",
-        "sha": "35fc4cc",
-        "url": "https://github.com/LxNx-Hn/Hot-s-Pod/commit/35fc4cc05bec29f9459d7087ba85161b3db1cce7"
-      },
-      {
-        "label": "권한과 UI 기준",
-        "sha": "94eab11",
-        "url": "https://github.com/LxNx-Hn/Hot-s-Pod/commit/94eab11ec4e25459ae5163d9647de0edf99731c0"
-      },
-      {
-        "label": "Cookie isolation",
-        "sha": "e8cf6b0",
-        "url": "https://github.com/LxNx-Hn/Hot-s-Pod/commit/e8cf6b05fba63f13fc62037ab62eae984095c149"
       }
     ],
     "results": [
-      "Vector Search의 similarity를 RDB filtering 이후에도 보존하는 hybrid search 흐름 구현",
-      "LLM 내부 context와 사용자 출력 규칙 분리",
-      "계층형 댓글 soft delete + orphan parent 재귀 정리",
-      "React Query cache와 backend membership/permission 상태 동기화",
-      "AI 코딩 도구가 만든 SQL 수정도 diff와 실행 결과를 확인한 뒤 반영"
+      "Semantic Retrieval과 Structured Filtering의 역할을 분리한 자연어 검색 흐름",
+      "RDB filtering 이후에도 Vector similarity 기반 ranking 유지",
+      "실제 query 결과를 기준으로 threshold의 precision/recall trade-off 조정",
+      "LLM은 확인된 검색 결과를 설명하는 단계로 제한"
     ]
   },
   {
@@ -408,36 +362,36 @@ export const projects = [
     ],
     "cases": [
       {
-        "title": "한국어 질문·영어 논문·한국어 답변을 RAGAS로 어떤 언어에서 평가해야 하는가",
-        "problem": "질문은 한국어, 검색 context와 reference는 영어, SCD가 켜진 답변은 한국어에 가까웠습니다. 그대로 평가하면 metric이 의미 차이와 언어 차이를 같이 보게 되고, 답변이나 context 한쪽만 번역하면 번역 자체가 점수에 영향을 줍니다.",
-        "cause": "cross-lingual RAG에서는 '같은 의미면 같은 점수'라고 가정하기 어렵고, 특히 faithfulness는 답변과 context를 함께 보므로 두 언어가 다르면 judge의 판단 조건도 달라집니다.",
-        "approach": "처음에는 SCD-on context만 한국어로 맞춰 평가했지만, 그러면 SCD 여부와 번역 여부가 항상 같이 움직여 점수 차이가 SCD 때문인지 번역 때문인지 분리할 수 없다는 문제를 확인했습니다.",
-        "solution": "HyDE-off에서 검색 context가 byte 단위로 같은 38개 SCD on/off 쌍만 따로 잡고, 양쪽 조건 모두에 같은 규칙을 적용해 영어 패널과 한국어 패널을 각각 만들었습니다. 이미 목표 언어인 텍스트는 그대로 두고 필요한 경우만 번역했습니다.",
-        "result": "번역을 한쪽 조건에만 적용한 첫 평가를 인과적 결과로 쓰지 않고 sensitivity analysis로 낮춰 해석했고, 더 대칭적인 입력에서 다시 비교할 수 있게 됐습니다."
+        "title": "한국어 질문·영어 논문·한국어 답변을 어떤 언어 조건에서 평가해야 하는가",
+        "problem": "질문은 한국어, 검색 context와 reference는 영어, SCD가 켜진 답변은 한국어에 가까웠습니다. 이 상태에서 RAGAS를 돌리면 내용 품질과 언어 차이가 같은 점수 안에 섞입니다.",
+        "cause": "cross-lingual RAG에서는 의미가 같아도 judge가 언어 조합에 따라 다르게 반응할 수 있고, 특히 faithfulness는 답변과 context를 동시에 보기 때문에 언어 조건 자체가 평가 변수가 됩니다.",
+        "approach": "처음에는 SCD-on context만 한국어로 번역해 언어를 맞췄지만, 그러면 SCD 여부와 번역 여부가 항상 같이 움직여 점수 차이를 분리할 수 없다는 confound를 확인했습니다.",
+        "solution": "HyDE-off에서 검색 context가 byte 단위로 같은 38개 SCD on/off 쌍만 따로 잡고, 양쪽 조건 모두에 같은 normalization rule을 적용한 영어 패널과 한국어 패널을 각각 만들었습니다.",
+        "result": "첫 비대칭 평가는 인과 결과가 아니라 sensitivity analysis로 낮춰 해석했고, SCD 외의 언어 조건을 최대한 맞춘 별도 평가를 만들었습니다."
       },
       {
-        "title": "번역으로 언어를 맞추면 이번에는 원래 의미와 기술 용어가 바뀔 수 있음",
-        "problem": "평가를 위해 문장을 번역하는 순간 숫자, 인용, 날짜, 모델명, metric명 같은 표현이 바뀌면 원래 답변과 다른 내용을 평가하게 됩니다. 단어 하나의 번역 선택도 answer relevancy나 faithfulness에 영향을 줄 수 있습니다.",
-        "cause": "일반 번역 품질이 높아도 연구 평가에서는 작은 표현 변화가 곧 실험 처치가 될 수 있었습니다.",
-        "approach": "번역이 자연스러운지만 보지 않고 '평가 대상의 의미를 얼마나 그대로 보존했는가'를 별도 조건으로 두었습니다.",
-        "solution": "숫자·인용·circled number·고정 날짜 literal을 정확히 보존하는지 검사하고, 번역이 필요 없는 경우에는 identity를 유지했습니다. 모든 평가 입력은 점수를 보기 전에 SHA-256으로 고정했습니다.",
-        "result": "같은 normalization rule을 네 조건에 적용하고도 번역 노출 빈도가 SCD-off/on에서 달랐다는 한계까지 그대로 남겼습니다. 즉 같은 규칙을 적용했다고 해서 완전히 같은 처치가 된다고 과장하지 않았습니다."
+        "title": "평가를 공정하게 하려고 번역하면, 번역 자체가 새로운 실험 처치가 되지 않는가",
+        "problem": "답변·context를 같은 언어로 맞추는 과정에서 숫자, 인용, 날짜, 모델명, metric명이나 기술 용어가 조금만 바뀌어도 원래 생성 결과가 아닌 번역 결과를 평가하게 됩니다.",
+        "cause": "일반 번역에서는 자연스러움이 중요하지만 연구 평가에서는 단어 하나의 선택도 answer relevancy나 faithfulness에 영향을 줄 수 있습니다.",
+        "approach": "번역 품질을 감으로 판단하지 않고 어떤 정보는 절대 바뀌면 안 되는지 먼저 정했습니다. 동시에 이미 목표 언어 조건을 만족하는 텍스트까지 다시 번역할 필요는 없다고 봤습니다.",
+        "solution": "필요한 경우에만 번역하고 숫자·인용·circled number·고정 날짜 literal을 정확히 보존하는지 검사했습니다. 평가 입력은 score를 보기 전에 protocol id와 SHA-256으로 고정했습니다.",
+        "result": "번역을 평가 전처리로 사용하면서도 그 과정 자체를 추적 가능한 변수로 남겼고, 같은 규칙을 적용해도 SCD-off/on의 실제 translation exposure가 달랐다는 한계까지 명시했습니다."
       },
       {
-        "title": "SCD가 한국어를 더 잘 유지하는 건 확인했는데 RAG 품질도 좋아졌다고 말할 수 있는가",
-        "problem": "reference SCD는 한국어 비율을 분명히 높였지만, 첫 gpt-4o 대칭 패널에서는 answer relevancy가 낮아지는 신호가 나왔습니다.",
-        "cause": "자동 평가는 judge 모델에 의존하고, 이미 생성한 답변을 사후 번역해 평가한 구조라 SCD 자체의 인과 효과라고 바로 말하기 어려웠습니다.",
-        "approach": "첫 judge 결과가 불편하더라도 그대로 남기고, 같은 입력 파일을 번역에 사용하지 않은 별도 고정 judge로 다시 채점했습니다.",
-        "solution": "영어·한국어 패널을 gpt-4.1-2025-04-14로 cross-judge 평가하고 19개 query cluster 기준 paired bootstrap 신뢰구간을 다시 계산했습니다.",
-        "result": "gpt-4o에서 보였던 answer-relevancy의 0이 아닌 음의 구간이 gpt-4.1에서는 재현되지 않았습니다. 최종적으로 '한국어 유지 효과는 강하지만 judge에 강건한 RAG 품질 차이는 확인되지 않았다'고 결론을 제한했습니다."
+        "title": "한 judge에서 나온 차이를 논문의 결론으로 써도 되는가",
+        "problem": "대칭 입력을 gpt-4o로 평가했을 때 answer relevancy가 낮아지는 구간이 나왔습니다. 수치만 보면 SCD의 비용이라고 쓰기 쉬웠습니다.",
+        "cause": "RAGAS의 일부 metric은 LLM judge의 의미 판단에 의존하고, 평가 입력도 사후 normalization을 거친 상태라 한 judge의 결과만으로 방법의 인과 효과를 단정하기 어려웠습니다.",
+        "approach": "첫 결과를 유리하거나 불리하다는 이유로 버리지 않고 입력을 그대로 고정한 채, normalization에 사용하지 않은 별도 고정 judge가 같은 방향을 재현하는지 확인했습니다.",
+        "solution": "같은 영어·한국어 패널을 gpt-4.1-2025-04-14로 다시 채점하고 19개 query cluster 기준 paired bootstrap 신뢰구간을 비교했습니다.",
+        "result": "gpt-4o에서 보였던 answer-relevancy의 비영점 음의 구간이 gpt-4.1에서는 재현되지 않았습니다. 최종 결론을 '한국어 유지 효과는 확인, judge에 강건한 RAG 품질 차이는 미확인'으로 제한했습니다."
       },
       {
-        "title": "처음 구현한 SCD가 효과가 없었을 때 논문 방법 자체가 문제인지 구현이 다른 건지 구분해야 했음",
-        "problem": "초기 penalty_additive SCD는 한국어 유지 효과가 거의 없었고 일부 이미 한국어인 답변을 오히려 나쁘게 만들었습니다.",
-        "cause": "코드를 원 논문과 다시 대조해보니 target-language boost와 warm-up이 빠져 있었고, reference의 multiplicative scaling 대신 고정 additive penalty만 사용하고 있었습니다.",
-        "approach": "기존 결과를 버리고 새 결과로 덮기보다 '기존 구현에서의 결과'와 '논문 기준 구현에서의 결과'를 따로 남겼습니다.",
-        "solution": "reference_scd를 별도 mode로 구현하고 기존 v1 결과를 보존한 채 같은 152개 generation 구조로 다시 실험했습니다.",
-        "result": "reference_scd에서는 한국어 비율 paired +0.2203, 76쌍 중 68쌍 개선을 확인했습니다. 구현 차이를 확인하지 않았다면 기존 null result를 방법 자체의 실패로 잘못 해석할 수 있었습니다."
+        "title": "효과가 없다는 결과가 방법의 실패인지, 내가 구현을 다르게 한 결과인지 어떻게 구분할 것인가",
+        "problem": "초기 penalty_additive SCD는 한국어 유지에 거의 도움이 되지 않았고 일부 이미 한국어인 답변을 오히려 악화시켰습니다.",
+        "cause": "원 논문과 코드를 다시 대조해보니 target-language boost와 warm-up이 빠져 있었고, reference의 multiplicative scaling 대신 additive penalty를 사용하고 있었습니다.",
+        "approach": "기존 결과를 지우고 새 구현으로 덮으면 실패 원인을 잃는다고 봤습니다. '내 구현에서의 결과'와 '논문 방식 자체의 결과'를 분리해야 했습니다.",
+        "solution": "기존 penalty_additive를 그대로 보존하고 reference_scd를 별도 mode로 구현해 같은 실험 구조에서 다시 생성·평가했습니다.",
+        "result": "reference_scd에서 한국어 비율 paired +0.2203, 76쌍 중 68쌍 개선을 확인했습니다. 초기 null result를 SCD 방법 자체의 실패로 잘못 결론내리지 않게 됐습니다."
       }
     ],
     "commits": [
@@ -529,44 +483,44 @@ export const projects = [
       }
     ],
     "contributions": [
-      "6개 씬으로 이어지는 CODE BLUE 게임의 grid 이동, 플레이어 combat, 적 AI, item/trigger, boss phase·pattern과 UI를 구성하고 보스전을 RL 학습 가능한 별도 scene으로 연결했습니다.",
-      "보스 위치·방향·HP·phase, warning/damage tile, 최근 위험 정보와 실제 화면에 보이는 pattern cue를 observation으로 구성했습니다.",
-      "학습 로그에 공격 기회, 위험 타일 진입, hit attribution, safe move 여부 등 진단 지표를 추가해 reward 총합이 아니라 실제 행동이 왜 막히는지 확인했습니다.",
-      "사람은 이동과 공격을 동시에 할 수 있는데 agent는 하나만 고르던 action mismatch를 찾아 Single Discrete [6]을 MultiDiscrete [5,2]로 변경했습니다.",
-      "reward farming, action mask, scene reset timeout, one-shot 입력 replay 같은 학습 환경 자체의 버그를 수정한 뒤 1M PPO long-run을 수행했습니다."
+      "직접 만든 6개 scene의 2D grid action game CODE BLUE에서 실제 보스전을 ML-Agents 학습 환경으로 연결했습니다.",
+      "사람 플레이와 비교할 수 있도록 agent의 action space와 observation 범위를 실제 입력·화면 정보에 맞춰 설계했습니다.",
+      "reward 총합보다 공격 기회, hit, 위험 회피 같은 행동 단위 지표를 만들어 policy가 무엇을 학습했는지 확인했습니다.",
+      "Action Space와 Reward 구조를 단계별로 바꾸고 매 변경 뒤 fresh training으로 이전 checkpoint 영향 없이 비교했습니다.",
+      "환경 설계를 고정한 뒤 PPO-only 1M long-run으로 구조 수정이 장기 학습에서 실제 클리어로 이어지는지 확인했습니다."
     ],
     "cases": [
       {
-        "title": "사람은 이동하면서 공격할 수 있는데 agent는 둘 중 하나만 고르게 만든 상태였음",
-        "problem": "50K 학습에서 boss damage가 24/60에 막혔고 공격은 전체 action의 1.40%뿐이었습니다. 안전하게 공격할 수 있는 기회의 80.3%를 넘겼습니다.",
-        "cause": "초기 Single Discrete [6]에서는 WAIT·이동·공격 중 하나만 선택할 수 있어 사람이 실제 게임에서 하는 '피하면서 공격'을 표현할 수 없었습니다.",
-        "approach": "학습 step을 더 늘리기 전에 사람 입력과 agent action space 자체가 같은 조건인지 비교했습니다.",
-        "solution": "이동 [5]와 공격 [2]을 독립 branch로 둔 MultiDiscrete [5,2]로 변경했습니다.",
-        "result": "agent도 이동과 공격을 같은 decision에서 표현할 수 있게 됐고 이후 reward 문제를 별도로 확인할 수 있었습니다."
+        "title": "사람과 agent가 애초에 같은 행동 가능성을 가지고 있는가",
+        "problem": "50K 학습에서 agent는 살아남지만 공격을 거의 하지 않았습니다. 사람은 움직이면서 공격할 수 있는데 agent는 WAIT·이동·공격 중 하나만 선택해야 했습니다.",
+        "cause": "초기 Single Discrete [6] action space가 게임의 실제 입력 구조를 잘못 추상화해, PPO가 아무리 학습해도 사람과 같은 전략을 표현할 수 없었습니다.",
+        "approach": "학습 step과 hyperparameter를 늘리기 전에 사람의 input channel과 agent의 action representation을 직접 비교했습니다.",
+        "solution": "이동 [5]와 공격 [2]을 독립 branch로 둔 MultiDiscrete [5,2]로 바꿨습니다.",
+        "result": "agent도 피하면서 공격하는 전략을 표현할 수 있게 됐고, 50K 성능 정체를 모델 학습량 문제가 아니라 environment design 문제로 분리할 수 있었습니다."
       },
       {
-        "title": "action space를 고치자 이번에는 실제 hit 없이 공격 시도만으로 보상을 얻음",
-        "problem": "동시 공격이 가능해진 뒤 agent가 정확히 맞히기보다 공격을 반복해 attempt reward를 쌓았습니다.",
-        "cause": "보상이 공격 성공이 아니라 안전한 위치에서 '공격을 시도한 것'에 붙어 있었습니다.",
-        "approach": "reward 총합만 보지 않고 hit rate와 boss HP 감소를 같이 봤습니다.",
-        "solution": "공격 시도 reward를 제거하고 실제 boss HP가 감소한 hit에만 bonus reward를 주도록 바꿨습니다.",
-        "result": "reward farming은 제거됐고, 그 수정만으로 damage가 바로 오르지 않았다는 결과도 그대로 남겨 다음 병목과 분리했습니다."
+        "title": "Reward가 높아졌다는 것이 정말 더 잘 싸우는 policy라는 뜻인가",
+        "problem": "이동과 공격을 동시에 할 수 있게 하자 agent의 reward는 늘었지만 실제 hit 없이 공격을 반복하는 행동이 생겼습니다.",
+        "cause": "SafeInRangeAttackAttemptReward가 '공격 성공'이 아니라 '공격 시도' 자체를 보상해 policy가 의도보다 쉬운 reward 획득 경로를 찾았습니다.",
+        "approach": "episode reward만 보지 않고 공격 시도, 실제 HP 감소, hit rate를 분리해 어떤 행동에서 점수가 생겼는지 확인했습니다.",
+        "solution": "시도 보상을 제거하고 실제 boss HP 감소가 확인된 hit에만 bonus를 주는 hit-gated reward로 바꿨습니다.",
+        "result": "reward farming을 제거했고, reward 증가와 task success를 같은 것으로 보지 않는 평가 기준을 만들었습니다."
       },
       {
-        "title": "보스를 깨게 만드는 것보다 사람이 볼 수 없는 정보를 agent에게 주지 않는 게 중요했음",
-        "problem": "보스 pattern의 내부 state나 다음 순서를 observation에 넣으면 성능은 쉽게 오를 수 있지만 사람보다 더 많은 정보를 가진 agent가 됩니다.",
-        "cause": "게임 내부에는 AI가 읽을 수 있는 상태가 많지만 실제 플레이어는 warning tile과 화면에 나타난 cue만 볼 수 있습니다.",
-        "approach": "클리어율보다 사람과 비교 가능한 조건을 먼저 정했습니다.",
-        "solution": "MarkATK real/fake cue와 과거 sweep history처럼 실제 화면에서 확인 가능한 정보만 observation으로 만들고 hidden/off-lane/stale target leak를 따로 기록했습니다.",
-        "result": "최종 1M run에서 hidden hit, off-lane hit, stale hit, fake marker mask leak, next-band/sweep-sequence leak를 0으로 확인했습니다."
+        "title": "클리어율을 높이기 위해 agent에게 게임 내부 정보를 어디까지 보여줘도 되는가",
+        "problem": "보스의 내부 pattern state나 다음 공격 순서를 observation에 넣으면 학습은 쉬워지지만 실제 사람보다 미래를 더 많이 아는 agent가 됩니다.",
+        "cause": "Unity 내부에는 쉽게 읽을 수 있는 상태가 많지만, 연구 목표는 단순 클리어가 아니라 사람이 보는 정보 범위에서 학습 가능한지를 보는 것이었습니다.",
+        "approach": "성능보다 observation의 정당성을 먼저 정하고, 실제 화면에 나타난 cue와 이미 관측된 history만 허용했습니다.",
+        "solution": "MarkATK real/fake cue와 과거 sweep history처럼 플레이어가 확인 가능한 정보만 observation으로 구성하고 hidden/off-lane/stale target leak를 별도 metric으로 추적했습니다.",
+        "result": "최종 1M run에서 hidden hit, off-lane hit, stale hit, fake-marker mask leak, next-band/sweep-sequence leak를 모두 0으로 확인했습니다."
       },
       {
-        "title": "구조를 계속 바꾸기보다 어느 시점부터는 고정하고 길게 학습해봐야 했음",
-        "problem": "20K~50K에서는 회피 중심 local optimum에서 빠져나오지 못했고 보스 처치가 나오지 않았습니다.",
-        "cause": "여러 phase를 버티고 공격권을 다시 만드는 보스전이라 짧은 run만으로 구조 변경 효과를 판단하기 어려웠습니다.",
-        "approach": "action·reward·observation을 더 만지지 않고 기준 코드를 고정한 뒤 장기 학습 자체를 검증했습니다.",
-        "solution": "동일 [5,2] action, 438차원 observation, hit-gated reward 조건으로 PPO-only 1M headless run을 수행했습니다.",
-        "result": "총 892 episode에서 boss_dead 199회, 전체 클리어율 22.3%, 최근 100 episode 클리어율 80%, 최근 hit rate 97.3%를 기록했습니다."
+        "title": "계속 환경을 고칠 것인가, 이제 고정하고 충분히 학습시킬 것인가",
+        "problem": "20K~50K에서는 클리어가 거의 나오지 않아 구조가 아직 틀린 것인지, 장기 학습이 부족한 것인지 구분하기 어려웠습니다.",
+        "cause": "환경을 계속 바꾸면 매번 학습 분포가 달라져 어느 수정이 실제 효과가 있었는지 판단하기 어려워집니다.",
+        "approach": "Action Space, observation, hit-gated reward가 의도대로 동작한다고 확인한 시점부터는 더 이상 유리하게 조건을 바꾸지 않고 환경을 고정했습니다.",
+        "solution": "같은 [5,2] action, 438차원 observation, reward 조건을 유지한 채 PPO-only 1M headless long-run을 수행했습니다.",
+        "result": "892 episode에서 boss_dead 199회, 전체 클리어율 22.3%, 최근 100 episode 클리어율 80%, 최근 hit rate 97.3%를 기록해 장기 학습에서 실제 task success로 이어지는지 확인했습니다."
       }
     ],
     "aiNote": {
@@ -576,19 +530,14 @@ export const projects = [
     },
     "commits": [
       {
-        "label": "RL action/mask 입력 버그 수정",
-        "sha": "903e2b3",
-        "url": "https://github.com/LxNx-Hn/AI_FinalTerm/commit/903e2b3ea34683be36c0647893a8a98c81dc4d20"
+        "label": "MDP / 환경 설계 분석",
+        "sha": "1119175",
+        "url": "https://github.com/LxNx-Hn/AI_FinalTerm/commit/111917571e5ef9f4422e80cfd2f3c5848702a55b"
       },
       {
-        "label": "Async episode reset",
-        "sha": "5bddba2",
-        "url": "https://github.com/LxNx-Hn/AI_FinalTerm/commit/5bddba21d71421d9705cc40743b37f3e03dd48ec"
-      },
-      {
-        "label": "행동 기회 진단 metric",
-        "sha": "8357fe2",
-        "url": "https://github.com/LxNx-Hn/AI_FinalTerm/commit/8357fe2d2d0bf7394f90a2a70a2a92dd418b59aa"
+        "label": "50K 병목 분석",
+        "sha": "f08cd01",
+        "url": "https://github.com/LxNx-Hn/AI_FinalTerm/commit/f08cd0153ed6c3941c334235b3fbae7aa73dc5f2"
       },
       {
         "label": "Action Space [5,2]",
@@ -596,9 +545,14 @@ export const projects = [
         "url": "https://github.com/LxNx-Hn/AI_FinalTerm/commit/6fedfb497ccb3d614c6d8a767f6f5b9e6306dc18"
       },
       {
-        "label": "Reward farming 제거",
+        "label": "Hit-gated Reward",
         "sha": "c84b1a4",
         "url": "https://github.com/LxNx-Hn/AI_FinalTerm/commit/c84b1a4d89f055e11ee69e926d1df2314012e5e9"
+      },
+      {
+        "label": "Observation 설계",
+        "sha": "af1894b",
+        "url": "https://github.com/LxNx-Hn/AI_FinalTerm/commit/af1894b930d4e7e94cef8cb17f963058e51e42fb"
       },
       {
         "label": "1M PPO long-run",

@@ -25,9 +25,9 @@ const renderCase = (item, index) => `
     </summary>
     <dl class="case-rows">
       <div class="case-row"><dt>문제</dt><dd>${item.problem}</dd></div>
-      <div class="case-row"><dt>원인</dt><dd>${item.cause}</dd></div>
-      <div class="case-row"><dt>확인 / 시도</dt><dd>${item.approach}</dd></div>
-      <div class="case-row"><dt>해결</dt><dd>${item.solution}</dd></div>
+      <div class="case-row"><dt>왜 어려웠나</dt><dd>${item.cause}</dd></div>
+      <div class="case-row"><dt>확인 / 고민</dt><dd>${item.approach}</dd></div>
+      <div class="case-row"><dt>선택</dt><dd>${item.solution}</dd></div>
       <div class="case-row case-row-result"><dt>결과</dt><dd>${item.result}</dd></div>
     </dl>
   </details>`;
@@ -97,9 +97,9 @@ const renderProject = (project, index) => {
         <ul class="bullet-list">${renderList(project.contributions)}</ul>
       </section>
 
-      <section class="project-cases" aria-label="문제 해결 과정">
-        <p class="content-label">문제 해결 과정</p>
-        <p class="case-guide">첫 사례만 펼쳐두었습니다. 제목을 누르면 문제 → 원인 → 확인/시도 → 해결 → 결과 순서로 볼 수 있습니다.</p>
+      <section class="project-cases" aria-label="핵심 문제와 판단 과정">
+        <p class="content-label">핵심 문제와 판단 과정</p>
+        <p class="case-guide">첫 사례만 펼쳐두었습니다. 구현 버그보다 프로젝트에서 직접 기준을 정해야 했던 문제와 판단만 정리했습니다.</p>
         <div class="case-study-list">${project.cases.map(renderCase).join("")}</div>
       </section>
 

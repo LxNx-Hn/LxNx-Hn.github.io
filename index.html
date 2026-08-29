@@ -53,13 +53,13 @@
         <div class="hero-copy">
           <p class="eyebrow">PORTFOLIO · AI / DATA / CLOUD</p>
           <h1 id="hero-title">
-            기술보다 먼저,<br />
-            <span>해결할 문제를 구조화합니다.</span>
+            결과가 이상하면,<br />
+            <span>어디서부터 어긋났는지 다시 봅니다.</span>
           </h1>
           <p class="hero-intro">
-            문제를 작은 단위로 구조화하고, 데이터·AI·Cloud를 조합해 실제 서비스 형태까지 구현해 왔습니다.
-            전체 설계와 판단은 직접 수행하고, 범위가 명확한 구현에는 AI를 활용한 뒤 코드와 로그를 직접
-            검증하는 방식으로 개발합니다.
+            RAG 검색, 추천 모델, 강화학습, 배포까지 여러 프로젝트를 직접 만들고 연결해봤습니다.
+            잘 안 될 때는 모델부터 바꾸기보다 데이터가 어떻게 들어왔는지, 중간 값이 어디서 달라졌는지부터
+            확인하는 편입니다. 아래에는 결과만이 아니라 제가 맡은 부분과 중간에 판단을 바꿨던 이유까지 같이 적었습니다.
           </p>
           <div class="hero-actions" aria-label="주요 링크">
             <a
@@ -76,22 +76,22 @@
         </div>
 
         <aside class="hero-proof" aria-label="포트폴리오 핵심 범위">
-          <p class="proof-label">WORKING RANGE</p>
+          <p class="proof-label">THIS PORTFOLIO</p>
           <ol class="proof-list">
             <li>
               <span class="proof-number">01</span>
-              <div><strong>Problem</strong><span>사용자 문제와 제약조건 정의</span></div>
+              <div><strong>What I built</strong><span>무엇을 만들었는지</span></div>
             </li>
             <li>
               <span class="proof-number">02</span>
-              <div><strong>Build</strong><span>데이터·AI·Cloud 조합</span></div>
+              <div><strong>What I owned</strong><span>어디까지 맡았는지</span></div>
             </li>
             <li>
               <span class="proof-number">03</span>
-              <div><strong>Verify</strong><span>코드·테스트·로그로 재확인</span></div>
+              <div><strong>What changed</strong><span>중간에 왜 판단을 바꿨는지</span></div>
             </li>
           </ol>
-          <p class="proof-note">공개 저장소와 대표 커밋으로 작업 범위를 연결했습니다.</p>
+          <p class="proof-note">기술 이름보다 실제 코드와 결과를 기준으로 적었습니다.</p>
         </aside>
       </section>
 
@@ -100,9 +100,9 @@
           <div class="section-heading">
             <div>
               <p class="section-index">01 · SELECTED PROJECTS</p>
-              <h2 id="projects-title">무엇을 만들었고, 어디를 맡았는지부터 정리했습니다.</h2>
+              <h2 id="projects-title">결과만 정리하지 않고,<br />중간에 판단이 바뀐 지점까지 같이 적었습니다.</h2>
             </div>
-            <p>프로젝트 소개부터 사용 기술, 맡은 부분, 실제로 막혔던 문제와 해결 과정 순서로 정리했습니다.</p>
+            <p>각 프로젝트는 소개, 맡은 부분, 사용 기술, 오래 고민했던 지점, 확인한 결과와 관련 코드 순서로 볼 수 있습니다.</p>
           </div>
           <div class="project-grid" data-project-list aria-live="polite"></div>
         </div>
@@ -112,82 +112,74 @@
         <div class="shell">
           <div class="section-heading workflow-heading">
             <div>
-              <p class="section-index">02 · HOW I WORK WITH AI</p>
-              <h2 id="workflow-title">AI를 구현 속도가 아닌<br />검증 가능한 작업 흐름에 넣습니다.</h2>
+              <p class="section-index">02 · AI IN MY WORK</p>
+              <h2 id="workflow-title">AI를 쓸 때도 먼저<br />어디까지 맡길지 범위를 줄입니다.</h2>
             </div>
             <p>
-              설계와 판단은 직접 하고, 범위가 명확한 작은 구현은 AI에 맡긴 뒤 결과를 직접 이해하고
-              검증하면서 다음 단계로 넘어갑니다.
+              전체 구현을 한 번에 맡기기보다 입력·출력과 바꿀 범위를 먼저 정합니다. 함수나 오류 단위로
+              좁혀서 요청하고, 나온 코드는 diff를 읽은 뒤 직접 실행해 결과를 확인합니다.
             </p>
           </div>
 
-          <ol class="workflow-steps" aria-label="AI 활용 6단계">
+          <ol class="workflow-steps workflow-steps-four" aria-label="AI 활용 4단계">
             <li>
               <span>01</span>
-              <div><strong>문제 분해</strong><p>큰 문제를 함수 수준까지 나눕니다.</p></div>
+              <div><strong>범위부터 잡기</strong><p>입력·출력, 상태, 바꿀 파일을 먼저 정합니다.</p></div>
             </li>
             <li>
               <span>02</span>
-              <div><strong>Skeleton 설계</strong><p>입출력·상태·인터페이스를 먼저 결정합니다.</p></div>
+              <div><strong>작게 맡기기</strong><p>함수, 쿼리, 테스트처럼 끝이 보이는 단위로 요청합니다.</p></div>
             </li>
             <li>
               <span>03</span>
-              <div><strong>작은 구현 위임</strong><p>CRUD·테스트·반복 구현처럼 범위가 선명한 작업을 맡깁니다.</p></div>
+              <div><strong>변경 코드 읽기</strong><p>diff와 side effect를 보고 기존 구조와 맞는지 확인합니다.</p></div>
             </li>
             <li>
               <span>04</span>
-              <div><strong>코드 이해</strong><p>변수·상태 변화·side effect·설계 의도를 직접 읽습니다.</p></div>
-            </li>
-            <li>
-              <span>05</span>
-              <div><strong>실행 검증</strong><p>test·build·API·log·실제 데이터를 기준으로 확인합니다.</p></div>
-            </li>
-            <li>
-              <span>06</span>
-              <div><strong>수정 반복</strong><p>문제가 남은 함수만 다시 좁혀 수정합니다.</p></div>
+              <div><strong>직접 돌려보기</strong><p>설명보다 test, log, 실제 결과를 기준으로 판단합니다.</p></div>
             </li>
           </ol>
 
           <div class="ai-panels">
             <article class="reasoning-panel">
               <div class="panel-heading">
-                <p class="content-label">REASONING BUDGET</p>
-                <h3>불확실성에 맞춰 추론 비용을 나눕니다.</h3>
+                <p class="content-label">WHERE I USE AI</p>
+                <h3>생각이 필요한 일과, 구현을 맡길 일을 나눕니다.</h3>
               </div>
               <div class="reasoning-columns">
                 <div>
-                  <p>높은 추론 성능</p>
+                  <p>제가 먼저 판단하는 쪽</p>
                   <ul>
-                    <li>Architecture</li>
-                    <li>Root cause</li>
-                    <li>요구사항 분석</li>
-                    <li>복잡한 버그</li>
+                    <li>Architecture와 인터페이스</li>
+                    <li>무엇이 원인인지 아직 애매한 문제</li>
+                    <li>평가 기준과 trade-off</li>
                     <li>실험 결과 해석</li>
+                    <li>서비스에서 어디까지 책임질지</li>
                   </ul>
                 </div>
                 <div>
-                  <p>가벼운 모델</p>
+                  <p>AI에 맡기기 좋은 쪽</p>
                   <ul>
-                    <li>설계된 함수 구현</li>
-                    <li>CRUD·Test</li>
-                    <li>Formatting</li>
-                    <li>Documentation</li>
-                    <li>반복 작업</li>
+                    <li>이미 설계된 함수 구현</li>
+                    <li>SQL·CRUD·테스트 보완</li>
+                    <li>반복되는 코드 수정</li>
+                    <li>문서 초안과 형식 정리</li>
+                    <li>범위가 명확한 디버깅 보조</li>
                   </ul>
                 </div>
               </div>
               <p class="panel-note">
-                해결 방향이 명확한 작업에는 가벼운 모델을 사용해 Token과 비용을 줄입니다.
+                어떤 모델을 쓰는지보다, AI가 판단해야 하는 범위를 불필요하게 넓히지 않는 쪽을 더 중요하게 봅니다.
               </p>
             </article>
 
             <article class="evidence-panel">
-              <p class="content-label">AI-ASSISTED EVIDENCE</p>
-              <h3>AI 기여는 커밋에서 분리해 설명합니다.</h3>
+              <p class="content-label">AI-ASSISTED WORK</p>
+              <h3>AI와 같이 만든 부분도 작업 범위를 따로 남겼습니다.</h3>
               <ul class="evidence-list">
                 <li>
                   <span>Copilot coding agent</span>
-                  <p>MariaDB alias 오류의 재현 조건과 LEFT JOIN 전환 방향을 명세해 수정 PR을 생성하고 병합했습니다.</p>
+                  <p>MariaDB alias 오류에서는 기존 쿼리 구조와 오류 범위를 먼저 정한 뒤 대안을 받았습니다. 제안된 LEFT JOIN 변경은 diff와 실행 결과를 확인하고 반영했습니다.</p>
                   <a
                     href="https://github.com/LxNx-Hn/Hot-s-Pod/commit/191a8eae5cce326ccd488e2ebddf51c10e54585a"
                     target="_blank"
@@ -196,7 +188,7 @@
                 </li>
                 <li>
                   <span>Claude co-authored</span>
-                  <p>강화학습의 action·reward 변경은 AI 공동작성 이력을 밝히고, 코드와 학습 로그로 다시 판단했습니다.</p>
+                  <p>강화학습의 action·reward 수정 일부는 Claude와 같이 작업했습니다. 변경 뒤에는 새 학습을 다시 돌려 실제 행동과 로그가 바뀌었는지 따로 확인했습니다.</p>
                   <a
                     href="https://github.com/LxNx-Hn/AI_FinalTerm/commit/6fedfb497ccb3d614c6d8a767f6f5b9e6306dc18"
                     target="_blank"
@@ -214,9 +206,9 @@
           <div class="section-heading stack-heading">
             <div>
               <p class="section-index">03 · WORKING STACK</p>
-              <h2 id="stack-title">필요한 기술을 문제에 맞게 조합합니다.</h2>
+              <h2 id="stack-title">프로젝트에서 실제로 많이 쓴 기술입니다.</h2>
             </div>
-            <p>도구의 수보다 데이터 흐름, 서비스 연결, 운영 조건을 함께 다룬 경험에 집중합니다.</p>
+            <p>프로젝트마다 실제로 사용한 범위는 위의 Tech Stack에 따로 적었고, 여기에는 반복해서 사용한 기술만 모았습니다.</p>
           </div>
           <div class="stack-grid">
             <article><span>01</span><h3>Backend</h3><p>Python · FastAPI<br />PostgreSQL · MariaDB</p></article>
@@ -239,19 +231,27 @@
             </p>
           </div>
 
-          <ol class="approach-flow" aria-label="문제 해결 흐름">
-            <li><span>01</span><strong>문제</strong></li>
-            <li><span>02</span><strong>요구사항 분해</strong></li>
-            <li><span>03</span><strong>데이터 확인</strong></li>
-            <li><span>04</span><strong>기술 선택</strong></li>
-            <li><span>05</span><strong>PoC 구현</strong></li>
-            <li><span>06</span><strong>검증</strong></li>
-            <li><span>07</span><strong>운영·비용·보안</strong></li>
-          </ol>
+          <div class="working-notes">
+            <article>
+              <span>01</span>
+              <h3>결과가 이상하면 입력부터 봅니다.</h3>
+              <p>모델이나 라이브러리를 먼저 바꾸기보다 데이터가 어디서 들어왔고, 중간 단계에서 어떤 값이 달라졌는지 따라갑니다.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>모르는 값을 아는 것처럼 채우지 않습니다.</h3>
+              <p>경로 데이터처럼 실제 값과 추정값이 섞이는 경우에는 estimated, unavailable처럼 상태를 따로 남기는 편입니다.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>좋은 수치보다 비교 조건을 먼저 봅니다.</h3>
+              <p>RAG 평가와 강화학습 모두 점수가 좋아졌다는 이유만으로 끝내지 않고, 무엇이 같이 바뀌었는지 다시 확인했습니다.</p>
+            </article>
+          </div>
 
           <div class="closing-line">
             <span aria-hidden="true"></span>
-            <p>기술을 선택하기 전에 문제를 좁히고, 결과를 근거로 설명합니다.</p>
+            <p>결과가 좋아 보여도 왜 그렇게 나왔는지 설명할 수 있어야 쓸 수 있다고 봅니다.</p>
           </div>
         </div>
       </section>

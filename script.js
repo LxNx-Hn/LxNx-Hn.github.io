@@ -16,33 +16,32 @@ const renderStack = (stack) =>
     )
     .join("");
 
-const renderCase = (item, index) => `
-  <details class="case-study" ${index === 0 ? "open" : ""}>
+const renderCase = (item, index, featured) => `
+  <details class="story-block" ${featured && index === 0 ? "open" : ""}>
     <summary>
-      <span>${String(index + 1).padStart(2, "0")}</span>
+      <span class="story-index">${String(index + 1).padStart(2, "0")}</span>
       <strong>${item.title}</strong>
-      <span class="case-toggle" aria-hidden="true">＋</span>
+      <span class="story-toggle" aria-hidden="true">＋</span>
     </summary>
-    <dl class="case-rows">
-      <div class="case-row"><dt>문제</dt><dd>${item.problem}</dd></div>
-      <div class="case-row"><dt>왜 어려웠나</dt><dd>${item.cause}</dd></div>
-      <div class="case-row"><dt>확인 / 고민</dt><dd>${item.approach}</dd></div>
-      <div class="case-row"><dt>선택</dt><dd>${item.solution}</dd></div>
-      <div class="case-row case-row-result"><dt>결과</dt><dd>${item.result}</dd></div>
-    </dl>
+    <div class="story-copy">
+      <p class="story-lead">${item.problem}</p>
+      <p>${item.cause} ${item.approach}</p>
+      <p>${item.solution}</p>
+      <p class="story-result"><span>확인한 결과</span>${item.result}</p>
+    </div>
   </details>`;
 
 const renderResults = (items) =>
   items?.length
     ? `
       <section class="project-results" aria-label="프로젝트 결과">
-        <p class="content-label">프로젝트 결과 / 확인된 수치</p>
+        <p class="content-label">확인한 결과</p>
         <ul class="result-list">${renderList(items)}</ul>
       </section>`
     : "";
 
 const renderProject = (project, index) => {
-  const classes = ["project-card", project.featured ? "project-card-featured" : ""]
+  const classes = ["project-chapter", project.featured ? "project-featured" : ""]
     .filter(Boolean)
     .join(" ");
 
@@ -73,38 +72,37 @@ const renderProject = (project, index) => {
   return `
     <article class="${classes}" aria-labelledby="project-title-${index + 1}">
       <header class="project-header">
-        <div>
+        <div class="project-heading-copy">
           <p class="project-label">${project.label}</p>
           <h3 id="project-title-${index + 1}">${project.title}</h3>
+          <p class="project-overview-copy">${project.overview}</p>
         </div>
         <a class="repo-link" href="${project.repo}" ${externalLinkAttributes}>
           Repository <span aria-hidden="true">↗</span>
         </a>
       </header>
 
-      <section class="project-overview" aria-label="프로젝트 소개">
-        <p class="content-label">프로젝트 소개</p>
-        <p>${project.overview}</p>
-      </section>
+      <div class="project-main-grid">
+        <section class="project-role" aria-label="내가 맡은 부분">
+          <p class="content-label">내가 맡은 부분</p>
+          <ul class="bullet-list">${renderList(project.contributions)}</ul>
+        </section>
 
-      <section class="project-stack" aria-label="Tech Stack">
-        <p class="content-label">Tech Stack</p>
-        <div class="stack-groups">${renderStack(project.stack)}</div>
-      </section>
+        <aside class="project-stack" aria-label="Tech Stack">
+          <p class="content-label">Tech Stack</p>
+          <div class="stack-groups">${renderStack(project.stack)}</div>
+        </aside>
+      </div>
 
-      <section class="project-role" aria-label="내가 맡은 부분">
-        <p class="content-label">내가 맡은 부분</p>
-        <ul class="bullet-list">${renderList(project.contributions)}</ul>
-      </section>
-
-      <section class="project-cases" aria-label="핵심 문제와 판단 과정">
-        <p class="content-label">핵심 문제와 판단 과정</p>
-        <p class="case-guide">첫 사례만 펼쳐두었습니다. 구현 버그보다 프로젝트에서 직접 기준을 정해야 했던 문제와 판단만 정리했습니다.</p>
-        <div class="case-study-list">${project.cases.map(renderCase).join("")}</div>
+      <section class="project-stories" aria-label="오래 고민했던 부분">
+        <div class="story-heading">
+          <p class="content-label">오래 고민했던 부분</p>
+          <p>정답이 바로 보이지 않아서 기준을 다시 잡았던 지점들만 남겼습니다.</p>
+        </div>
+        <div class="story-list">${project.cases.map((item, caseIndex) => renderCase(item, caseIndex, project.featured)).join("")}</div>
       </section>
 
       ${renderResults(project.results)}
-
       ${aiNote}
 
       <footer class="project-footer">

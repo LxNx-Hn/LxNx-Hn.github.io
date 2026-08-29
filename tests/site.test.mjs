@@ -71,7 +71,7 @@ test("document keeps the required semantic structure and anchor targets", async 
 
 test("project renderer follows portfolio reading order", async () => {
   const script = await read("script.js");
-  const labels = ["프로젝트 소개", "Tech Stack", "내가 맡은 부분", "핵심 문제와 판단 과정", "관련 코드 / 커밋"];
+  const labels = ["내가 맡은 부분", "Tech Stack", "오래 고민했던 부분", "관련 코드 / 커밋"];
   let previous = -1;
   for (const label of labels) {
     const current = script.indexOf(label);
@@ -79,7 +79,7 @@ test("project renderer follows portfolio reading order", async () => {
     previous = current;
   }
   assert.ok(script.includes('target="_blank" rel="noopener noreferrer"'));
-  assert.ok(script.includes('aria-labelledby="project-title-'));
+  assert.ok(script.includes('aria-labelledby="project-title-'));\n  assert.ok(script.includes('class="story-block"'));
   assert.equal(script.includes("\uFFFD"), false, "script.js contains a replacement character");
 });
 

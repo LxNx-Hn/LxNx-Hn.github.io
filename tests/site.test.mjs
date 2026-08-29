@@ -26,13 +26,15 @@ test("project data stays inside the verified public repository set", () => {
     assert.ok(project.title && project.overview && project.label);
     assert.ok(project.stack.length >= 3 && project.stack.length <= 5);
     assert.ok(project.contributions.length >= 3 && project.contributions.length <= 5);
-    assert.ok(project.cases.length >= 1 && project.cases.length <= 3);
-    assert.ok(project.commits.length >= 1 && project.commits.length <= 3);
+    assert.ok(project.cases.length >= 2 && project.cases.length <= 7);
+    assert.ok(project.commits.length >= 4 && project.commits.length <= 6);
 
     for (const group of project.stack) {
       assert.ok(group.label);
       assert.ok(group.items.length >= 1);
     }
+
+    assert.ok(project.results.length >= 3 && project.results.length <= 7);
 
     for (const item of project.cases) {
       for (const key of ["title", "problem", "cause", "approach", "solution", "result"]) {

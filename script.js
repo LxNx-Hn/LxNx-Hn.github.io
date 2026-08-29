@@ -17,8 +17,12 @@ const renderStack = (stack) =>
     .join("");
 
 const renderCase = (item, index) => `
-  <article class="case-study">
-    <h4>${String(index + 1).padStart(2, "0")} · ${item.title}</h4>
+  <details class="case-study" ${index === 0 ? "open" : ""}>
+    <summary>
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <strong>${item.title}</strong>
+      <span class="case-toggle" aria-hidden="true">＋</span>
+    </summary>
     <dl class="case-rows">
       <div class="case-row"><dt>문제</dt><dd>${item.problem}</dd></div>
       <div class="case-row"><dt>원인</dt><dd>${item.cause}</dd></div>
@@ -26,7 +30,16 @@ const renderCase = (item, index) => `
       <div class="case-row"><dt>해결</dt><dd>${item.solution}</dd></div>
       <div class="case-row case-row-result"><dt>결과</dt><dd>${item.result}</dd></div>
     </dl>
-  </article>`;
+  </details>`;
+
+const renderResults = (items) =>
+  items?.length
+    ? `
+      <section class="project-results" aria-label="프로젝트 결과">
+        <p class="content-label">프로젝트 결과 / 확인된 수치</p>
+        <ul class="result-list">${renderList(items)}</ul>
+      </section>`
+    : "";
 
 const renderProject = (project, index) => {
   const classes = ["project-card", project.featured ? "project-card-featured" : ""]
@@ -86,8 +99,11 @@ const renderProject = (project, index) => {
 
       <section class="project-cases" aria-label="문제 해결 과정">
         <p class="content-label">문제 해결 과정</p>
+        <p class="case-guide">첫 사례만 펼쳐두었습니다. 제목을 누르면 문제 → 원인 → 확인/시도 → 해결 → 결과 순서로 볼 수 있습니다.</p>
         <div class="case-study-list">${project.cases.map(renderCase).join("")}</div>
       </section>
+
+      ${renderResults(project.results)}
 
       ${aiNote}
 

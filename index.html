@@ -111,91 +111,152 @@
         <div class="shell">
           <div class="section-heading workflow-heading">
             <div>
-              <p class="section-index">02 · AI IN MY WORK</p>
-              <h2 id="workflow-title">AI를 쓸 때도 먼저<br />어디까지 맡길지 범위를 줄입니다.</h2>
+              <p class="section-index">02 · AI 활용 방식</p>
+              <h2 id="workflow-title">개발 과정에 AI를 적극적으로 사용합니다.</h2>
             </div>
             <p>
-              전체 구현을 한 번에 맡기기보다 입력·출력과 바꿀 범위를 먼저 정합니다. 함수나 오류 단위로
-              좁혀서 요청하고, 나온 코드는 diff를 읽은 뒤 직접 실행해 결과를 확인합니다.
+              설계 검토부터 구현, 디버깅, 테스트, 문서화까지 단계별로 사용합니다.
+              다만 전체 작업을 한 번에 맡기기보다 필요한 범위를 먼저 정하고, 결과는 코드와 실행 결과로 다시 확인합니다.
             </p>
           </div>
 
-          <ol class="workflow-steps workflow-steps-four" aria-label="AI 활용 4단계">
+          <ol class="workflow-steps workflow-steps-six" aria-label="AI 활용 6단계">
             <li>
               <span>01</span>
-              <div><strong>범위부터 잡기</strong><p>입력·출력, 상태, 바꿀 파일을 먼저 정합니다.</p></div>
+              <div><strong>문제 정리</strong><p>요구사항과 현재 상태를 정리하고, 아직 확실하지 않은 부분을 먼저 나눕니다.</p></div>
             </li>
             <li>
               <span>02</span>
-              <div><strong>작게 맡기기</strong><p>함수, 쿼리, 테스트처럼 끝이 보이는 단위로 요청합니다.</p></div>
+              <div><strong>구조 설계</strong><p>입출력, 상태, 인터페이스와 변경 범위를 잡고 빠진 조건을 점검합니다.</p></div>
             </li>
             <li>
               <span>03</span>
-              <div><strong>변경 코드 읽기</strong><p>diff와 side effect를 보고 기존 구조와 맞는지 확인합니다.</p></div>
+              <div><strong>작업 분해</strong><p>함수, 쿼리, 테스트처럼 검토 가능한 크기로 나눕니다.</p></div>
             </li>
             <li>
               <span>04</span>
-              <div><strong>직접 돌려보기</strong><p>설명보다 test, log, 실제 결과를 기준으로 판단합니다.</p></div>
+              <div><strong>구현 보조</strong><p>방향이 정해진 반복 구현과 표준 패턴은 AI로 빠르게 작성합니다.</p></div>
+            </li>
+            <li>
+              <span>05</span>
+              <div><strong>코드 검토</strong><p>diff를 읽고 변수, 상태 변화, 예외 처리와 side effect를 확인합니다.</p></div>
+            </li>
+            <li>
+              <span>06</span>
+              <div><strong>실행 검증</strong><p>test, build, API, log, 실제 데이터와 학습 결과로 적용 여부를 판단합니다.</p></div>
             </li>
           </ol>
 
-          <div class="ai-panels">
-            <article class="reasoning-panel">
-              <div class="panel-heading">
-                <p class="content-label">WHERE I USE AI</p>
-                <h3>생각이 필요한 일과, 구현을 맡길 일을 나눕니다.</h3>
-              </div>
-              <div class="reasoning-columns">
+          <div class="ai-usage-layout">
+            <article class="ai-usage-card ai-usage-card-wide">
+              <p class="content-label">업무 분담</p>
+              <h3>판단이 필요한 일과 구현 속도를 높일 일을 나눠서 씁니다.</h3>
+              <div class="ai-usage-columns">
                 <div>
-                  <p>제가 먼저 판단하는 쪽</p>
-                  <ul>
-                    <li>Architecture와 인터페이스</li>
-                    <li>무엇이 원인인지 아직 애매한 문제</li>
-                    <li>평가 기준과 trade-off</li>
-                    <li>실험 결과 해석</li>
-                    <li>서비스에서 어디까지 책임질지</li>
-                  </ul>
+                  <strong>제가 먼저 판단하는 부분</strong>
+                  <p>
+                    아키텍처, 애매한 요구사항, root cause, 데이터와 평가 기준, 실험 결과 해석처럼
+                    답이 하나로 정해져 있지 않은 문제는 먼저 기준을 잡습니다. AI는 빠진 조건을 찾거나
+                    대안을 비교하는 데 사용합니다.
+                  </p>
                 </div>
                 <div>
-                  <p>AI에 맡기기 좋은 쪽</p>
-                  <ul>
-                    <li>이미 설계된 함수 구현</li>
-                    <li>SQL·CRUD·테스트 보완</li>
-                    <li>반복되는 코드 수정</li>
-                    <li>문서 초안과 형식 정리</li>
-                    <li>범위가 명확한 디버깅 보조</li>
-                  </ul>
+                  <strong>AI로 속도를 높이는 부분</strong>
+                  <p>
+                    이미 설계된 함수 구현, SQL 수정안, CRUD, 테스트 코드, 반복 작업, 문서 초안처럼
+                    범위가 분명한 일은 적극적으로 맡깁니다. 작은 단위로 요청할수록 검토와 수정도 빨라졌습니다.
+                  </p>
                 </div>
               </div>
-              <p class="panel-note">
-                어떤 모델을 쓰는지보다, AI가 판단해야 하는 범위를 불필요하게 넓히지 않는 쪽을 더 중요하게 봅니다.
+            </article>
+
+            <article class="ai-usage-card">
+              <p class="content-label">컨텍스트 관리</p>
+              <h3>필요한 코드와 조건만 전달합니다.</h3>
+              <p>
+                작은 오류 하나를 고치는데 저장소 전체를 넘기지 않고 관련 함수와 호출 경로만 제공합니다.
+                반대로 여러 모듈을 함께 봐야 하는 설계 문제라면 필요한 구조와 제약을 충분히 넣습니다.
+                컨텍스트를 줄이면 응답 속도와 토큰 사용도 줄고, 불필요한 수정 범위도 작아졌습니다.
               </p>
             </article>
 
-            <article class="evidence-panel">
-              <p class="content-label">AI-ASSISTED WORK</p>
-              <h3>AI와 같이 만든 부분도 작업 범위를 따로 남겼습니다.</h3>
-              <ul class="evidence-list">
-                <li>
-                  <span>Copilot coding agent</span>
-                  <p>MariaDB alias 오류에서는 기존 쿼리 구조와 오류 범위를 먼저 정한 뒤 대안을 받았습니다. 제안된 LEFT JOIN 변경은 diff와 실행 결과를 확인하고 반영했습니다.</p>
-                  <a
-                    href="https://github.com/LxNx-Hn/Hot-s-Pod/commit/191a8eae5cce326ccd488e2ebddf51c10e54585a"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >Copilot 공동작성 커밋 <span aria-hidden="true">↗</span></a>
-                </li>
-                <li>
-                  <span>Claude co-authored</span>
-                  <p>강화학습의 action·reward 수정 일부는 Claude와 같이 작업했습니다. 변경 뒤에는 새 학습을 다시 돌려 실제 행동과 로그가 바뀌었는지 따로 확인했습니다.</p>
-                  <a
-                    href="https://github.com/LxNx-Hn/AI_FinalTerm/commit/6fedfb497ccb3d614c6d8a767f6f5b9e6306dc18"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >Action Space 커밋 <span aria-hidden="true">↗</span></a>
-                </li>
-              </ul>
+            <article class="ai-usage-card">
+              <p class="content-label">모델 선택</p>
+              <h3>작업 난이도에 따라 추론 비용을 조절합니다.</h3>
+              <p>
+                구조 설계, 복잡한 상태 변화, 원인이 애매한 오류, 실험 해석은 추론 성능이 높은 모델을 사용합니다.
+                방향이 정해진 함수 구현, 테스트 보완, 문서 정리처럼 반복 가능한 작업은 더 가벼운 모델을 사용해
+                시간과 토큰을 줄입니다.
+              </p>
             </article>
+
+            <article class="ai-usage-card">
+              <p class="content-label">검증</p>
+              <h3>설명보다 실행 결과를 봅니다.</h3>
+              <p>
+                AI가 제안한 원인이 그럴듯해도 바로 믿지 않습니다. 변경 폭을 작게 유지하고 diff를 읽은 뒤,
+                테스트와 로그, 실제 데이터, 학습 결과가 같은 설명을 지지하는지 확인합니다.
+                맞지 않으면 전체를 다시 만들기보다 원인이 남은 부분만 좁혀 다시 수정합니다.
+              </p>
+            </article>
+          </div>
+
+          <section class="ai-examples" aria-labelledby="ai-examples-title">
+            <div class="ai-examples-heading">
+              <div>
+                <p class="content-label">실제 사용 예시</p>
+                <h3 id="ai-examples-title">프로젝트에서도 같은 방식으로 사용했습니다.</h3>
+              </div>
+              <p>설계 검토, 구현 보조, 디버깅, 테스트와 실험 정리까지 작업 성격에 맞춰 AI를 사용했습니다.</p>
+            </div>
+
+            <div class="ai-example-list">
+              <article>
+                <span>Hot's POD</span>
+                <h4>SQL 오류 수정</h4>
+                <p>
+                  MariaDB correlated subquery alias 오류에서는 재현 조건과 기존 쿼리 구조를 먼저 정리했습니다.
+                  제안된 LEFT JOIN 방식은 기존 결과와 비교하고 실행 결과를 확인한 뒤 반영했습니다.
+                </p>
+                <a href="https://github.com/LxNx-Hn/Hot-s-Pod/commit/191a8eae5cce326ccd488e2ebddf51c10e54585a" target="_blank" rel="noopener noreferrer">
+                  관련 커밋 <span aria-hidden="true">↗</span>
+                </a>
+              </article>
+
+              <article>
+                <span>CODE BLUE / PPO</span>
+                <h4>Action · Reward 구조 수정</h4>
+                <p>
+                  action space와 reward 수정안을 비교할 때 AI를 함께 사용했습니다. 코드가 바뀐 뒤에는
+                  fresh training을 다시 수행하고 공격 비율, hit, boss damage와 학습 로그를 비교해 다음 수정 여부를 판단했습니다.
+                </p>
+                <a href="https://github.com/LxNx-Hn/AI_FinalTerm/commit/6fedfb497ccb3d614c6d8a767f6f5b9e6306dc18" target="_blank" rel="noopener noreferrer">
+                  관련 커밋 <span aria-hidden="true">↗</span>
+                </a>
+              </article>
+
+              <article>
+                <span>일반 개발 흐름</span>
+                <h4>설계 → 구현 → 검토 분리</h4>
+                <p>
+                  복잡한 작업은 먼저 구조와 인터페이스를 정한 뒤 작은 구현 단위로 나눕니다.
+                  결과는 다시 읽고 실행하면서 확인하고, 문제가 남으면 전체 코드를 다시 생성하기보다
+                  원인이 남은 함수나 조건만 좁혀 수정합니다.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <div class="ai-principles">
+            <p class="content-label">작업 기준</p>
+            <div class="ai-principle-grid">
+              <div><strong>Small diff</strong><span>한 번에 바꾸는 범위를 작게 유지</span></div>
+              <div><strong>Context control</strong><span>필요한 코드와 조건만 전달</span></div>
+              <div><strong>Human review</strong><span>변수·상태·예외를 직접 이해한 뒤 반영</span></div>
+              <div><strong>Test / Log</strong><span>설명보다 실행 결과로 판단</span></div>
+              <div><strong>Reproducibility</strong><span>실험 조건과 결과를 다시 확인할 수 있게 기록</span></div>
+              <div><strong>Cost awareness</strong><span>작업 난이도에 맞춰 모델과 토큰 사용 조절</span></div>
+            </div>
           </div>
         </div>
       </section>

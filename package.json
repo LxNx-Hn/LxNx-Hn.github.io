@@ -1,0 +1,11 @@
+{
+  "name": "moon-jonggeon-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check script.js && node --check data/projects.js && node tests/site.test.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "npm run check"
+  }
+}

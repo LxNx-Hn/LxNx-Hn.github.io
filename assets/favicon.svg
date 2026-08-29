@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="문종건 포트폴리오">
+  <rect width="64" height="64" rx="16" fill="#16243b"/>
+  <path d="M15 18h34v5H15z" fill="#e2303d"/>
+  <path d="M18 31h8v16h-8zm19-8h8v24h-8z" fill="#fff"/>
+  <circle cx="31.5" cy="39" r="4" fill="#fff"/>
+</svg>

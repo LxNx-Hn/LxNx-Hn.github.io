@@ -1,0 +1,93 @@
+import assert from "node:assert/strict";
+import { readFile, stat } from "node:fs/promises";
+import { resolve } from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
+
+import { projects } from "../data/projects.js";
+
+const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const read = (path) => readFile(resolve(root, path), "utf8");
+
+const allowedRepositories = new Set([
+  "https://github.com/LxNx-Hn/KT-10",
+  "https://github.com/LxNx-Hn/Hot-s-Pod",
+  "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter",
+  "https://github.com/LxNx-Hn/M_RAG",
+  "https://github.com/LxNx-Hn/AI_FinalTerm",
+]);
+
+test("project data stays inside the verified public repository set", () => {
+  assert.equal(projects.length, 5);
+  assert.deepEqual(new Set(projects.map((project) => project.repo)), allowedRepositories);
+
+  const commitUrls = new Set();
+  for (const project of projects) {
+    assert.ok(project.title && project.problem && project.label);
+    assert.ok(project.contributions.length >= 3 && project.contributions.length <= 5);
+    assert.ok(project.technical.length >= 2 && project.technical.length <= 4);
+    assert.ok(project.commits.length >= 1 && project.commits.length <= 3);
+
+    for (const commit of project.commits) {
+      assert.match(commit.sha, /^[0-9a-f]{7}$/);
+      assert.ok(commit.url.startsWith(`${project.repo}/commit/`));
+      assert.equal(commitUrls.has(commit.url), false, `duplicate commit URL: ${commit.url}`);
+      commitUrls.add(commit.url);
+    }
+
+    if (project.aiNote) {
+      assert.match(project.aiNote.url, /^https:\/\/github\.com\/LxNx-Hn\//);
+    }
+  }
+});
+
+test("document keeps the required semantic structure and anchor targets", async () => {
+  const html = await read("index.html");
+  const requiredElements = ["<header", "<nav", "<main", "<section", "<footer"];
+  const requiredIds = ["top", "projects", "ai-workflow", "stack", "approach"];
+
+  assert.match(html, /<html lang="ko">/);
+  for (const element of requiredElements) assert.ok(html.includes(element), `missing ${element}`);
+  for (const id of requiredIds) assert.ok(html.includes(`id="${id}"`), `missing section #${id}`);
+  assert.ok(html.includes('href="#projects"'));
+  assert.ok(html.includes('href="#ai-workflow"'));
+  assert.ok(html.includes('href="#approach"'));
+  assert.ok(html.includes('class="skip-link"'));
+  assert.equal(html.includes("\uFFFD"), false, "index.html contains a replacement character");
+
+  const externalAnchors = html.match(/<a\s[\s\S]*?href="https:\/\/[^>]+>/g) ?? [];
+  assert.ok(externalAnchors.length >= 3);
+  for (const anchor of externalAnchors) {
+    assert.ok(anchor.includes('target="_blank"'));
+    assert.ok(anchor.includes('rel="noopener noreferrer"'));
+  }
+});
+
+test("runtime renderer protects every generated external link", async () => {
+  const script = await read("script.js");
+  assert.ok(script.includes('target="_blank" rel="noopener noreferrer"'));
+  assert.ok(script.includes('aria-labelledby="project-title-'));
+  assert.equal(script.includes("\uFFFD"), false, "script.js contains a replacement character");
+});
+
+test("social preview is a valid large landscape PNG", async () => {
+  const imagePath = resolve(root, "assets/og.png");
+  const image = await readFile(imagePath);
+  const imageStat = await stat(imagePath);
+
+  assert.ok(imageStat.size > 100_000);
+  assert.equal(image.subarray(1, 4).toString("ascii"), "PNG");
+  const width = image.readUInt32BE(16);
+  const height = image.readUInt32BE(20);
+  assert.ok(width >= 1200 && height >= 630, `${width}x${height} is too small`);
+  assert.ok(width / height > 1.8 && width / height < 2.0, `${width}x${height} has the wrong aspect ratio`);
+});
+
+test("local asset references resolve to files", async () => {
+  const html = await read("index.html");
+  for (const path of ["styles.css", "script.js", "assets/og.png", "assets/favicon.svg"]) {
+    await stat(resolve(root, path));
+    assert.ok(html.includes(path));
+  }
+  await stat(resolve(root, "data/projects.js"));
+});

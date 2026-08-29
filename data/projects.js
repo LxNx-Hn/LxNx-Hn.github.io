@@ -54,7 +54,7 @@ export const projects = [
     ],
     "cases": [
       {
-        "title": "최단시간만으로는 좋은 경로가 되지 않았습니다.",
+        "title": "좋은 경로의 기준",
         "problem": "최단시간 하나로 순위를 정하면 휠체어 사용자에게 계단이 있는 짧은 길이, 짐이 많은 사용자에게 도보가 긴 환승 적은 길이 상위에 올 수 있었습니다. 프로필마다 불편의 종류와 우선순위가 달랐습니다.",
         "cause": "이 문제에는 모든 사용자에게 통하는 단일 정답 label이 없고, 초기 단계에는 충분한 사람 평가 데이터도 없었습니다.",
         "approach": "모델부터 학습시키기보다 각 프로필에서 어떤 feature가 부담이 되는지 기준을 먼저 분리했습니다. 동시에 이 기준으로 만든 label을 실제 사람 선호라고 부르면 안 된다고 봤습니다.",
@@ -62,7 +62,7 @@ export const projects = [
         "result": "380개 OD의 1,137개 후보로 baseline을 만들고 NDCG@3 0.9166~0.9596을 확인했지만, 이 수치를 실제 사용자 선호를 검증한 production 성능으로 해석하지 않도록 경계를 남겼습니다."
       },
       {
-        "title": "개인화하기도 전에 후보를 잘라내고 있었습니다.",
+        "title": "개인화 전 후보 보존",
         "problem": "외부 API가 반환한 경로를 시간순 topN으로 바로 잘라 화면과 모델에 같이 쓰면, 특정 사용자에게는 더 적합하지만 일반 기준에서 조금 느린 경로가 개인화 평가를 받기도 전에 사라질 수 있었습니다.",
         "cause": "'화면에 몇 개를 보여줄지'와 '추천 모델이 몇 개를 비교해야 할지'는 다른 문제인데 같은 topN 값으로 묶여 있었습니다.",
         "approach": "최종 UI는 단순해야 하지만 내부에서는 개인화가 의미 있게 작동할 만큼 후보 다양성을 보존해야 한다고 봤습니다.",
@@ -70,7 +70,7 @@ export const projects = [
         "result": "일반적인 시간순 필터가 개인화 모델의 선택지를 미리 없애는 구조를 줄이고, 후보 생성과 랭킹의 역할을 분리했습니다."
       },
       {
-        "title": "없는 값을 채우면 모델은 그 값을 사실로 봅니다.",
+        "title": "불확실한 데이터 처리",
         "problem": "여러 공급원을 합치다 보니 실제 도로 선형이 없는 버스 경로, 연결되지 않은 철도 시간표, 공급원마다 표현이 다른 노선처럼 '값은 필요하지만 확정할 수 없는 정보'가 생겼습니다.",
         "cause": "추천 시스템은 숫자와 feature가 있으면 계산을 계속할 수 있지만, 임의로 채운 값은 오히려 모델이 거짓 확신을 갖게 만들 수 있었습니다.",
         "approach": "정보가 비어 있는 것과 실제 값이 0인 것을 같은 것으로 다루지 않고, 사용자에게 보이는 결과에서도 데이터 품질을 숨기지 않는 쪽을 택했습니다.",
@@ -164,7 +164,7 @@ export const projects = [
     ],
     "cases": [
       {
-        "title": "평가를 위해 번역했는데, 그 번역이 실험 조건을 바꾸고 있었습니다.",
+        "title": "Cross-lingual 평가 조건",
         "problem": "질문은 한국어, 검색 context와 reference는 영어, SCD가 켜진 답변은 한국어에 가까웠습니다. 이 상태에서 RAGAS를 돌리면 내용 품질과 언어 차이가 같은 점수 안에 섞입니다.",
         "cause": "cross-lingual RAG에서는 의미가 같아도 judge가 언어 조합에 따라 다르게 반응할 수 있고, 특히 faithfulness는 답변과 context를 동시에 보기 때문에 언어 조건 자체가 평가 변수가 됩니다.",
         "approach": "처음에는 SCD-on context만 한국어로 번역해 언어를 맞췄지만, 그러면 SCD 여부와 번역 여부가 항상 같이 움직여 점수 차이를 분리할 수 없다는 confound를 확인했습니다.",
@@ -172,7 +172,7 @@ export const projects = [
         "result": "첫 비대칭 평가는 인과 결과가 아니라 sensitivity analysis로 낮춰 해석했고, SCD 외의 언어 조건을 최대한 맞춘 별도 평가를 만들었습니다."
       },
       {
-        "title": "같은 뜻으로 번역했다고 해서 같은 평가 입력이 되는 건 아니었습니다.",
+        "title": "번역 과정의 평가 왜곡",
         "problem": "답변·context를 같은 언어로 맞추는 과정에서 숫자, 인용, 날짜, 모델명, metric명이나 기술 용어가 조금만 바뀌어도 원래 생성 결과가 아닌 번역 결과를 평가하게 됩니다.",
         "cause": "일반 번역에서는 자연스러움이 중요하지만 연구 평가에서는 단어 하나의 선택도 answer relevancy나 faithfulness에 영향을 줄 수 있습니다.",
         "approach": "번역 품질을 감으로 판단하지 않고 어떤 정보는 절대 바뀌면 안 되는지 먼저 정했습니다. 동시에 이미 목표 언어 조건을 만족하는 텍스트까지 다시 번역할 필요는 없다고 봤습니다.",
@@ -180,7 +180,7 @@ export const projects = [
         "result": "번역을 평가 전처리로 사용하면서도 그 과정 자체를 추적 가능한 변수로 남겼고, 같은 규칙을 적용해도 SCD-off/on의 실제 translation exposure가 달랐다는 한계까지 명시했습니다."
       },
       {
-        "title": "한 judge에서 나온 차이가 다른 judge에서도 반복되는지 다시 봤습니다.",
+        "title": "Judge에 따른 결과 차이",
         "problem": "대칭 입력을 gpt-4o로 평가했을 때 answer relevancy가 낮아지는 구간이 나왔습니다. 수치만 보면 SCD의 비용이라고 쓰기 쉬웠습니다.",
         "cause": "RAGAS의 일부 metric은 LLM judge의 의미 판단에 의존하고, 평가 입력도 사후 normalization을 거친 상태라 한 judge의 결과만으로 방법의 인과 효과를 단정하기 어려웠습니다.",
         "approach": "첫 결과를 유리하거나 불리하다는 이유로 버리지 않고 입력을 그대로 고정한 채, normalization에 사용하지 않은 별도 고정 judge가 같은 방향을 재현하는지 확인했습니다.",
@@ -188,7 +188,7 @@ export const projects = [
         "result": "gpt-4o에서 보였던 answer-relevancy의 비영점 음의 구간이 gpt-4.1에서는 재현되지 않았습니다. 최종 결론을 '한국어 유지 효과는 확인, judge에 강건한 RAG 품질 차이는 미확인'으로 제한했습니다."
       },
       {
-        "title": "효과가 없던 게 방법 문제인지, 제 구현 문제인지 나눠서 봤습니다.",
+        "title": "방법과 구현 효과 분리",
         "problem": "초기 penalty_additive SCD는 한국어 유지에 거의 도움이 되지 않았고 일부 이미 한국어인 답변을 오히려 악화시켰습니다.",
         "cause": "원 논문과 코드를 다시 대조해보니 target-language boost와 warm-up이 빠져 있었고, reference의 multiplicative scaling 대신 additive penalty를 사용하고 있었습니다.",
         "approach": "기존 결과를 지우고 새 구현으로 덮으면 실패 원인을 잃는다고 봤습니다. '내 구현에서의 결과'와 '논문 방식 자체의 결과'를 분리해야 했습니다.",
@@ -240,9 +240,9 @@ export const projects = [
   {
     "title": "CODE BLUE · PPO Boss Agent",
     "repo": "https://github.com/LxNx-Hn/AI_FinalTerm",
-    "label": "직접 만든 Unity 게임 + PPO 강화학습",
+    "label": "컴퓨터게임 과제로 제작한 CODE BLUE + PPO 강화학습",
     "featured": true,
-    "overview": "AI 기말 과제로 직접 만든 2D 격자 액션 게임 CODE BLUE에 Unity ML-Agents PPO를 적용한 프로젝트입니다. 게임 자체는 Entry, 일반 전투 스테이지, 병원 스테이지, 엘리베이터 보스전, 옥상 엔딩, Credits까지 6개 씬으로 구성했고 플레이어 이동·공격·대시, 적 AI, 아이템, trigger, UI, 보스의 다단계 패턴을 구현했습니다. 강화학습에서는 이 게임의 보스전을 별도 RL scene으로 만들고, 사람이 화면에서 확인할 수 있는 정보와 같은 범위의 observation과 이동/공격 입력만으로 보스를 처치하도록 학습시켰습니다.",
+    "overview": "컴퓨터게임 과제로 직접 제작한 2D 격자 액션 게임 CODE BLUE의 보스전을 PPO로 해결해본 프로젝트입니다. Entry, 일반 전투, 병원, 엘리베이터 보스전, 옥상 엔딩, Credits까지 6개 씬으로 게임을 만들고 플레이어 이동·공격·대시, 적 AI, 아이템, trigger, UI, 다단계 보스 패턴을 구현했습니다. 이후 보스전을 별도 RL 학습 환경으로 연결해, 사람이 게임에서 할 수 있는 행동과 볼 수 있는 정보 범위 안에서 PPO agent가 보스를 처치하도록 학습했습니다.",
     "stack": [
       {
         "label": "Game",
@@ -285,23 +285,23 @@ export const projects = [
       }
     ],
     "contributions": [
-      "직접 만든 6개 scene의 2D grid action game CODE BLUE에서 실제 보스전을 ML-Agents 학습 환경으로 연결했습니다.",
-      "사람 플레이와 비교할 수 있도록 agent의 action space와 observation 범위를 실제 입력·화면 정보에 맞춰 설계했습니다.",
-      "reward 총합보다 공격 기회, hit, 위험 회피 같은 행동 단위 지표를 만들어 policy가 무엇을 학습했는지 확인했습니다.",
-      "Action Space와 Reward 구조를 단계별로 바꾸고 매 변경 뒤 fresh training으로 이전 checkpoint 영향 없이 비교했습니다.",
-      "환경 설계를 고정한 뒤 PPO-only 1M long-run으로 구조 수정이 장기 학습에서 실제 클리어로 이어지는지 확인했습니다."
+      "컴퓨터게임 과제로 CODE BLUE의 6개 scene, grid 이동, player combat, 적 AI, item/trigger, boss phase·pattern과 UI를 구현했습니다.",
+      "완성한 보스전을 ML-Agents 학습 환경으로 연결하고, 실제 플레이 입력에 맞춰 action space와 observation을 설계했습니다.",
+      "공격 기회, hit, 위험 회피 같은 행동 단위 지표를 추가해 reward 총합만으로 판단하지 않도록 했습니다.",
+      "Action Space와 Reward 구조를 단계별로 수정하고 매 변경 뒤 fresh training으로 이전 checkpoint 영향을 분리했습니다.",
+      "환경 설계를 고정한 뒤 PPO-only 1M long-run으로 실제 보스 클리어까지 확인했습니다."
     ],
     "cases": [
       {
-        "title": "학습량보다 먼저, agent가 할 수 있는 행동부터 다시 봤습니다.",
-        "problem": "50K 학습에서 agent는 살아남지만 공격을 거의 하지 않았습니다. 사람은 움직이면서 공격할 수 있는데 agent는 WAIT·이동·공격 중 하나만 선택해야 했습니다.",
-        "cause": "초기 Single Discrete [6] action space가 게임의 실제 입력 구조를 잘못 추상화해, PPO가 아무리 학습해도 사람과 같은 전략을 표현할 수 없었습니다.",
-        "approach": "학습 step과 hyperparameter를 늘리기 전에 사람의 input channel과 agent의 action representation을 직접 비교했습니다.",
-        "solution": "이동 [5]와 공격 [2]을 독립 branch로 둔 MultiDiscrete [5,2]로 바꿨습니다.",
-        "result": "agent도 피하면서 공격하는 전략을 표현할 수 있게 됐고, 50K 성능 정체를 모델 학습량 문제가 아니라 environment design 문제로 분리할 수 있었습니다."
+        "title": "Action Space 설계",
+        "problem": "50K 학습에서 agent는 살아남지만 공격을 거의 하지 않았습니다. 사람은 이동하면서 공격할 수 있는데 agent는 WAIT·이동·공격 중 하나만 선택하도록 만들어져 있었습니다.",
+        "cause": "PPO의 학습량보다 앞서, 제가 정의한 Single Discrete [6] action space가 실제 게임 조작을 제대로 표현하지 못하고 있었습니다.",
+        "approach": "학습 step이나 hyperparameter를 더 바꾸기 전에 사람의 input과 agent가 선택할 수 있는 action을 먼저 비교했습니다.",
+        "solution": "이동 [5]와 공격 [2]을 독립 branch로 둔 MultiDiscrete [5,2]로 변경했습니다.",
+        "result": "agent도 이동과 공격을 같은 decision에서 표현할 수 있게 됐고, 이후 성능 변화를 reward와 별도로 다시 확인할 수 있었습니다."
       },
       {
-        "title": "Reward는 올랐는데 더 잘 싸우는 건 아니었습니다.",
+        "title": "Reward와 실제 행동의 차이",
         "problem": "이동과 공격을 동시에 할 수 있게 하자 agent의 reward는 늘었지만 실제 hit 없이 공격을 반복하는 행동이 생겼습니다.",
         "cause": "SafeInRangeAttackAttemptReward가 '공격 성공'이 아니라 '공격 시도' 자체를 보상해 policy가 의도보다 쉬운 reward 획득 경로를 찾았습니다.",
         "approach": "episode reward만 보지 않고 공격 시도, 실제 HP 감소, hit rate를 분리해 어떤 행동에서 점수가 생겼는지 확인했습니다.",
@@ -309,7 +309,7 @@ export const projects = [
         "result": "reward farming을 제거했고, reward 증가와 task success를 같은 것으로 보지 않는 평가 기준을 만들었습니다."
       },
       {
-        "title": "사람이 볼 수 없는 정보를 주고 클리어시키고 싶지는 않았습니다.",
+        "title": "Observation의 정보 범위",
         "problem": "보스의 내부 pattern state나 다음 공격 순서를 observation에 넣으면 학습은 쉬워지지만 실제 사람보다 미래를 더 많이 아는 agent가 됩니다.",
         "cause": "Unity 내부에는 쉽게 읽을 수 있는 상태가 많지만, 연구 목표는 단순 클리어가 아니라 사람이 보는 정보 범위에서 학습 가능한지를 보는 것이었습니다.",
         "approach": "성능보다 observation의 정당성을 먼저 정하고, 실제 화면에 나타난 cue와 이미 관측된 history만 허용했습니다.",
@@ -317,7 +317,7 @@ export const projects = [
         "result": "최종 1M run에서 hidden hit, off-lane hit, stale hit, fake-marker mask leak, next-band/sweep-sequence leak를 모두 0으로 확인했습니다."
       },
       {
-        "title": "환경을 계속 바꾸기보다, 어느 시점부터는 그대로 두고 학습해봤습니다.",
+        "title": "환경 고정 후 장기 학습",
         "problem": "20K~50K에서는 클리어가 거의 나오지 않아 구조가 아직 틀린 것인지, 장기 학습이 부족한 것인지 구분하기 어려웠습니다.",
         "cause": "환경을 계속 바꾸면 매번 학습 분포가 달라져 어느 수정이 실제 효과가 있었는지 판단하기 어려워집니다.",
         "approach": "Action Space, observation, hit-gated reward가 의도대로 동작한다고 확인한 시점부터는 더 이상 유리하게 조건을 바꾸지 않고 환경을 고정했습니다.",
@@ -420,7 +420,7 @@ export const projects = [
     ],
     "cases": [
       {
-        "title": "비슷하게 찾아야 하는 것과 정확히 맞아야 하는 조건을 나눴습니다.",
+        "title": "Semantic Search와 조건 검색의 역할 분리",
         "problem": "'운동할 사람', '조용한 모임'처럼 표현이 다양한 의도는 keyword만으로 찾기 어렵지만, 장소나 category는 의미가 비슷하다는 이유로 다른 값을 허용하면 안 됐습니다.",
         "cause": "Semantic Search는 표현 차이에 강하지만 hard constraint에는 느슨하고, SQL filter는 정확하지만 사용자의 애매한 의도를 이해하지 못합니다.",
         "approach": "둘 중 하나를 선택하지 않고 어떤 정보는 semantic하게 찾고 어떤 정보는 deterministic하게 확인해야 하는지 역할을 나눴습니다.",
@@ -428,7 +428,7 @@ export const projects = [
         "result": "자연어 표현의 유연성은 가져가면서 구조화 조건은 확정적으로 지키는 hybrid search 흐름을 만들었습니다."
       },
       {
-        "title": "검색 결과를 보면서 어느 선까지 남길지 정했습니다.",
+        "title": "검색 임계값 조정",
         "problem": "threshold를 높이면 엉뚱한 모임은 줄지만 표현이 조금 다른 유효한 결과도 함께 사라졌고, 낮추면 recall은 늘지만 사용자가 보기엔 관련 없는 결과가 섞였습니다.",
         "cause": "embedding distance는 서비스 데이터와 query 분포에 따라 의미가 달라져 인터넷의 일반적인 숫자를 그대로 가져올 수 없었습니다.",
         "approach": "특정 수치를 정답처럼 두지 않고 실제 서비스의 자연어 query를 반복해서 넣어 어떤 결과가 남고 빠지는지 비교했습니다.",
@@ -436,7 +436,7 @@ export const projects = [
         "result": "숫자 하나를 '최적값'으로 주장하기보다 현재 데이터에서 필요한 precision/recall 균형을 경험적으로 맞추고 그 기준을 코드에 반영했습니다."
       },
       {
-        "title": "LLM이 검색 결과까지 고르게 두지는 않았습니다.",
+        "title": "LLM의 역할 범위",
         "problem": "LLM에게 검색과 답변을 함께 맡기면 자연스럽지만, 실제 DB에 없는 모임을 섞거나 retrieval용 tag를 사용자 답변에 드러낼 가능성이 있었습니다.",
         "cause": "생성 모델의 자연스러운 표현 능력과 검색 시스템의 사실성 책임을 같은 단계에 두고 있었습니다.",
         "approach": "모임 존재 여부와 순위는 retrieval/DB가 책임지고, LLM은 그 결과를 설명하는 역할로 제한했습니다.",
@@ -524,7 +524,7 @@ export const projects = [
     ],
     "cases": [
       {
-        "title": "잘 답하는 것보다, 답하지 말아야 할 질문을 먼저 나눴습니다.",
+        "title": "질문 범위와 Routing",
         "problem": "생성형 AI는 창업과 관련 없어도 그럴듯하게 답할 수 있었고, 정책 질문과 트렌드 질문은 필요한 데이터의 성격도 달랐습니다. 모든 질문을 하나의 RAG 경로로 보내는 게 맞지 않았습니다.",
         "cause": "RAG의 검색 정확도보다 앞단에서 '이 질문이 서비스 범위 안인지, 어느 정보 경로로 가야 하는지'를 정하는 기준이 필요했습니다.",
         "approach": "모델에게 더 많은 문서를 주는 대신 질문을 먼저 구조화해 서비스가 책임질 범위를 분명하게 만들었습니다.",
@@ -532,7 +532,7 @@ export const projects = [
         "result": "프로젝트 기준 Accuracy 97.14%, Recall 97.94%, Precision 98.07%, F1 97.60을 확인했고, 범위 밖 질문을 별도 처리할 수 있게 됐습니다."
       },
       {
-        "title": "모델을 직접 띄우는 게 항상 맞는 건 아니었습니다.",
+        "title": "모델 운영 방식 선택",
         "problem": "로컬 GPU 환경에서는 동작했지만 실제 데모에서는 모델 서버, API key, backend, frontend, 비용을 함께 고려해야 했습니다. 모든 것을 직접 호스팅하면 프로젝트 규모에 비해 운영 부담이 컸습니다.",
         "cause": "개발 단계의 '모델이 실행된다'와 서비스 단계의 '반복 배포하고 유지할 수 있다'는 다른 기준이었습니다.",
         "approach": "AI 모델 자체를 소유하는 것보다 데모에서 필요한 제어 범위와 운영 비용을 기준으로 경계를 다시 나눴습니다.",

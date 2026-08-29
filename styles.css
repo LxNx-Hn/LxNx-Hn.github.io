@@ -293,7 +293,7 @@ a {
 }
 
 .section-heading h2,
-.b2b-intro h2 {
+.approach-intro h2 {
   margin: 10px 0 0;
   font-size: clamp(2rem, 3.6vw, 3.2rem);
   letter-spacing: -0.055em;
@@ -528,7 +528,7 @@ a {
 
 .workflow-steps li > span,
 .stack-grid article > span,
-.b2b-flow li > span {
+.approach-flow li > span {
   color: var(--accent);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.7rem;
@@ -692,32 +692,32 @@ a {
   line-height: 1.75;
 }
 
-.b2b-section {
+.approach-section {
   background: var(--navy);
   color: white;
 }
 
-.b2b-section .section-index {
+.approach-section .section-index {
   color: #f48a91;
 }
 
-.b2b-intro {
+.approach-intro {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
   gap: 24px 80px;
   align-items: end;
 }
 
-.b2b-intro .section-index,
-.b2b-intro h2 {
+.approach-intro .section-index,
+.approach-intro h2 {
   grid-column: 1;
 }
 
-.b2b-intro h2 {
+.approach-intro h2 {
   margin-top: 8px;
 }
 
-.b2b-intro > p:last-child {
+.approach-intro > p:last-child {
   grid-column: 2;
   grid-row: 1 / span 2;
   margin: 0;
@@ -726,7 +726,7 @@ a {
   line-height: 1.9;
 }
 
-.b2b-flow {
+.approach-flow {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   margin: 64px 0 0;
@@ -735,7 +735,7 @@ a {
   list-style: none;
 }
 
-.b2b-flow li {
+.approach-flow li {
   display: grid;
   min-height: 124px;
   align-content: space-between;
@@ -743,11 +743,11 @@ a {
   border-right: 1px solid rgba(255, 255, 255, 0.16);
 }
 
-.b2b-flow li:last-child {
+.approach-flow li:last-child {
   border-right: 0;
 }
 
-.b2b-flow strong {
+.approach-flow strong {
   font-size: 0.8rem;
   line-height: 1.45;
 }
@@ -838,7 +838,7 @@ a {
   }
 
   .section-heading,
-  .b2b-intro {
+  .approach-intro {
     grid-template-columns: 1fr;
   }
 
@@ -875,14 +875,14 @@ a {
     border-bottom: 1px solid var(--line);
   }
 
-  .b2b-intro .section-index,
-  .b2b-intro h2,
-  .b2b-intro > p:last-child {
+  .approach-intro .section-index,
+  .approach-intro h2,
+  .approach-intro > p:last-child {
     grid-column: 1;
     grid-row: auto;
   }
 
-  .b2b-flow {
+  .approach-flow {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
@@ -989,7 +989,7 @@ a {
 
   .reasoning-columns,
   .stack-grid,
-  .b2b-flow {
+  .approach-flow {
     grid-template-columns: 1fr;
   }
 
@@ -1004,7 +1004,7 @@ a {
     border-bottom: 0;
   }
 
-  .b2b-flow li {
+  .approach-flow li {
     min-height: 82px;
     grid-template-columns: 34px 1fr;
     align-items: center;
@@ -1012,7 +1012,7 @@ a {
     border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   }
 
-  .b2b-flow li:last-child {
+  .approach-flow li:last-child {
     border-bottom: 0;
   }
 

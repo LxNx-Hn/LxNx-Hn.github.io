@@ -106,7 +106,27 @@ export const projects = [
       "UI topN과 내부 candidate pool을 분리해 개인화 전 후보 다양성 보존",
       "bootstrap_baseline과 human_validated 모델을 명시적으로 구분",
       "확인된 값과 estimated / unavailable 값을 추천·표시 단계에서 구분"
-    ]
+    ],
+    "media": {
+      "items": [
+        {
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/KT-10/main/docs/app/hero-app.webp",
+          "alt": "동넷 경로 추천 서비스 메인 화면",
+          "caption": "실제 서비스 화면"
+        },
+        {
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/KT-10/main/docs/app/route-detail.webp",
+          "alt": "동넷 경로 상세 정보 화면",
+          "caption": "경로 상세 및 접근성 정보"
+        }
+      ],
+      "links": [
+        {
+          "label": "발표용 화면 자료",
+          "url": "https://github.com/LxNx-Hn/KT-10/tree/main/presentation"
+        }
+      ]
+    }
   },
   {
     "title": "M_RAG",
@@ -235,7 +255,31 @@ export const projects = [
       "동일 검색 context 38쌍으로 영어/한국어 대칭 평가 구성",
       "gpt-4o에서 보인 answer-relevancy 저하 신호가 고정 gpt-4.1 cross-judge에서는 재현되지 않음",
       "최종 결론: 한국어 언어 준수 증가는 확인, judge에 강건한 비영점 RAG-quality 효과는 미확인"
-    ]
+    ],
+    "media": {
+      "items": [
+        {
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/M_RAG/main/docs/PAPER/figures/system_overview.svg",
+          "alt": "M_RAG 전체 시스템 및 실험 구조",
+          "caption": "System overview"
+        },
+        {
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/M_RAG/main/docs/PAPER/figures/factorial_design.svg",
+          "alt": "HyDE CAD SCD factorial experiment design",
+          "caption": "HyDE × CAD × SCD 실험 설계"
+        }
+      ],
+      "links": [
+        {
+          "label": "국문 논문 PDF",
+          "url": "https://github.com/LxNx-Hn/M_RAG/blob/main/docs/PAPER/output/M_RAG_THESIS_KO.pdf"
+        },
+        {
+          "label": "영문 논문 PDF",
+          "url": "https://github.com/LxNx-Hn/M_RAG/blob/main/docs/PAPER/output/M_RAG_THESIS_EN.pdf"
+        }
+      ]
+    }
   },
   {
     "title": "CODE BLUE · PPO Boss Agent",
@@ -369,7 +413,35 @@ export const projects = [
       "최근 100 episode 클리어율 80% · hit rate 97.3%",
       "평균 클리어 70.0초 · 최속 42.6초",
       "hidden/off-lane/stale/fake-marker/next-band/sweep-sequence integrity leak 0"
-    ]
+    ],
+    "media": {
+      "items": [
+        {
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/AI_FinalTerm/main/presentations/final/assets/source_images/game_warning_tile.png",
+          "alt": "CODE BLUE 보스전 warning tile 게임 화면",
+          "caption": "직접 만든 CODE BLUE 보스전"
+        },
+        {
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/AI_FinalTerm/main/docs/rl_final/figures/clear_rate_by_step.png",
+          "alt": "PPO 학습 step별 클리어율 그래프",
+          "caption": "1M PPO 학습 중 클리어율 변화"
+        }
+      ],
+      "links": [
+        {
+          "label": "1M PPO 클리어 영상",
+          "url": "https://github.com/LxNx-Hn/AI_FinalTerm/blob/main/videos/05_late_clever_clear.mp4"
+        },
+        {
+          "label": "최종 발표자료",
+          "url": "https://github.com/LxNx-Hn/AI_FinalTerm/blob/main/presentations/final/CODE_BLUE_RL_FINAL.pptx"
+        },
+        {
+          "label": "학습 영상 5종",
+          "url": "https://github.com/LxNx-Hn/AI_FinalTerm/tree/main/videos"
+        }
+      ]
+    }
   },
   {
     "title": "Hot's POD",
@@ -567,6 +639,30 @@ export const projects = [
       "질문 분류 → 데이터 경로 → RAG 응답으로 이어지는 서비스 구조 연결",
       "Cloud Run backend + Netlify frontend + GitHub Actions CI/CD 구성",
       "Secret Manager와 Cloud Run/Artifact Registry 비용 제어까지 데모 운영 범위에 포함"
-    ]
+    ],
+    "media": {
+      "items": [
+        {
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/chatbot-with-kt-dgucenter/main/ops/images/Screenshot/%EB%B0%98%EC%9D%91%ED%98%95UI.png",
+          "alt": "창업지원 RAG 챗봇 반응형 UI",
+          "caption": "Desktop / Mobile UI"
+        },
+        {
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/chatbot-with-kt-dgucenter/main/ops/images/Screenshot/%EC%98%88%EC%8B%9C_%EC%A0%95%EC%B1%85.png",
+          "alt": "창업지원 RAG 챗봇 정책 질문 응답 예시",
+          "caption": "정책 질문 응답 예시"
+        }
+      ],
+      "links": [
+        {
+          "label": "시연 영상",
+          "url": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter/blob/main/ops/presentations/%EC%8B%9C%EC%97%B0%EC%98%81%EC%83%81.mp4"
+        },
+        {
+          "label": "Live Demo",
+          "url": "https://dgu-chat-bot.netlify.app/"
+        }
+      ]
+    }
   }
 ];

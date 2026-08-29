@@ -31,6 +31,36 @@ const renderCase = (item, index, featured) => `
     </div>
   </details>`;
 
+const renderMedia = (media) => {
+  if (!media?.items?.length) return "";
+
+  const items = media.items
+    .map(
+      (item) => `
+        <figure class="project-media-item">
+          <div class="project-media-frame">
+            <img src="${item.src}" alt="${item.alt}" loading="lazy" decoding="async" />
+          </div>
+          <figcaption>${item.caption}</figcaption>
+        </figure>`,
+    )
+    .join("");
+
+  const links = media.links?.length
+    ? `<div class="project-resource-links">${media.links
+        .map(
+          (link) => `<a href="${link.url}" ${externalLinkAttributes}>${link.label} <span aria-hidden="true">↗</span></a>`,
+        )
+        .join("")}</div>`
+    : "";
+
+  return `
+    <section class="project-media" aria-label="프로젝트 화면 및 자료">
+      <div class="project-media-grid">${items}</div>
+      ${links}
+    </section>`;
+};
+
 const renderResults = (items) =>
   items?.length
     ? `
@@ -82,6 +112,8 @@ const renderProject = (project, index) => {
         </a>
       </header>
 
+      ${renderMedia(project.media)}
+
       <div class="project-main-grid">
         <section class="project-role" aria-label="내가 맡은 부분">
           <p class="content-label">내가 맡은 부분</p>
@@ -94,10 +126,10 @@ const renderProject = (project, index) => {
         </aside>
       </div>
 
-      <section class="project-stories" aria-label="오래 고민했던 부분">
+      <section class="project-stories" aria-label="프로젝트에서 고민했던 지점">
         <div class="story-heading">
-          <p class="content-label">오래 고민했던 부분</p>
-          <p>정답이 바로 보이지 않아서 기준을 다시 잡았던 지점들만 남겼습니다.</p>
+          <p class="content-label">프로젝트에서 고민했던 지점</p>
+          <p>구현 과정에서 기준을 다시 잡거나 판단이 필요했던 지점을 정리했습니다.</p>
         </div>
         <div class="story-list">${project.cases.map((item, caseIndex) => renderCase(item, caseIndex, project.featured)).join("")}</div>
       </section>

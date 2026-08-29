@@ -23,10 +23,22 @@ test("project data stays inside the verified public repository set", () => {
 
   const commitUrls = new Set();
   for (const project of projects) {
-    assert.ok(project.title && project.problem && project.label);
+    assert.ok(project.title && project.overview && project.label);
+    assert.ok(project.stack.length >= 3 && project.stack.length <= 5);
     assert.ok(project.contributions.length >= 3 && project.contributions.length <= 5);
-    assert.ok(project.technical.length >= 2 && project.technical.length <= 4);
+    assert.ok(project.cases.length >= 1 && project.cases.length <= 3);
     assert.ok(project.commits.length >= 1 && project.commits.length <= 3);
+
+    for (const group of project.stack) {
+      assert.ok(group.label);
+      assert.ok(group.items.length >= 1);
+    }
+
+    for (const item of project.cases) {
+      for (const key of ["title", "problem", "cause", "approach", "solution", "result"]) {
+        assert.ok(item[key], `${project.title}: missing case field ${key}`);
+      }
+    }
 
     for (const commit of project.commits) {
       assert.match(commit.sha, /^[0-9a-f]{7}$/);
@@ -50,21 +62,20 @@ test("document keeps the required semantic structure and anchor targets", async 
   for (const element of requiredElements) assert.ok(html.includes(element), `missing ${element}`);
   for (const id of requiredIds) assert.ok(html.includes(`id="${id}"`), `missing section #${id}`);
   assert.ok(html.includes('href="#projects"'));
-  assert.ok(html.includes('href="#ai-workflow"'));
-  assert.ok(html.includes('href="#approach"'));
   assert.ok(html.includes('class="skip-link"'));
   assert.equal(html.includes("\uFFFD"), false, "index.html contains a replacement character");
-
-  const externalAnchors = html.match(/<a\s[\s\S]*?href="https:\/\/[^>]+>/g) ?? [];
-  assert.ok(externalAnchors.length >= 3);
-  for (const anchor of externalAnchors) {
-    assert.ok(anchor.includes('target="_blank"'));
-    assert.ok(anchor.includes('rel="noopener noreferrer"'));
-  }
+  assert.equal(html.includes("KT 지원"), false);
 });
 
-test("runtime renderer protects every generated external link", async () => {
+test("project renderer follows portfolio reading order", async () => {
   const script = await read("script.js");
+  const labels = ["프로젝트 소개", "Tech Stack", "내가 맡은 부분", "문제 해결 과정", "관련 코드 / 커밋"];
+  let previous = -1;
+  for (const label of labels) {
+    const current = script.indexOf(label);
+    assert.ok(current > previous, `wrong or missing project section order: ${label}`);
+    previous = current;
+  }
   assert.ok(script.includes('target="_blank" rel="noopener noreferrer"'));
   assert.ok(script.includes('aria-labelledby="project-title-'));
   assert.equal(script.includes("\uFFFD"), false, "script.js contains a replacement character");

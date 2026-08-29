@@ -308,8 +308,8 @@ a {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 28px;
 }
 
 .project-card {
@@ -1034,5 +1034,156 @@ a {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+
+/* Detailed portfolio project layout */
+.project-card {
+  gap: 0;
+}
+
+.project-overview {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 24px;
+  margin-top: 30px;
+  padding: 24px 0;
+  border-block: 1px solid var(--line);
+}
+
+.project-overview > p:last-child {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 680;
+  line-height: 1.8;
+}
+
+.project-stack,
+.project-role,
+.project-cases {
+  padding-top: 30px;
+}
+
+.stack-groups {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.stack-group {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+}
+
+.stack-group strong {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--ink);
+  font-size: 0.74rem;
+}
+
+.stack-group p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  line-height: 1.65;
+}
+
+.project-role .bullet-list {
+  max-width: 900px;
+}
+
+.case-study-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.case-study {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fbfcfa;
+}
+
+.case-study > h4 {
+  margin: 0;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.case-rows {
+  display: grid;
+}
+
+.case-row {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 18px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.case-row:last-child {
+  border-bottom: 0;
+}
+
+.case-row dt {
+  color: var(--accent-dark);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.case-row dd {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+  line-height: 1.7;
+}
+
+.case-row-result dd {
+  color: var(--ink);
+  font-weight: 680;
+}
+
+.project-ai-note {
+  margin-top: 24px;
+  margin-bottom: 0;
+}
+
+.project-footer {
+  margin-top: 30px;
+}
+
+.commit-list {
+  width: 100%;
+}
+
+@media (max-width: 860px) {
+  .project-overview {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .stack-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .stack-groups {
+    grid-template-columns: 1fr;
+  }
+
+  .case-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 }

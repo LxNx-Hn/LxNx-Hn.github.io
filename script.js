@@ -1,15 +1,38 @@
 import { projects } from "./data/projects.js";
 
 const projectList = document.querySelector("[data-project-list]");
-
 const externalLinkAttributes = 'target="_blank" rel="noopener noreferrer"';
 
 const renderList = (items) => items.map((item) => `<li>${item}</li>`).join("");
+
+const renderStack = (stack) =>
+  stack
+    .map(
+      (group) => `
+        <div class="stack-group">
+          <strong>${group.label}</strong>
+          <p>${group.items.join(" · ")}</p>
+        </div>`,
+    )
+    .join("");
+
+const renderCase = (item, index) => `
+  <article class="case-study">
+    <h4>${String(index + 1).padStart(2, "0")} · ${item.title}</h4>
+    <dl class="case-rows">
+      <div class="case-row"><dt>문제</dt><dd>${item.problem}</dd></div>
+      <div class="case-row"><dt>원인</dt><dd>${item.cause}</dd></div>
+      <div class="case-row"><dt>확인 / 시도</dt><dd>${item.approach}</dd></div>
+      <div class="case-row"><dt>해결</dt><dd>${item.solution}</dd></div>
+      <div class="case-row case-row-result"><dt>결과</dt><dd>${item.result}</dd></div>
+    </dl>
+  </article>`;
 
 const renderProject = (project, index) => {
   const classes = ["project-card", project.featured ? "project-card-featured" : ""]
     .filter(Boolean)
     .join(" ");
+
   const commits = project.commits
     .map(
       (commit) => `
@@ -20,6 +43,7 @@ const renderProject = (project, index) => {
         </a>`,
     )
     .join("");
+
   const aiNote = project.aiNote
     ? `
       <aside class="project-ai-note">
@@ -28,7 +52,7 @@ const renderProject = (project, index) => {
           <p>${project.aiNote.text}</p>
         </div>
         <a href="${project.aiNote.url}" ${externalLinkAttributes}>
-          근거 커밋 <span aria-hidden="true">↗</span>
+          관련 커밋 <span aria-hidden="true">↗</span>
         </a>
       </aside>`
     : "";
@@ -45,28 +69,30 @@ const renderProject = (project, index) => {
         </a>
       </header>
 
-      <div class="problem-block">
-        <p class="content-label">한 줄 문제 정의</p>
-        <p>${project.problem}</p>
-      </div>
+      <section class="project-overview" aria-label="프로젝트 소개">
+        <p class="content-label">프로젝트 소개</p>
+        <p>${project.overview}</p>
+      </section>
 
-      <div class="project-columns">
-        <div>
-          <p class="content-label">내가 한 핵심 작업</p>
-          <ul class="bullet-list">${renderList(project.contributions)}</ul>
-        </div>
-        <div>
-          <p class="content-label">기술적으로 중요했던 부분</p>
-          <ul class="bullet-list">${renderList(project.technical)}</ul>
-        </div>
-      </div>
+      <section class="project-stack" aria-label="Tech Stack">
+        <p class="content-label">Tech Stack</p>
+        <div class="stack-groups">${renderStack(project.stack)}</div>
+      </section>
+
+      <section class="project-role" aria-label="내가 맡은 부분">
+        <p class="content-label">내가 맡은 부분</p>
+        <ul class="bullet-list">${renderList(project.contributions)}</ul>
+      </section>
+
+      <section class="project-cases" aria-label="문제 해결 과정">
+        <p class="content-label">문제 해결 과정</p>
+        <div class="case-study-list">${project.cases.map(renderCase).join("")}</div>
+      </section>
 
       ${aiNote}
 
       <footer class="project-footer">
-        <ul class="tech-list" aria-label="사용 기술">
-          ${project.tech.map((tech) => `<li>${tech}</li>`).join("")}
-        </ul>
+        <p class="content-label">관련 코드 / 커밋</p>
         <div class="commit-list" aria-label="대표 커밋">${commits}</div>
       </footer>
     </article>`;

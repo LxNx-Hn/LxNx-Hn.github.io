@@ -1346,18 +1346,6 @@ a {
     gap: 24px;
   }
 
-  .workflow-steps-four {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .workflow-steps-four li:nth-child(-n + 2) {
-    border-bottom: 1px solid var(--line);
-  }
-
-  .workflow-steps-four li:nth-child(2n) {
-    border-right: 0;
-  }
-
   .working-notes {
     grid-template-columns: 1fr;
   }
@@ -1395,19 +1383,6 @@ a {
   .result-list,
   .commit-list {
     grid-template-columns: 1fr;
-  }
-
-  .workflow-steps-four {
-    grid-template-columns: 1fr;
-  }
-
-  .workflow-steps-four li {
-    border-right: 0 !important;
-    border-bottom: 1px solid var(--line) !important;
-  }
-
-  .workflow-steps-four li:last-child {
-    border-bottom: 0 !important;
   }
 }
 

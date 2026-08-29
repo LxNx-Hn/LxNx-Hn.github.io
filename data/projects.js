@@ -409,7 +409,7 @@ export const projects = [
       {
         "label": "Action Space [5,2]",
         "sha": "6fedfb4",
-        "url": "https://github.com/LxNx-Hn/AI_FinalTerm/commit/6fedfb497ccb3d614c6dc18"
+        "url": "https://github.com/LxNx-Hn/AI_FinalTerm/commit/6fedfb497ccb3d614c6d8a767f6f5b9e6306dc18"
       },
       {
         "label": "Reward farming 제거",

@@ -4,7 +4,7 @@ export const projects = [
     "repo": "https://github.com/LxNx-Hn/KT-10",
     "label": "이동취약자 맞춤 경로 추천 · 동넷",
     "featured": true,
-    "overview": "이동취약자에게 '가장 빠른 길'이 항상 가장 좋은 길은 아니라는 문제에서 시작한 경로 추천 프로젝트입니다. 경사, 도보거리, 환승, 계단·승강기, 저상버스, 그늘처럼 서로 성격이 다른 조건을 실제 경로 후보의 feature로 만들고, 6개 사용자 프로필별로 후보를 다시 평가하는 구조를 만들었습니다. 제가 맡은 범위는 데이터 수집·feature 구성에서 XGBRanker 학습, 후보 재정렬, 서비스 연결까지였습니다.",
+    "overview": "이동취약자에게 가장 빠른 경로가 항상 가장 좋은 경로는 아니라는 문제에서 시작했습니다. 경사, 도보거리, 환승, 접근성, 환경 정보를 실제 경로 후보에 붙이고 6개 사용자 프로필별로 다시 평가하는 추천 흐름을 만들었습니다. 데이터 수집과 feature 구성부터 XGBRanker 학습, 후보 재정렬, 서비스 연결까지 맡았습니다.",
     "stack": [
       {
         "label": "AI / Ranking",
@@ -47,19 +47,19 @@ export const projects = [
       }
     ],
     "contributions": [
-      "경사·도보·환승·접근성·환경 정보를 실제 경로 후보 단위 feature snapshot으로 만들고 추천 모델 입력까지 연결했습니다.",
-      "6개 사용자 프로필별로 무엇을 불편으로 볼지 평가 기준을 만들고 XGBRanker baseline을 학습·검증했습니다.",
-      "화면에 보일 topN과 모델이 판단할 내부 후보군을 분리해 개인화 전에 후보가 잘리지 않도록 추천 흐름을 조정했습니다.",
-      "외부 데이터에 없는 정보는 억지로 채우지 않고 exact / estimated / unavailable을 구분해 추천과 표시 단계에서 품질 한계를 보존했습니다."
+      "경사·도보·환승·접근성·환경 정보를 실제 경로 후보 단위로 정리해 추천 모델 입력까지 연결했습니다.",
+      "6개 사용자 프로필별 초기 평가 기준을 만들고 XGBRanker baseline을 학습·검증했습니다.",
+      "화면에 보여줄 경로 수와 모델이 비교할 내부 후보 수를 분리해 개인화 전에 후보가 잘리지 않도록 했습니다.",
+      "확인할 수 없는 정보는 0이나 평균값으로 채우지 않고 estimated / unavailable로 구분해 모델과 화면에 전달했습니다."
     ],
     "cases": [
       {
         "title": "좋은 경로의 기준",
         "problem": "최단시간 하나로 순위를 정하면 휠체어 사용자에게 계단이 있는 짧은 길이, 짐이 많은 사용자에게 도보가 긴 환승 적은 길이 상위에 올 수 있었습니다. 프로필마다 불편의 종류와 우선순위가 달랐습니다.",
-        "cause": "이 문제에는 모든 사용자에게 통하는 단일 정답 label이 없고, 초기 단계에는 충분한 사람 평가 데이터도 없었습니다.",
-        "approach": "모델부터 학습시키기보다 각 프로필에서 어떤 feature가 부담이 되는지 기준을 먼저 분리했습니다. 동시에 이 기준으로 만든 label을 실제 사람 선호라고 부르면 안 된다고 봤습니다.",
-        "solution": "6개 프로필별 route-fit rubric과 feature burden을 만들고 이를 bootstrap evaluation label로만 사용해 XGBRanker baseline을 학습했습니다. artifact에도 label_origin=bootstrap_evaluation을 남기고 human_validated 모델과 구분했습니다.",
-        "result": "380개 OD의 1,137개 후보로 baseline을 만들고 NDCG@3 0.9166~0.9596을 확인했지만, 이 수치를 실제 사용자 선호를 검증한 production 성능으로 해석하지 않도록 경계를 남겼습니다."
+        "cause": "모든 사용자에게 통하는 하나의 정답 경로가 없었고, 초기에는 충분한 실제 사용자 선택 데이터도 없었습니다.",
+        "approach": "먼저 프로필마다 어떤 조건을 부담으로 볼지 나눴습니다. 다만 이 기준으로 만든 학습값을 실제 사용자 선호와 같은 것으로 보지는 않았습니다.",
+        "solution": "6개 프로필별 초기 평가 기준으로 학습 데이터를 만들고 XGBRanker baseline을 학습했습니다. 모델 artifact에서도 bootstrap 평가 데이터로 학습한 baseline과 실제 사람 평가를 거친 모델을 구분하도록 했습니다.",
+        "result": "380개 OD의 1,137개 실제 후보에서 NDCG@3 0.9166~0.9596을 확인했습니다. 이 수치는 초기 평가 기준에 대한 baseline 성능이며 실제 사용자 선호 검증 결과로 해석하지 않았습니다."
       },
       {
         "title": "개인화 전 후보 보존",
@@ -126,6 +126,12 @@ export const projects = [
           "url": "https://github.com/LxNx-Hn/KT-10/tree/main/presentation"
         }
       ]
+    },
+    "slug": "dongnet",
+    "selected": {
+      "summary": "이동 조건이 다른 사용자를 위해 실제 경로 후보를 만들고, 6개 프로필별 XGBRanker로 다시 평가했습니다.",
+      "role": "Ranking · Data Pipeline · Backend",
+      "evidence": "380 OD · 1,137 routes · NDCG@3 0.9166–0.9596"
     }
   },
   {
@@ -133,7 +139,7 @@ export const projects = [
     "repo": "https://github.com/LxNx-Hn/M_RAG",
     "label": "Cross-lingual RAG 졸업논문 · M_RAG",
     "featured": true,
-    "overview": "한국어로 질문하고 영어 논문에서 근거를 찾은 뒤 다시 한국어로 답하는 cross-lingual RAG를 졸업논문으로 다뤘습니다. 같은 Paper-RAG backbone에서 HyDE, CAD, SCD 조합을 비교했지만, 실제로 가장 어려웠던 부분은 모델을 돌리는 것보다 서로 다른 언어가 섞인 상태에서 결과를 어떻게 공정하게 평가할지 정하는 일이었습니다. 한국어 질문·영어 논문·영어 reference·한국어 답변이 한 평가 안에 같이 들어가면서 번역 자체가 새로운 변수가 됐고, 이를 분리해 해석하는 과정을 논문의 중요한 부분으로 남겼습니다.",
+    "overview": "한국어 질문으로 영어 논문을 검색하고 한국어로 답하는 cross-lingual RAG를 졸업논문으로 다뤘습니다. 같은 Paper-RAG backbone에서 HyDE, CAD, SCD 8개 조합을 비교했고, 모델 효과뿐 아니라 서로 다른 언어가 섞인 결과를 어떻게 공정하게 평가할지도 실험의 한 부분으로 다뤘습니다.",
     "stack": [
       {
         "label": "RAG / Retrieval",
@@ -176,11 +182,10 @@ export const projects = [
       }
     ],
     "contributions": [
-      "한국어 질의–영어 논문 RAG에서 HyDE, CAD, SCD 8개 조합을 같은 backbone 위에서 생성·평가했습니다.",
-      "SCD의 목표인 한국어 유지 효과는 LLM judge가 아니라 생성 답변의 한글 비율을 직접 측정해 별도로 검증했습니다.",
-      "cross-lingual RAGAS 평가에서 번역 여부가 SCD 효과와 섞이는 문제를 발견하고, 영어·한국어 양쪽으로 맞춘 대칭 평가를 새로 설계했습니다.",
-      "번역 과정에서 숫자, 인용, 날짜, 모델·metric 이름 같은 기술 용어가 바뀌지 않았는지 별도 integrity check를 넣고 평가 입력을 score 전에 고정했습니다.",
-      "같은 입력을 gpt-4o와 고정 gpt-4.1 judge로 다시 평가해 특정 judge에서만 나타나는 효과를 최종 결론으로 쓰지 않았습니다."
+      "한국어 질의–영어 논문 환경에서 HyDE, CAD, SCD 8개 조합의 생성·평가 실험을 구성했습니다.",
+      "SCD의 한국어 유지 효과를 RAGAS 점수와 분리해 생성 답변의 언어 준수율로 직접 측정했습니다.",
+      "번역 여부가 SCD 효과와 섞이는 문제를 확인하고 영어·한국어 대칭 평가와 번역 integrity check를 설계했습니다.",
+      "같은 평가 입력을 서로 다른 judge로 다시 채점해 특정 judge에서만 나타나는 차이를 최종 결론에서 분리했습니다."
     ],
     "cases": [
       {
@@ -249,12 +254,10 @@ export const projects = [
       }
     ],
     "results": [
-      "영어 논문 4편 · 한국어 질의 19개 · HyDE × CAD × SCD 8개 설정 · 총 152개 생성",
-      "reference_scd 한국어 비율 paired +0.2203 · 68/76 쌍 개선",
-      "언어 이탈(<0.5) 26/76 → 12/76",
+      "19 queries × 8 HyDE/CAD/SCD configs = 152 generations",
+      "reference SCD 한국어 비율 paired +0.2203 · 68/76 쌍 개선",
       "동일 검색 context 38쌍으로 영어/한국어 대칭 평가 구성",
-      "gpt-4o에서 보인 answer-relevancy 저하 신호가 고정 gpt-4.1 cross-judge에서는 재현되지 않음",
-      "최종 결론: 한국어 언어 준수 증가는 확인, judge에 강건한 비영점 RAG-quality 효과는 미확인"
+      "한국어 유지 효과는 확인했지만 judge에 강건한 RAG-quality 차이는 확인하지 못함"
     ],
     "media": {
       "items": [
@@ -279,6 +282,12 @@ export const projects = [
           "url": "https://github.com/LxNx-Hn/M_RAG/blob/main/docs/PAPER/output/M_RAG_THESIS_EN.pdf"
         }
       ]
+    },
+    "slug": "m-rag",
+    "selected": {
+      "summary": "한국어 질문으로 영어 논문을 검색하는 RAG에서 HyDE·CAD·SCD를 비교하고, cross-lingual 평가 조건 자체를 다시 검증했습니다.",
+      "role": "Experiment Design · RAG · Evaluation",
+      "evidence": "19 queries × 8 configs · 152 generations"
     }
   },
   {
@@ -441,6 +450,12 @@ export const projects = [
           "url": "https://github.com/LxNx-Hn/AI_FinalTerm/tree/main/videos"
         }
       ]
+    },
+    "slug": "code-blue",
+    "selected": {
+      "summary": "컴퓨터게임 과제로 만든 CODE BLUE의 보스전을 실제 플레이 조건에 맞춘 PPO 환경으로 연결해 학습했습니다.",
+      "role": "Game Environment · PPO · Evaluation",
+      "evidence": "1M steps · recent 100 clear rate 80%"
     }
   },
   {
@@ -485,27 +500,19 @@ export const projects = [
       }
     ],
     "contributions": [
-      "자연어 검색에서 의미 유사도와 장소·category 같은 구조화 조건을 어떤 순서로 결합할지 검색 흐름을 설계했습니다.",
-      "Vector Search의 similarity가 RDB filtering 뒤에도 유지되도록 최종 ranking까지 score를 전달했습니다.",
-      "실제 query 결과를 비교하면서 similarity threshold의 precision/recall trade-off를 조정했습니다.",
-      "LLM에는 DB에서 확인된 모임만 context로 넘기고, retrieval용 내부 표현과 사용자 답변 규칙을 분리했습니다."
+      "의미 유사도와 장소·category 같은 구조화 조건을 어떤 순서로 결합할지 검색 흐름을 설계했습니다.",
+      "Vector Search의 similarity가 DB filtering 뒤에도 유지되도록 최종 ranking까지 score를 전달했습니다.",
+      "실제 query 결과를 보며 similarity threshold를 조정하고 검색 결과가 어떻게 달라지는지 비교했습니다.",
+      "LLM에는 DB에서 확인된 모임만 넘기고, retrieval과 최종 답변의 역할을 분리했습니다."
     ],
     "cases": [
       {
         "title": "Semantic Search와 조건 검색의 역할 분리",
         "problem": "'운동할 사람', '조용한 모임'처럼 표현이 다양한 의도는 keyword만으로 찾기 어렵지만, 장소나 category는 의미가 비슷하다는 이유로 다른 값을 허용하면 안 됐습니다.",
         "cause": "Semantic Search는 표현 차이에 강하지만 hard constraint에는 느슨하고, SQL filter는 정확하지만 사용자의 애매한 의도를 이해하지 못합니다.",
-        "approach": "둘 중 하나를 선택하지 않고 어떤 정보는 semantic하게 찾고 어떤 정보는 deterministic하게 확인해야 하는지 역할을 나눴습니다.",
-        "solution": "먼저 embedding으로 의미 후보를 만들고, 그 후보에 장소·category 조건을 RDB에서 적용했습니다. 이후에도 Vector Search의 similarity를 잃지 않도록 score를 보존해 최종 순위를 다시 만들었습니다.",
-        "result": "자연어 표현의 유연성은 가져가면서 구조화 조건은 확정적으로 지키는 hybrid search 흐름을 만들었습니다."
-      },
-      {
-        "title": "검색 임계값 조정",
-        "problem": "threshold를 높이면 엉뚱한 모임은 줄지만 표현이 조금 다른 유효한 결과도 함께 사라졌고, 낮추면 recall은 늘지만 사용자가 보기엔 관련 없는 결과가 섞였습니다.",
-        "cause": "embedding distance는 서비스 데이터와 query 분포에 따라 의미가 달라져 인터넷의 일반적인 숫자를 그대로 가져올 수 없었습니다.",
-        "approach": "특정 수치를 정답처럼 두지 않고 실제 서비스의 자연어 query를 반복해서 넣어 어떤 결과가 남고 빠지는지 비교했습니다.",
-        "solution": "검색 결과를 직접 보며 threshold를 조정하고, threshold 변경 뒤 DB filtering과 similarity ranking까지 같이 확인했습니다.",
-        "result": "숫자 하나를 '최적값'으로 주장하기보다 현재 데이터에서 필요한 precision/recall 균형을 경험적으로 맞추고 그 기준을 코드에 반영했습니다."
+        "approach": "어떤 정보는 의미가 비슷하면 되고, 어떤 정보는 정확히 일치해야 하는지 먼저 역할을 나눴습니다. 이후 실제 자연어 query 결과를 반복해서 보면서 similarity threshold도 같은 흐름 안에서 조정했습니다.",
+        "solution": "먼저 embedding으로 의미 후보를 만들고 장소·category는 RDB에서 다시 확인했습니다. DB filtering 뒤에도 Vector Search의 similarity를 유지해 재정렬하고, threshold는 현재 데이터에서 관련 결과가 과하게 빠지거나 섞이지 않는 범위로 조정했습니다.",
+        "result": "자연어 표현의 유연성은 가져가면서 구조화 조건은 정확히 지키고, 검색 관련도까지 마지막 순위에 반영하는 흐름을 만들었습니다."
       },
       {
         "title": "LLM의 역할 범위",
@@ -539,11 +546,36 @@ export const projects = [
       }
     ],
     "results": [
-      "Semantic Retrieval과 Structured Filtering의 역할을 분리한 자연어 검색 흐름",
-      "RDB filtering 이후에도 Vector similarity 기반 ranking 유지",
-      "실제 query 결과를 기준으로 threshold의 precision/recall trade-off 조정",
+      "Semantic Retrieval과 Structured Filtering을 분리한 자연어 검색 흐름",
+      "DB filtering 이후에도 Vector similarity 기반 ranking 유지",
       "LLM은 확인된 검색 결과를 설명하는 단계로 제한"
-    ]
+    ],
+    "slug": "hots-pod",
+    "diagram": {
+      "title": "Natural-language search pipeline",
+      "nodes": [
+        {
+          "title": "Natural-language Query",
+          "note": "사용자 표현"
+        },
+        {
+          "title": "Semantic Retrieval",
+          "note": "Sentence Transformer · ChromaDB"
+        },
+        {
+          "title": "Structured Filter",
+          "note": "장소 · Category · MariaDB"
+        },
+        {
+          "title": "Re-rank",
+          "note": "Similarity 보존 · threshold 조정"
+        },
+        {
+          "title": "LLM Response",
+          "note": "확인된 결과만 설명"
+        }
+      ]
+    }
   },
   {
     "title": "창업지원 RAG 챗봇",
@@ -663,6 +695,7 @@ export const projects = [
           "url": "https://dgu-chat-bot.netlify.app/"
         }
       ]
-    }
+    },
+    "slug": "startup-rag"
   }
 ];

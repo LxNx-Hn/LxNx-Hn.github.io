@@ -20,21 +20,26 @@ const allowedRepositories = new Set([
 test("project data stays inside the verified public repository set", () => {
   assert.equal(projects.length, 5);
   assert.deepEqual(new Set(projects.map((project) => project.repo)), allowedRepositories);
+  assert.equal(projects.filter((project) => project.featured).length, 3);
+  assert.equal(new Set(projects.map((project) => project.slug)).size, projects.length);
 
   const commitUrls = new Set();
   for (const project of projects) {
-    assert.ok(project.title && project.overview && project.label);
+    assert.ok(project.title && project.overview && project.label && project.slug);
     assert.ok(project.stack.length >= 3 && project.stack.length <= 5);
     assert.ok(project.contributions.length >= 3 && project.contributions.length <= 5);
-    assert.ok(project.cases.length >= 2 && project.cases.length <= 7);
+    assert.ok(project.cases.length >= 2 && project.cases.length <= 5);
     assert.ok(project.commits.length >= 3 && project.commits.length <= 6);
+    assert.ok(project.results.length >= 3 && project.results.length <= 6);
+
+    if (project.featured) {
+      assert.ok(project.selected?.summary && project.selected?.role && project.selected?.evidence);
+    }
 
     for (const group of project.stack) {
       assert.ok(group.label);
       assert.ok(group.items.length >= 1);
     }
-
-    assert.ok(project.results.length >= 3 && project.results.length <= 7);
 
     for (const item of project.cases) {
       for (const key of ["title", "problem", "cause", "approach", "solution", "result"]) {
@@ -49,39 +54,36 @@ test("project data stays inside the verified public repository set", () => {
       commitUrls.add(commit.url);
     }
 
-    if (project.aiNote) {
-      assert.match(project.aiNote.url, /^https:\/\/github\.com\/LxNx-Hn\//);
-    }
-
     if (project.media) {
-      assert.ok(project.media.items.length >= 1 && project.media.items.length <= 3);
       for (const item of project.media.items) {
         assert.match(item.src, /^https:\/\/raw\.githubusercontent\.com\/LxNx-Hn\//);
         assert.ok(item.alt && item.caption);
       }
-      for (const link of project.media.links ?? []) {
-        assert.match(link.url, /^https:\/\//);
-        assert.ok(link.label);
-      }
+    }
+
+    if (project.diagram) {
+      assert.ok(project.diagram.title);
+      assert.ok(project.diagram.nodes.length >= 3);
     }
   }
 });
 
-test("document keeps the required semantic structure and anchor targets", async () => {
+test("document keeps the required semantic structure and contact", async () => {
   const html = await read("index.html");
   const requiredElements = ["<header", "<nav", "<main", "<section", "<footer"];
-  const requiredIds = ["top", "projects", "ai-workflow", "stack", "approach"];
+  const requiredIds = ["top", "selected-work", "projects", "ai-workflow", "stack", "approach", "contact"];
 
   assert.match(html, /<html lang="ko">/);
   for (const element of requiredElements) assert.ok(html.includes(element), `missing ${element}`);
   for (const id of requiredIds) assert.ok(html.includes(`id="${id}"`), `missing section #${id}`);
-  assert.ok(html.includes('href="#projects"'));
-  assert.ok(html.includes('class="skip-link"'));
-  assert.equal(html.includes("\uFFFD"), false, "index.html contains a replacement character");
-  assert.equal(html.includes("KT 지원"), false);
+  assert.ok(html.includes("AI Engineer"));
+  assert.ok(html.includes("mailto:lxnx.kiki@gmail.com"));
+  assert.equal(html.includes("AI Archive"), false);
+  assert.equal(html.includes("/notes/"), false);
+  assert.equal(html.includes("\uFFFD"), false);
 });
 
-test("project renderer follows portfolio reading order", async () => {
+test("project renderer keeps case studies closed and renders selected work", async () => {
   const script = await read("script.js");
   const labels = ["내가 맡은 부분", "Tech Stack", "프로젝트에서 고민했던 지점", "관련 코드 / 커밋"];
   let previous = -1;
@@ -90,10 +92,13 @@ test("project renderer follows portfolio reading order", async () => {
     assert.ok(current > previous, `wrong or missing project section order: ${label}`);
     previous = current;
   }
-  assert.ok(script.includes('target="_blank" rel="noopener noreferrer"'));
-  assert.ok(script.includes('aria-labelledby="project-title-'));
+
+  assert.ok(script.includes("[data-selected-project-list]"));
+  assert.ok(script.includes("renderSelected"));
+  assert.ok(script.includes("renderDiagram"));
   assert.ok(script.includes('class="story-block"'));
-  assert.equal(script.includes("\uFFFD"), false, "script.js contains a replacement character");
+  assert.equal(/<details class="story-block"[^>]*open/.test(script), false);
+  assert.equal(script.includes("\uFFFD"), false);
 });
 
 test("social preview is a valid large landscape PNG", async () => {
@@ -109,7 +114,7 @@ test("social preview is a valid large landscape PNG", async () => {
   assert.ok(width / height > 1.8 && width / height < 2.0, `${width}x${height} has the wrong aspect ratio`);
 });
 
-test("local asset references resolve to files", async () => {
+test("local build source references resolve", async () => {
   const html = await read("index.html");
   for (const path of ["styles.css", "script.js", "assets/og.png", "assets/favicon.svg"]) {
     await stat(resolve(root, path));

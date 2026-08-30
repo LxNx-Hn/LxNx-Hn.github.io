@@ -287,3 +287,16 @@ test("Dongnet case copy avoids defensive negative phrasing", () => {
     assert.equal(copy.includes(phrase), false, `defensive phrasing remains: ${phrase}`);
   }
 });
+
+
+test("M_RAG is presented as an ongoing thesis with draft documents", async () => {
+  const html = await read("index.html");
+  const mrag = projects.find((project) => project.title === "M_RAG");
+
+  assert.ok(html.includes("졸업논문 주제로 cross-lingual RAG의 평가 조건을 다룬 M_RAG를 진행 중입니다."));
+  assert.ok(mrag.label.includes("졸업논문 연구 진행 중"));
+  assert.ok(mrag.overview.includes("졸업논문 주제로 진행 중입니다"));
+  assert.ok(mrag.media.links.some((link) => link.label === "국문 논문 초안 PDF"));
+  assert.ok(mrag.media.links.some((link) => link.label === "영문 논문 초안 PDF"));
+  assert.ok(mrag.commits.some((item) => item.label === "논문 초안 결과 정렬"));
+});

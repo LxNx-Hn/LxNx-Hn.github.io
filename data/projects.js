@@ -139,9 +139,9 @@ export const projects = [
   {
     "title": "M_RAG",
     "repo": "https://github.com/LxNx-Hn/M_RAG",
-    "label": "Cross-lingual RAG 졸업논문 · M_RAG",
+    "label": "Cross-lingual RAG 졸업논문 연구 진행 중 · M_RAG",
     "featured": true,
-    "overview": "한국어 질문으로 영어 논문을 검색하고 한국어로 답하는 cross-lingual RAG를 졸업논문으로 다뤘습니다. 같은 Paper-RAG backbone에서 HyDE, CAD, SCD 8개 조합을 비교했고, 모델 효과뿐 아니라 서로 다른 언어가 섞인 결과를 어떻게 공정하게 평가할지도 실험의 한 부분으로 다뤘습니다.",
+    "overview": "한국어 질문으로 영어 논문을 검색하고 한국어로 답하는 cross-lingual RAG를 졸업논문 주제로 진행 중입니다. 같은 Paper-RAG backbone에서 HyDE, CAD, SCD 8개 조합을 비교했고, 모델 효과뿐 아니라 서로 다른 언어가 섞인 결과를 어떻게 공정하게 평가할지도 실험의 한 부분으로 다뤘습니다.",
     "stack": [
       {
         "label": "RAG / Retrieval",
@@ -250,7 +250,7 @@ export const projects = [
         "url": "https://github.com/LxNx-Hn/M_RAG/commit/ae5b64e87b5ae4c02c2bfa80da0ec4ced068bfcb"
       },
       {
-        "label": "최종 논문 결과 정렬",
+        "label": "논문 초안 결과 정렬",
         "sha": "a5c15d2",
         "url": "https://github.com/LxNx-Hn/M_RAG/commit/a5c15d2539698acfb02e5eb56758bee48e292702"
       }
@@ -276,11 +276,11 @@ export const projects = [
       ],
       "links": [
         {
-          "label": "국문 논문 PDF",
+          "label": "국문 논문 초안 PDF",
           "url": "https://github.com/LxNx-Hn/M_RAG/blob/main/docs/PAPER/output/M_RAG_THESIS_KO.pdf"
         },
         {
-          "label": "영문 논문 PDF",
+          "label": "영문 논문 초안 PDF",
           "url": "https://github.com/LxNx-Hn/M_RAG/blob/main/docs/PAPER/output/M_RAG_THESIS_EN.pdf"
         }
       ]

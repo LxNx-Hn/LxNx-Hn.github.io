@@ -367,10 +367,10 @@ test("README does not present a fabricated portfolio screenshot", async () => {
 
 test("M_RAG selected thumbnail stays intentionally simple", async () => {
   const svg = await read("assets/mrag-selected.svg");
-  for (const label of ["KR Query", "EN Papers", "HyDE · CAD · SCD", "Bilingual Eval"]) {
+  for (const label of ["CROSS-LINGUAL RAG", "KR → EN → KR", "HyDE · CAD · SCD", "Bilingual Evaluation"]) {
     assert.ok(svg.includes(label), `missing thumbnail label: ${label}`);
   }
-  for (const noisyText of ["19 queries", "translation confound", "judge-robust", "Korean maintenance"]) {
+  for (const noisyText of ["19 queries", "translation confound", "judge-robust", "Korean maintenance", "user question", "retrieval context"]) {
     assert.equal(svg.includes(noisyText), false, `thumbnail is too dense: ${noisyText}`);
   }
 });

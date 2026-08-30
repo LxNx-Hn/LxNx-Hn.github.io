@@ -203,3 +203,31 @@ test("contact works without requiring a configured mail client", async () => {
   assert.ok(script.includes("fallbackCopyText"));
   assert.ok(script.includes('document.execCommand("copy")'));
 });
+
+
+test("retired startup RAG live demo is not exposed", async () => {
+  const html = await read("index.html");
+  const script = await read("script.js");
+  const data = await read("data/projects.js");
+
+  for (const source of [html, script, data]) {
+    assert.equal(source.includes("dgu-chat-bot.netlify.app"), false);
+    assert.equal(source.includes(">Live Demo<"), false);
+  }
+});
+
+test("RAG growth cards keep decision, result, stack, and project evidence", async () => {
+  const script = await read("script.js");
+  for (const token of [
+    "rag-journey-scope",
+    "rag-journey-decisions",
+    "rag-decision-result",
+    "rag-result-list",
+    "rag-stack-list",
+    "rag-journey-media-grid",
+  ]) {
+    assert.ok(script.includes(token), `missing RAG journey structure: ${token}`);
+  }
+  assert.ok(script.includes("project.cases.slice(0, 2)"));
+  assert.ok(script.includes("project.results.slice(0, 3)"));
+});

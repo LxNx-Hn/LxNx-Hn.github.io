@@ -599,7 +599,8 @@ export const projects = [
           "label": "Repository",
           "url": "https://github.com/LxNx-Hn/Hot-s-Pod"
         }
-      ]
+      ],
+      "role": "Search Design · Backend · RAG"
     }
   },
   {
@@ -714,10 +715,6 @@ export const projects = [
         {
           "label": "시연 영상",
           "url": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter/blob/main/ops/presentations/%EC%8B%9C%EC%97%B0%EC%98%81%EC%83%81.mp4"
-        },
-        {
-          "label": "Live Demo",
-          "url": "https://dgu-chat-bot.netlify.app/"
         }
       ]
     },
@@ -732,12 +729,9 @@ export const projects = [
         {
           "label": "Repository",
           "url": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter"
-        },
-        {
-          "label": "Live Demo",
-          "url": "https://dgu-chat-bot.netlify.app/"
         }
-      ]
+      ],
+      "role": "Project Leader · Technical Lead"
     }
   }
 ];

@@ -112,27 +112,84 @@ const renderEvidence = (items) =>
     </section>` : "";
 
 const renderJourney = (project) => {
-  const image = project.media?.items?.[0];
-  const links = project.journey.links.map((link) =>
-    `<a href="${link.url}" ${externalLinkAttributes}>${link.label} <span aria-hidden="true">↗</span></a>`
+  const resources = [
+    ...(project.journey.links || []),
+    ...(project.media?.links || []),
+  ].filter((link, index, all) =>
+    all.findIndex((candidate) => candidate.url === link.url) === index
+  );
+
+  const media = project.media?.items?.length
+    ? `
+      <div class="rag-journey-media-grid">
+        ${project.media.items.slice(0, 2).map((item) => `
+          <figure>
+            <div class="rag-journey-media">
+              <img src="${item.src}" alt="${item.alt}" loading="lazy" decoding="async" />
+            </div>
+            <figcaption>${item.caption}</figcaption>
+          </figure>`).join("")}
+      </div>`
+    : "";
+
+  const decisions = project.cases.slice(0, 2).map((item) => `
+    <article class="rag-decision">
+      <strong>${item.title}</strong>
+      <p>${item.problem}</p>
+      <p class="rag-decision-result"><span>확인한 결과</span>${item.result}</p>
+    </article>`).join("");
+
+  const stack = project.stack.map((group) =>
+    `<div><strong>${group.label}</strong><span>${group.items.slice(0, 3).join(" · ")}</span></div>`
   ).join("");
 
   return `
-    <article class="rag-journey-card">
-      <div class="rag-journey-index">0${project.journey.order}</div>
-      <div class="rag-journey-copy">
-        <p class="project-label">${project.journey.stage}</p>
-        <h3>${project.title}</h3>
-        <p class="rag-journey-summary">${project.journey.summary}</p>
-        <p class="rag-journey-focus">${project.journey.focus}</p>
-        <strong class="rag-journey-evidence">${project.journey.evidence}</strong>
-        ${project.diagram ? renderDiagram(project.diagram) : ""}
-        <div class="rag-journey-links">${links}</div>
+    <article class="rag-journey-card" id="journey-${project.slug}">
+      <header class="rag-journey-header">
+        <div class="rag-journey-index">0${project.journey.order}</div>
+        <div>
+          <p class="project-label">${project.journey.stage}</p>
+          <h3>${project.title}</h3>
+          <p class="rag-journey-role">${project.journey.role}</p>
+          <p class="rag-journey-summary">${project.journey.summary}</p>
+        </div>
+        <a class="rag-repo-link" href="${project.repo}" ${externalLinkAttributes}>Repository <span aria-hidden="true">↗</span></a>
+      </header>
+
+      <div class="rag-journey-body">
+        <div class="rag-journey-main">
+          <section class="rag-journey-scope">
+            <p class="content-label">내가 맡은 부분</p>
+            <ul class="bullet-list">${renderList(project.contributions.slice(0, 3))}</ul>
+          </section>
+
+          <section class="rag-journey-decisions">
+            <p class="content-label">핵심 판단</p>
+            <div class="rag-decision-grid">${decisions}</div>
+          </section>
+        </div>
+
+        <aside class="rag-journey-side">
+          <section>
+            <p class="content-label">확인한 결과</p>
+            <ul class="result-list rag-result-list">${renderList(project.results.slice(0, 3))}</ul>
+          </section>
+
+          <section class="rag-journey-stack">
+            <p class="content-label">Tech Stack</p>
+            <div class="rag-stack-list">${stack}</div>
+          </section>
+
+          <div class="rag-journey-links">
+            ${resources.map((link) =>
+              `<a href="${link.url}" ${externalLinkAttributes}>${link.label} <span aria-hidden="true">↗</span></a>`
+            ).join("")}
+          </div>
+        </aside>
       </div>
-      ${image ? `
-        <div class="rag-journey-media">
-          <img src="${image.src}" alt="${image.alt}" loading="lazy" decoding="async" />
-        </div>` : ""}
+
+      ${media}
+      ${project.diagram ? renderDiagram(project.diagram) : ""}
     </article>`;
 };
 

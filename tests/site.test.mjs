@@ -238,9 +238,9 @@ test("Dongnet documents the LLM-to-bootstrap labeling process without treating i
 
   assert.ok(dongnet.overview.includes("LLM으로 1차 평가"));
   assert.ok(dongnet.overview.includes("bootstrap 학습 데이터"));
-  assert.ok(dongnet.contributions.some((item) => item.includes("LLM 평가를 그대로 정답으로 쓰지 않고")));
+  assert.ok(dongnet.contributions.some((item) => item.includes("LLM 1차 평가의 점수와 근거를 재분석")));
   assert.ok(dongnet.cases[0].solution.includes("6,822개 bootstrap label"));
-  assert.ok(dongnet.cases[0].result.includes("실제 사용자 선호 검증 결과로 해석하지 않았습니다"));
+  assert.ok(dongnet.cases[0].result.includes("실제 사용자 선호 검증은 별도 검증 단계로 구분했습니다"));
 });
 
 
@@ -273,4 +273,16 @@ test("README exposes the portfolio preview asset", async () => {
   const readme = await read("README.md");
   assert.ok(readme.includes("![Portfolio preview](./assets/portfolio-preview.svg)"));
   await stat(resolve(root, "assets/portfolio-preview.svg"));
+});
+
+
+test("Dongnet case copy avoids defensive negative phrasing", () => {
+  const dongnet = projects.find((project) => project.title === "동넷");
+  const copy = JSON.stringify({
+    contributions: dongnet.contributions,
+    cases: dongnet.cases,
+  });
+  for (const phrase of ["보지 않았", "해석하지 않았", "쓰지 않고", "채우지 않고"]) {
+    assert.equal(copy.includes(phrase), false, `defensive phrasing remains: ${phrase}`);
+  }
 });

@@ -131,7 +131,7 @@ export const projects = [
     "selected": {
       "summary": "이동 조건이 다른 사용자를 위해 실제 경로 후보를 만들고, 6개 프로필별 XGBRanker로 다시 평가했습니다.",
       "role": "Ranking · Data Pipeline · Backend",
-      "evidence": "380 OD · 1,137 routes · NDCG@3 0.9166–0.9596"
+      "evidence": "380 OD · 1,137 routes · bootstrap NDCG@3 0.9166–0.9596"
     }
   },
   {
@@ -287,7 +287,7 @@ export const projects = [
     "selected": {
       "summary": "한국어 질문으로 영어 논문을 검색하는 RAG에서 HyDE·CAD·SCD를 비교하고, cross-lingual 평가 조건 자체를 다시 검증했습니다.",
       "role": "Experiment Design · RAG · Evaluation",
-      "evidence": "19 queries × 8 configs · 152 generations"
+      "evidence": "한국어 비율 +0.2203 · 76쌍 중 68쌍 개선"
     }
   },
   {
@@ -455,7 +455,7 @@ export const projects = [
     "selected": {
       "summary": "컴퓨터게임 과제로 만든 CODE BLUE의 보스전을 실제 플레이 조건에 맞춘 PPO 환경으로 연결해 학습했습니다.",
       "role": "Game Environment · PPO · Evaluation",
-      "evidence": "1M steps · recent 100 clear rate 80%"
+      "evidence": "1M PPO · 199 boss clears · recent 100 clear rate 80%"
     }
   },
   {

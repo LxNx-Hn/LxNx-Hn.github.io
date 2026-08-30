@@ -246,15 +246,14 @@ img { max-width: 100%; }
 .workflow-section { border-bottom: 1px solid var(--line); background: var(--surface); }
 .workflow-heading > p { line-height: 1.8; }
 .workflow-steps {
-  display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
-  margin: 0; padding: 0; border-block: 1px solid var(--line); list-style: none;
+  display: grid; margin: 0; padding: 0; border-block: 1px solid var(--line); list-style: none;
 }
+.workflow-steps-four { grid-template-columns: repeat(4,minmax(0,1fr)); }
 .workflow-steps li {
   display: grid; min-height: 154px; grid-template-columns: 34px 1fr; gap: 12px; padding: 26px 24px;
-  border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
 }
-.workflow-steps li:nth-child(3n) { border-right: 0; }
-.workflow-steps li:nth-last-child(-n+3) { border-bottom: 0; }
+.workflow-steps li:last-child { border-right: 0; }
 .workflow-steps li > span, .stack-grid article > span, .working-notes article > span {
   color: var(--accent); font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size: .68rem; font-weight: 750;
 }
@@ -343,8 +342,8 @@ img { max-width: 100%; }
   .project-media-grid, .ai-efficiency-grid, .ai-example-list { grid-template-columns: 1fr; }
   .ai-efficiency-grid article { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
   .ai-efficiency-grid article:last-child { border-bottom: 0; }
-  .workflow-steps { grid-template-columns: repeat(2,minmax(0,1fr)); }
-  .workflow-steps li, .workflow-steps li:nth-child(3n) { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .workflow-steps-four { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .workflow-steps li { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .workflow-steps li:nth-child(2n) { border-right: 0; }
   .workflow-steps li:nth-last-child(-n+2) { border-bottom: 0; }
   .ai-principle-grid, .stack-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -373,8 +372,8 @@ img { max-width: 100%; }
   .story-copy { padding: 0 0 24px; }
   .result-list, .commit-list { grid-template-columns: 1fr; }
   .project-ai-note { align-items: flex-start; flex-direction: column; }
-  .workflow-steps, .ai-principle-grid, .stack-grid { grid-template-columns: 1fr; }
-  .workflow-steps li, .workflow-steps li:nth-child(2n), .workflow-steps li:nth-child(3n) {
+  .workflow-steps-four, .ai-principle-grid, .stack-grid { grid-template-columns: 1fr; }
+  .workflow-steps li, .workflow-steps li:nth-child(2n) {
     min-height: auto; border-right: 0; border-bottom: 1px solid var(--line);
   }
   .workflow-steps li:last-child { border-bottom: 0; }

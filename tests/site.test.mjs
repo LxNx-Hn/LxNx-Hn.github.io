@@ -122,3 +122,28 @@ test("local build source references resolve", async () => {
   }
   await stat(resolve(root, "data/projects.js"));
 });
+
+
+test("selected work evidence stays precise", () => {
+  const byTitle = Object.fromEntries(projects.map((project) => [project.title, project]));
+  assert.equal(
+    byTitle["동넷"].selected.evidence,
+    "380 OD · 1,137 routes · bootstrap NDCG@3 0.9166–0.9596",
+  );
+  assert.equal(
+    byTitle["M_RAG"].selected.evidence,
+    "한국어 비율 +0.2203 · 76쌍 중 68쌍 개선",
+  );
+  assert.equal(
+    byTitle["CODE BLUE · PPO Boss Agent"].selected.evidence,
+    "1M PPO · 199 boss clears · recent 100 clear rate 80%",
+  );
+});
+
+test("AI workflow is compact but keeps the four validation stages", async () => {
+  const html = await read("index.html");
+  assert.ok(html.includes('aria-label="AI 활용 4단계"'));
+  for (const label of ["문제·구조 정리", "작업 분해·구현", "코드 검토", "실행 검증"]) {
+    assert.ok(html.includes(label));
+  }
+});

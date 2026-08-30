@@ -455,7 +455,7 @@ export const projects = [
     "selected": {
       "summary": "컴퓨터게임 과제로 만든 CODE BLUE의 보스전을 실제 플레이 조건에 맞춘 PPO 환경으로 연결해 학습했습니다.",
       "role": "Game Environment · PPO · Evaluation",
-      "evidence": "1M PPO · 199 boss clears · recent 100 clear rate 80%"
+      "evidence": "892 episodes · 199 clears · overall 22.3% → recent 100 80%"
     },
     "evidence": [
       {

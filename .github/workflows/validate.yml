@@ -28,11 +28,20 @@ jobs:
         with:
           node-version: 24
 
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
       - name: Validate source
         run: npm run check
 
       - name: Build static site
         run: npm run build
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Responsive browser smoke test
+        run: npm run smoke
 
       - name: Configure Pages
         if: github.event_name != 'pull_request'

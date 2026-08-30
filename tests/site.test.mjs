@@ -139,7 +139,7 @@ test("selected work evidence stays precise", () => {
   );
   assert.equal(
     byTitle["CODE BLUE · PPO Boss Agent"].selected.evidence,
-    "1M PPO · 199 boss clears · recent 100 clear rate 80%",
+    "892 episodes · 199 clears · overall 22.3% → recent 100 80%",
   );
 });
 

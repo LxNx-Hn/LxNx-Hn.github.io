@@ -77,18 +77,30 @@ try {
       { timeout: 15_000 },
     );
 
-    await page.waitForFunction(
-      () => [...document.querySelectorAll(".project-media-frame img, .rag-journey-media img")]
-        .every((img) => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0),
-      { timeout: 20_000 },
-    );
-
-    const brokenProjectMedia = await page.locator(".project-media-frame img, .rag-journey-media img").evaluateAll(
-      (images) => images
-        .filter((img) => !img.complete || img.naturalWidth === 0 || img.naturalHeight === 0)
-        .map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
-    );
-    assert.deepEqual(brokenProjectMedia, [], `${viewport.name}: broken project media`);
+    const projectMedia = page.locator(".project-media-frame img, .rag-journey-media img");
+    for (let index = 0; index < await projectMedia.count(); index += 1) {
+      const image = projectMedia.nth(index);
+      await image.scrollIntoViewIfNeeded();
+      await image.waitFor({ state: "attached" });
+      await image.evaluate((img) => {
+        if (img.complete) return;
+        return new Promise((resolve) => {
+          img.addEventListener("load", resolve, { once: true });
+          img.addEventListener("error", resolve, { once: true });
+        });
+      });
+      const state = await image.evaluate((img) => ({
+        complete: img.complete,
+        naturalWidth: img.naturalWidth,
+        naturalHeight: img.naturalHeight,
+        src: img.currentSrc || img.src,
+        alt: img.alt,
+      }));
+      assert.ok(
+        state.complete && state.naturalWidth > 0 && state.naturalHeight > 0,
+        `${viewport.name}: broken project media ${JSON.stringify(state)}`,
+      );
+    }
 
     if (viewport.width <= 1100) {
       const hotPod = page.locator(".rag-journey-card").filter({ hasText: "Hot's POD" });

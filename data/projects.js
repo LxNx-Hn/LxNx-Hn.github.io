@@ -107,8 +107,7 @@ export const projects = [
       "6개 프로필 XGBRanker baseline · NDCG@3 0.9166~0.9596",
       "UI topN과 내부 candidate pool을 분리해 개인화 전 후보 다양성 보존",
       "bootstrap_baseline과 human_validated 모델을 명시적으로 구분",
-      "확인된 값과 estimated / unavailable 값을 추천·표시 단계에서 구분",
-      "VWorld 건물 정보와 태양 위치를 이용해 출발 시각별 건물 그늘 비율·그늘 도보거리를 경로에 반영"
+      "VWorld 건물 정보와 태양 위치로 출발 시각별 그늘 비율·그늘 도보거리를 반영하고, 데이터 확인 수준을 exact / estimated / unavailable로 구분"
     ],
     "media": {
       "items": [

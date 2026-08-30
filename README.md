@@ -1,7 +1,5 @@
 # 문종건 · AI Engineer Portfolio
 
-![Portfolio preview](./assets/portfolio-preview.svg)
-
 RAG, Search, Ranking, Reinforcement Learning을 실험에서 서비스까지 연결한 프로젝트를 정리한 개인 포트폴리오입니다.
 
 🔗 **Live**: https://lxnx-hn.github.io  

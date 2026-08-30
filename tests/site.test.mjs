@@ -270,13 +270,6 @@ test("Dongnet presentation links to the verified Pages deployment", () => {
   );
 });
 
-test("README exposes the portfolio preview asset", async () => {
-  const readme = await read("README.md");
-  assert.ok(readme.includes("![Portfolio preview](./assets/portfolio-preview.svg)"));
-  await stat(resolve(root, "assets/portfolio-preview.svg"));
-});
-
-
 test("Dongnet case copy avoids defensive negative phrasing", () => {
   const dongnet = projects.find((project) => project.title === "동넷");
   const copy = JSON.stringify({
@@ -364,4 +357,20 @@ test("Dongnet no longer exposes the mislabeled shade screenshot alias", () => {
   assert.equal(serialized.includes("shade-overlay.webp"), false);
   assert.equal(serialized.includes("docs/app/hero-app.webp"), false);
   assert.equal(serialized.includes("docs/app/route-detail.webp"), false);
+});
+
+
+test("README does not present a fabricated portfolio screenshot", async () => {
+  const readme = await read("README.md");
+  assert.equal(readme.includes("portfolio-preview.svg"), false);
+});
+
+test("M_RAG selected thumbnail stays intentionally simple", async () => {
+  const svg = await read("assets/mrag-selected.svg");
+  for (const label of ["KR Query", "EN Papers", "HyDE · CAD · SCD", "Bilingual Eval"]) {
+    assert.ok(svg.includes(label), `missing thumbnail label: ${label}`);
+  }
+  for (const noisyText of ["19 queries", "translation confound", "judge-robust", "Korean maintenance"]) {
+    assert.equal(svg.includes(noisyText), false, `thumbnail is too dense: ${noisyText}`);
+  }
 });

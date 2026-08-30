@@ -4,7 +4,7 @@ export const projects = [
     "repo": "https://github.com/LxNx-Hn/KT-10",
     "label": "이동취약자 맞춤 경로 추천 · 동넷",
     "featured": true,
-    "overview": "동넷은 이동취약자가 경로를 고를 때 소요시간만 보는 대신 경사, 도보거리, 환승, 계단·승강기, 저상버스, 접근성 정보와 시간대별 건물 그늘까지 함께 비교할 수 있게 만든 경로 추천 서비스입니다. 이동취약자에게 가장 빠른 경로가 항상 가장 좋은 경로는 아니라는 문제에서 시작했고, 경로를 볼 항목은 있었지만 프로필마다 무엇을 얼마나 중요하게 볼지 정량 기준이 없었습니다. 실제 경로 후보를 LLM으로 1차 평가한 뒤 점수와 근거를 다시 분석해 고정된 평가 rubric과 bootstrap 학습 데이터를 만들고, 6개 사용자 프로필별 XGBRanker baseline을 학습했습니다. 이후 후보 재정렬과 백엔드·서비스 연결까지 맡았습니다.",
+    "overview": "가장 빠른 경로가 항상 가장 좋은 경로는 아니라는 문제에서 시작했습니다. 경로를 볼 항목은 있었지만 프로필마다 무엇을 얼마나 중요하게 볼지 정량 기준이 없었습니다. 실제 경로 후보를 LLM으로 1차 평가한 뒤 점수와 근거를 다시 분석해 고정된 평가 rubric과 bootstrap 학습 데이터를 만들고, 6개 사용자 프로필별 XGBRanker baseline을 학습했습니다. 이후 후보 재정렬과 백엔드·서비스 연결까지 맡았습니다.",
     "stack": [
       {
         "label": "AI / Ranking",
@@ -140,14 +140,15 @@ export const projects = [
       "summary": "경사·환승·접근성·시간대별 건물 그늘까지 함께 보는 이동취약자 경로 추천 서비스에서, 실제 경로 후보를 LLM으로 1차 평가하고 재분석해 6개 프로필별 XGBRanker 학습 데이터로 연결했습니다.",
       "role": "Ranking · Data Pipeline · Backend",
       "evidence": "380 OD · 1,137 routes · bootstrap NDCG@3 0.9166–0.9596"
-    }
+    },
+    "intro": "이동취약자가 경로를 고를 때 소요시간뿐 아니라 경사·보행 부담·환승·접근성·시간대별 건물 그늘까지 함께 비교할 수 있게 만든 맞춤 경로 추천 서비스입니다."
   },
   {
     "title": "M_RAG",
     "repo": "https://github.com/LxNx-Hn/M_RAG",
     "label": "Cross-lingual RAG 졸업논문 연구 진행 중 · M_RAG",
     "featured": true,
-    "overview": "한국어 질문으로 영어 논문을 검색하고 한국어로 답하는 cross-lingual RAG를 졸업논문 주제로 진행 중입니다. 같은 Paper-RAG backbone에서 HyDE, CAD, SCD 8개 조합을 비교했고, 모델 효과뿐 아니라 서로 다른 언어가 섞인 결과를 어떻게 공정하게 평가할지도 실험의 한 부분으로 다뤘습니다.",
+    "overview": "같은 Paper-RAG backbone에서 HyDE, CAD, SCD 8개 조합을 비교했고, 모델 효과뿐 아니라 서로 다른 언어가 섞인 결과를 어떤 조건에서 평가해야 하는지도 실험의 한 부분으로 다뤘습니다. 한국어 유지 정도, 번역이 평가에 주는 영향, judge가 바뀌어도 같은 차이가 남는지를 나눠 확인하고 있습니다.",
     "stack": [
       {
         "label": "RAG / Retrieval",
@@ -300,14 +301,15 @@ export const projects = [
         "src": "./assets/mrag-selected.svg",
         "alt": "한국어 질의에서 영어 논문 검색, HyDE·CAD·SCD 비교와 cross-lingual 평가로 이어지는 M_RAG 요약 도식"
       }
-    }
+    },
+    "intro": "한국어 질문으로 영어 논문을 검색하고 한국어로 답하는 cross-lingual RAG의 검색·생성·평가 조건을 비교하는 졸업논문 연구 프로젝트입니다."
   },
   {
     "title": "CODE BLUE · PPO Boss Agent",
     "repo": "https://github.com/LxNx-Hn/AI_FinalTerm",
     "label": "컴퓨터게임 과제로 제작한 CODE BLUE + PPO 강화학습",
     "featured": true,
-    "overview": "컴퓨터게임 과제로 직접 제작한 2D 격자 액션 게임 CODE BLUE의 보스전을 PPO로 해결해본 프로젝트입니다. Entry, 일반 전투, 병원, 엘리베이터 보스전, 옥상 엔딩, Credits까지 6개 씬으로 게임을 만들고 플레이어 이동·공격·대시, 적 AI, 아이템, trigger, UI, 다단계 보스 패턴을 구현했습니다. 이후 보스전을 별도 RL 학습 환경으로 연결해, 사람이 게임에서 할 수 있는 행동과 볼 수 있는 정보 범위 안에서 PPO agent가 보스를 처치하도록 학습했습니다.",
+    "overview": "Entry, 일반 전투, 병원, 엘리베이터 보스전, 옥상 엔딩, Credits까지 6개 씬으로 게임을 만들고 플레이어 이동·공격·대시, 적 AI, 아이템, trigger, UI, 다단계 보스 패턴을 구현했습니다. 이후 보스전을 별도 RL 학습 환경으로 연결해 Action·Observation·Reward를 실제 플레이 조건에 맞추고, PPO agent가 보스를 처치하는지 학습 결과와 gameplay로 확인했습니다.",
     "stack": [
       {
         "label": "Game",
@@ -480,14 +482,15 @@ export const projects = [
         "url": "https://github.com/LxNx-Hn/AI_FinalTerm/blob/main/videos/05_late_clever_clear.mp4",
         "note": "1M PPO inference 실제 gameplay"
       }
-    ]
+    ],
+    "intro": "직접 제작한 2D 격자 액션 게임 CODE BLUE의 보스전을 사람이 플레이하는 조건에 맞춰 PPO로 학습한 게임 AI 프로젝트입니다."
   },
   {
     "title": "Hot's POD",
     "repo": "https://github.com/LxNx-Hn/Hot-s-Pod",
     "label": "자연어 기반 소모임 검색 · Hot's POD",
     "featured": false,
-    "overview": "첫 RAG 프로젝트가 끝난 뒤 구조를 직접 다시 만들어보기 위해 진행한 자연어 소모임 검색 서비스입니다. 사용자가 '주말에 근처에서 가볍게 운동할 모임'처럼 검색하면 의미적으로 비슷한 모임을 찾되, 장소·category처럼 틀리면 안 되는 조건은 DB에서 다시 확인하도록 Vector Search와 RDB filtering을 연결했습니다. LLM은 검색 결과를 만드는 주체가 아니라, 확인된 모임을 사용자에게 설명하는 마지막 단계로 두었습니다.",
+    "overview": "첫 RAG 프로젝트가 끝난 뒤 retrieval 구조를 직접 다시 만들어보기 위해 진행했습니다. '주말에 근처에서 가볍게 운동할 모임'처럼 표현이 달라도 의미적으로 비슷한 모임을 찾고, 장소·category처럼 정확해야 하는 조건은 DB에서 다시 확인하도록 Vector Search와 RDB filtering을 연결했습니다. LLM은 확인된 검색 결과를 사용자에게 설명하는 마지막 단계로 두었습니다.",
     "stack": [
       {
         "label": "AI / Search",
@@ -603,7 +606,7 @@ export const projects = [
     "journey": {
       "order": 2,
       "stage": "검색 구조 직접 재설계",
-      "summary": "첫 RAG 프로젝트 이후 retrieval 구조를 직접 다시 구성하면서 Semantic Retrieval과 장소·category 같은 hard constraint를 분리했습니다.",
+      "summary": "자연어 소모임 검색을 직접 다시 설계하면서 Semantic Retrieval과 장소·category 같은 hard constraint를 분리하고, 검색 결과의 순서를 유지하는 구조까지 다뤘습니다.",
       "focus": "Vector similarity를 DB filtering 뒤에도 유지하고, LLM은 확인된 검색 결과를 설명하는 마지막 단계로 제한했습니다.",
       "evidence": "Semantic Retrieval → Structured Filter → Re-rank → LLM",
       "links": [
@@ -613,14 +616,15 @@ export const projects = [
         }
       ],
       "role": "Search Design · Backend · RAG"
-    }
+    },
+    "intro": "사용자가 자연어로 원하는 모임 조건을 말하면 의미 검색과 정확한 조건 필터를 함께 적용해 소모임을 찾는 검색 서비스입니다."
   },
   {
     "title": "창업지원 RAG 챗봇",
     "repo": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter",
     "label": "첫 RAG 서비스 프로젝트 · Project Leader",
     "featured": false,
-    "overview": "창업 희망자의 질문에 정책, 창업 정보, 검색 트렌드를 찾아 답하는 RAG 챗봇입니다. 처음 RAG를 서비스 형태로 다뤘던 프로젝트라 '모델을 어떻게 붙일까'보다 어떤 질문을 서비스가 답해야 하고, 질문 종류에 따라 어떤 데이터를 써야 하는지를 먼저 정하는 과정이 중요했습니다. Project Leader로 질문 분류부터 검색·응답, FastAPI–React 연결과 배포까지 전체 흐름을 맞췄습니다.",
+    "overview": "처음 RAG를 서비스 형태로 다뤘던 프로젝트라 질문이 들어오면 먼저 정책·창업 정보·트렌드·범위 밖 질문으로 분류하고, 유형별 데이터 경로를 거쳐 답을 만드는 구조를 잡았습니다. Project Leader로 질문 분류부터 검색·응답, FastAPI–React 연결과 배포까지 전체 흐름을 맞췄습니다.",
     "stack": [
       {
         "label": "AI",
@@ -734,7 +738,7 @@ export const projects = [
     "journey": {
       "order": 1,
       "stage": "첫 서비스형 RAG",
-      "summary": "Project Leader로 질문 분류와 routing부터 검색·응답, FastAPI–React 연결, Cloud Run·Netlify 배포까지 전체 흐름을 맞췄습니다.",
+      "summary": "창업 정책·정보·트렌드 질문에 답하는 첫 서비스형 RAG에서 Project Leader로 질문 분류와 routing부터 검색·응답, FastAPI–React 연결, Cloud Run·Netlify 배포까지 전체 흐름을 맞췄습니다.",
       "focus": "질문 범위와 데이터 경로를 먼저 나누고, 모델·백엔드·secret·비용을 함께 운영 조건으로 봤습니다.",
       "evidence": "Classifier F1 97.60 · Cloud Run + Netlify",
       "links": [
@@ -744,6 +748,7 @@ export const projects = [
         }
       ],
       "role": "Project Leader · Technical Lead"
-    }
+    },
+    "intro": "창업 희망자의 질문을 정책·창업 정보·검색 트렌드로 나눠 관련 데이터를 찾고 답하는 RAG 챗봇 서비스입니다."
   }
 ];

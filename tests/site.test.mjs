@@ -310,3 +310,29 @@ test("Dongnet explains the product before the ranking details and includes shade
   assert.ok(dongnet.contributions.some((item) => item.includes("VWorld 건물 정보와 태양 위치")));
   assert.ok(dongnet.media.items.some((item) => item.src.endsWith("/docs/app/shade-overlay.webp")));
 });
+
+
+test("every portfolio project states what the project is before technical detail", () => {
+  const expected = {
+    "동넷": "맞춤 경로 추천 서비스",
+    "M_RAG": "졸업논문 연구 프로젝트",
+    "CODE BLUE · PPO Boss Agent": "게임 AI 프로젝트",
+    "Hot's POD": "검색 서비스",
+    "창업지원 RAG 챗봇": "RAG 챗봇 서비스",
+  };
+
+  for (const project of projects) {
+    assert.ok(project.intro, `missing project intro: ${project.title}`);
+    assert.ok(
+      project.intro.includes(expected[project.title]),
+      `project identity is unclear: ${project.title}`,
+    );
+  }
+});
+
+test("project identity is rendered before implementation detail", async () => {
+  const script = await read("script.js");
+  assert.ok(script.includes("project-intro selected-intro"));
+  assert.ok(script.includes("project-intro rag-journey-intro"));
+  assert.ok(script.includes("project-intro project-intro-main"));
+});

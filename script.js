@@ -25,6 +25,7 @@ const renderSelected = (project) => {
       <div class="selected-copy">
         <p class="project-label">${project.label}</p>
         <h3>${project.title}</h3>
+        <p class="project-intro selected-intro">${project.intro}</p>
         <p class="selected-summary">${project.selected.summary}</p>
         <dl class="selected-meta">
           <div><dt>Role</dt><dd>${project.selected.role}</dd></div>
@@ -150,6 +151,7 @@ const renderJourney = (project) => {
         <div>
           <p class="project-label">${project.journey.stage}</p>
           <h3>${project.title}</h3>
+          <p class="project-intro rag-journey-intro">${project.intro}</p>
           <p class="rag-journey-role">${project.journey.role}</p>
           <p class="rag-journey-summary">${project.journey.summary}</p>
         </div>
@@ -211,6 +213,7 @@ const renderProject = (project, index) => {
         <div class="project-heading-copy">
           <p class="project-label">${project.label}</p>
           <h3 id="project-title-${index + 1}">${project.title}</h3>
+          <p class="project-intro project-intro-main">${project.intro}</p>
           <p class="project-overview-copy">${project.overview}</p>
         </div>
         <a class="repo-link" href="${project.repo}" ${externalLinkAttributes}>Repository <span aria-hidden="true">↗</span></a>

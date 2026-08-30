@@ -124,8 +124,8 @@ export const projects = [
       ],
       "links": [
         {
-          "label": "발표용 화면 자료",
-          "url": "https://github.com/LxNx-Hn/KT-10/tree/main/presentation"
+          "label": "발표 화면",
+          "url": "https://lxnx-hn.github.io/KT-10/"
         }
       ]
     },
@@ -289,7 +289,11 @@ export const projects = [
     "selected": {
       "summary": "한국어 질문으로 영어 논문을 검색하는 RAG에서 HyDE·CAD·SCD를 비교하고, cross-lingual 평가 조건 자체를 다시 검증했습니다.",
       "role": "Experiment Design · RAG · Evaluation",
-      "evidence": "한국어 문자 비율 +0.2203 · 76쌍 중 68쌍 개선"
+      "evidence": "한국어 문자 비율 +0.2203 · 76쌍 중 68쌍 개선",
+      "thumbnail": {
+        "src": "./assets/mrag-selected.svg",
+        "alt": "한국어 질의에서 영어 논문 검색, HyDE·CAD·SCD 비교와 cross-lingual 평가로 이어지는 M_RAG 요약 도식"
+      }
     }
   },
   {

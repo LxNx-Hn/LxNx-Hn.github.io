@@ -15,7 +15,7 @@
     <meta property="og:title" content="문종건 | AI Engineer" />
     <meta
       property="og:description"
-      content="RAG, Search, Ranking, Reinforcement Learning을 직접 실험하고 데이터·백엔드·배포까지 연결한 포트폴리오"
+      content="AI 모델을 구현하는 데서 끝내지 않고 데이터 준비부터 평가·백엔드·서비스 연결까지 직접 확인한 AI Engineer 포트폴리오"
     />
     <meta property="og:image" content="https://lxnx-hn.github.io/assets/og.png" />
     <meta property="og:image:alt" content="문종건 AI Engineer 포트폴리오" />
@@ -23,7 +23,7 @@
     <meta name="twitter:title" content="문종건 | AI Engineer" />
     <meta
       name="twitter:description"
-      content="RAG, Search, Ranking, Reinforcement Learning을 직접 실험하고 데이터·백엔드·배포까지 연결한 포트폴리오"
+      content="AI 모델을 구현하는 데서 끝내지 않고 데이터 준비부터 평가·백엔드·서비스 연결까지 직접 확인한 AI Engineer 포트폴리오"
     />
     <meta name="twitter:image" content="https://lxnx-hn.github.io/assets/og.png" />
     <link rel="canonical" href="https://lxnx-hn.github.io/" />
@@ -42,8 +42,8 @@
         </a>
         <div class="nav-links">
           <a href="#selected-work">Selected</a>
+          <a href="#experience">Experience</a>
           <a href="#projects">Projects</a>
-          <a href="#ai-workflow">AI Workflow</a>
           <a href="#contact">Contact</a>
         </div>
       </nav>
@@ -94,11 +94,87 @@
         </div>
       </section>
 
+      <section class="section experience-section" id="experience" aria-labelledby="experience-title">
+        <div class="shell">
+          <div class="section-heading">
+            <div>
+              <p class="section-index">02 · EXPERIENCE &amp; EDUCATION</p>
+              <h2 id="experience-title">프로젝트가 이어진 배경</h2>
+            </div>
+            <p>
+              학교에서 컴퓨터공학을 전공하며 KT디지털인재장학생으로 활동했고,
+              장학생 프로젝트에서 첫 서비스형 RAG와 동넷을 진행했습니다.
+            </p>
+          </div>
+
+          <div class="experience-layout">
+            <article class="experience-primary">
+              <header class="experience-header">
+                <div>
+                  <p class="content-label">Experience</p>
+                  <h3>KT디지털인재장학생</h3>
+                  <p>KT그룹희망나눔재단 · 2022.03–2026.12</p>
+                </div>
+              </header>
+
+              <div class="experience-projects">
+                <div class="experience-project">
+                  <time datetime="2025-08">2025.08</time>
+                  <div>
+                    <div class="experience-project-title">
+                      <strong>창업지원 RAG 챗봇</strong>
+                      <span>Project Leader · Technical Lead</span>
+                    </div>
+                    <p>
+                      질문 분류와 routing부터 검색·응답, FastAPI–React 연결까지 기술 방향과 전체 서비스 흐름을 맡았습니다.
+                    </p>
+                    <a href="#rag-journey">RAG 성장 과정 보기 <span aria-hidden="true">↓</span></a>
+                  </div>
+                </div>
+
+                <div class="experience-project">
+                  <time datetime="2026-07">2026.07–08</time>
+                  <div>
+                    <div class="experience-project-title">
+                      <strong>동넷</strong>
+                      <span>AI Team Lead</span>
+                    </div>
+                    <p>
+                      평가 항목은 있었지만 프로필별 정량 기준이 없어 실제 경로 후보를 LLM으로 1차 평가했고,
+                      그 결과를 다시 분석해 bootstrap 학습 데이터를 만든 뒤 6개 프로필별 XGBRanker 학습과 서비스 연결까지 AI 파트를 이끌었습니다.
+                    </p>
+                    <a href="#project-dongnet">Case Study 보기 <span aria-hidden="true">↑</span></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <div class="experience-side">
+              <article class="experience-side-card">
+                <p class="content-label">Education</p>
+                <h3>동국대학교 WISE캠퍼스</h3>
+                <p class="experience-side-meta">컴퓨터공학과 · 2021.03–2027.02</p>
+                <p>
+                  졸업논문으로 cross-lingual RAG의 평가 조건을 다룬 M_RAG를 진행했습니다.
+                </p>
+                <a href="#project-m-rag">M_RAG 보기 <span aria-hidden="true">↑</span></a>
+              </article>
+
+              <article class="experience-side-card experience-military">
+                <p class="content-label">Military Service</p>
+                <h3>군필</h3>
+                <p class="experience-side-meta">2023.02–2024.08</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="section projects-section" id="projects" aria-labelledby="projects-title">
         <div class="shell">
           <div class="section-heading">
             <div>
-              <p class="section-index">02 · PROJECT CASE STUDIES</p>
+              <p class="section-index">03 · PROJECT CASE STUDIES</p>
               <h2 id="projects-title">대표 프로젝트 Case Study</h2>
             </div>
             <p>동넷, M_RAG, CODE BLUE 세 프로젝트는 맡은 부분과 판단 과정, 결과 근거까지 상세하게 정리했습니다.</p>
@@ -111,7 +187,7 @@
         <div class="shell">
           <div class="section-heading">
             <div>
-              <p class="section-index">03 · ADDITIONAL WORK</p>
+              <p class="section-index">04 · ADDITIONAL WORK</p>
               <h2 id="rag-journey-title">RAG를 다뤄온 과정</h2>
             </div>
             <p>
@@ -130,7 +206,7 @@
         <div class="shell">
           <div class="section-heading workflow-heading">
             <div>
-              <p class="section-index">04 · AI IN DEVELOPMENT</p>
+              <p class="section-index">05 · AI IN DEVELOPMENT</p>
               <h2 id="workflow-title">AI를 개발 전 과정에 사용합니다.</h2>
             </div>
             <p>
@@ -204,81 +280,6 @@
         </div>
       </section>
 
-      <section class="section experience-section" id="experience" aria-labelledby="experience-title">
-        <div class="shell">
-          <div class="section-heading">
-            <div>
-              <p class="section-index">05 · EXPERIENCE &amp; EDUCATION</p>
-              <h2 id="experience-title">프로젝트가 이어진 배경</h2>
-            </div>
-            <p>
-              학교에서 컴퓨터공학을 전공하며 KT디지털인재장학생으로 활동했고,
-              장학생 프로젝트에서 첫 서비스형 RAG와 동넷을 진행했습니다.
-            </p>
-          </div>
-
-          <div class="experience-layout">
-            <article class="experience-primary">
-              <header class="experience-header">
-                <div>
-                  <p class="content-label">Experience</p>
-                  <h3>KT디지털인재장학생</h3>
-                  <p>KT그룹희망나눔재단 · 2022.03–2026.12</p>
-                </div>
-              </header>
-
-              <div class="experience-projects">
-                <div class="experience-project">
-                  <time datetime="2025-08">2025.08</time>
-                  <div>
-                    <div class="experience-project-title">
-                      <strong>창업지원 RAG 챗봇</strong>
-                      <span>Project Leader · Technical Lead</span>
-                    </div>
-                    <p>
-                      질문 분류와 routing부터 검색·응답, FastAPI–React 연결까지 기술 방향과 전체 서비스 흐름을 맡았습니다.
-                    </p>
-                    <a href="#rag-journey">RAG 성장 과정 보기 <span aria-hidden="true">↓</span></a>
-                  </div>
-                </div>
-
-                <div class="experience-project">
-                  <time datetime="2026-07">2026.07–08</time>
-                  <div>
-                    <div class="experience-project-title">
-                      <strong>동넷</strong>
-                      <span>AI Team Lead</span>
-                    </div>
-                    <p>
-                      평가 항목은 있었지만 프로필별 정량 기준이 없어 실제 경로 후보를 LLM으로 1차 평가했고,
-                      그 결과를 다시 분석해 bootstrap 학습 데이터를 만든 뒤 6개 프로필별 XGBRanker 학습과 서비스 연결까지 AI 파트를 이끌었습니다.
-                    </p>
-                    <a href="#project-dongnet">Case Study 보기 <span aria-hidden="true">↑</span></a>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <div class="experience-side">
-              <article class="experience-side-card">
-                <p class="content-label">Education</p>
-                <h3>동국대학교 WISE캠퍼스</h3>
-                <p class="experience-side-meta">컴퓨터공학과 · 2021.03–2027.02</p>
-                <p>
-                  졸업논문으로 cross-lingual RAG의 평가 조건을 다룬 M_RAG를 진행했습니다.
-                </p>
-                <a href="#project-m-rag">M_RAG 보기 <span aria-hidden="true">↑</span></a>
-              </article>
-
-              <article class="experience-side-card experience-military">
-                <p class="content-label">Military Service</p>
-                <h3>군필</h3>
-                <p class="experience-side-meta">2023.02–2024.08</p>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section class="section stack-section" id="stack" aria-labelledby="stack-title">
         <div class="shell">

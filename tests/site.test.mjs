@@ -121,7 +121,7 @@ test("social preview is a valid large landscape PNG", async () => {
 
 test("local build source references resolve", async () => {
   const html = await read("index.html");
-  for (const path of ["styles.css", "script.js", "assets/og.png", "assets/favicon.svg"]) {
+  for (const path of ["styles.css", "script.js", "assets/og.png", "assets/mrag-selected.svg", "assets/favicon.svg"]) {
     await stat(resolve(root, path));
     assert.ok(html.includes(path));
   }
@@ -241,4 +241,36 @@ test("Dongnet documents the LLM-to-bootstrap labeling process without treating i
   assert.ok(dongnet.contributions.some((item) => item.includes("LLM 평가를 그대로 정답으로 쓰지 않고")));
   assert.ok(dongnet.cases[0].solution.includes("6,822개 bootstrap label"));
   assert.ok(dongnet.cases[0].result.includes("실제 사용자 선호 검증 결과로 해석하지 않았습니다"));
+});
+
+
+test("experience is surfaced immediately after selected work", async () => {
+  const html = await read("index.html");
+  const selected = html.indexOf('id="selected-work"');
+  const experience = html.indexOf('id="experience"');
+  const projectsIndex = html.indexOf('id="projects"');
+  assert.ok(selected >= 0 && experience > selected && projectsIndex > experience);
+  assert.ok(html.includes('href="#experience">Experience</a>'));
+});
+
+test("M_RAG uses a dedicated selected-work thumbnail", () => {
+  const mrag = projects.find((project) => project.title === "M_RAG");
+  assert.equal(mrag.selected.thumbnail?.src, "./assets/mrag-selected.svg");
+  assert.ok(mrag.selected.thumbnail?.alt.includes("cross-lingual"));
+});
+
+test("Dongnet presentation links to the verified Pages deployment", () => {
+  const dongnet = projects.find((project) => project.title === "동넷");
+  const presentation = dongnet.media?.links?.find((link) => link.label === "발표 화면");
+  assert.equal(presentation?.url, "https://lxnx-hn.github.io/KT-10/");
+  assert.equal(
+    dongnet.media?.links?.some((link) => link.url.includes("/tree/main/presentation")),
+    false,
+  );
+});
+
+test("README exposes the portfolio preview asset", async () => {
+  const readme = await read("README.md");
+  assert.ok(readme.includes("![Portfolio preview](./assets/portfolio-preview.svg)"));
+  await stat(resolve(root, "assets/portfolio-preview.svg"));
 });

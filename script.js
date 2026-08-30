@@ -15,7 +15,7 @@ const renderStack = (stack) =>
     </div>`).join("");
 
 const renderSelected = (project) => {
-  const image = project.media?.items?.[0];
+  const image = project.selected?.thumbnail || project.media?.items?.[0];
   return `
     <article class="selected-card">
       ${image ? `

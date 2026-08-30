@@ -18,6 +18,7 @@ const staticFiles = [
   "script.js",
   "data/projects.js",
   "assets/og.png",
+  "assets/mrag-selected.svg",
   "assets/favicon.svg",
 ];
 

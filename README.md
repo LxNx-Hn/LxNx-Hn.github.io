@@ -1,5 +1,7 @@
 # 문종건 · AI Engineer Portfolio
 
+![Portfolio preview](./assets/portfolio-preview.svg)
+
 RAG, Search, Ranking, Reinforcement Learning을 실험에서 서비스까지 연결한 프로젝트를 정리한 개인 포트폴리오입니다.
 
 🔗 **Live**: https://lxnx-hn.github.io  
@@ -8,10 +10,10 @@ RAG, Search, Ranking, Reinforcement Learning을 실험에서 서비스까지 연
 ## 사이트 구성
 
 - Selected Work — 대표 프로젝트 3개 요약
+- Experience & Education — KT디지털인재장학생 활동, 프로젝트 기술 리더 역할, 전공 및 이력
 - Project Case Studies — 동넷, M_RAG, CODE BLUE 대표 3개 프로젝트의 상세 과정과 근거
 - RAG를 다뤄온 과정 — 창업지원 RAG와 Hot's POD의 역할·핵심 판단·결과를 함께 보여주고 M_RAG 평가 연구로 연결
 - AI in Development — AI를 설계·구현·검토·검증에 사용하는 방식
-- Experience & Education — KT디지털인재장학생 활동, 프로젝트 기술 리더 역할, 전공 및 이력
 - Working Stack / Working Notes
 
 ## 로컬 확인

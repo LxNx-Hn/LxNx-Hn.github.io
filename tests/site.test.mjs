@@ -231,3 +231,14 @@ test("RAG growth cards keep decision, result, stack, and project evidence", asyn
   assert.ok(script.includes("project.cases.slice(0, 2)"));
   assert.ok(script.includes("project.results.slice(0, 3)"));
 });
+
+
+test("Dongnet documents the LLM-to-bootstrap labeling process without treating it as human validation", () => {
+  const dongnet = projects.find((project) => project.title === "동넷");
+
+  assert.ok(dongnet.overview.includes("LLM으로 1차 평가"));
+  assert.ok(dongnet.overview.includes("bootstrap 학습 데이터"));
+  assert.ok(dongnet.contributions.some((item) => item.includes("LLM 평가를 그대로 정답으로 쓰지 않고")));
+  assert.ok(dongnet.cases[0].solution.includes("6,822개 bootstrap label"));
+  assert.ok(dongnet.cases[0].result.includes("실제 사용자 선호 검증 결과로 해석하지 않았습니다"));
+});

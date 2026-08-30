@@ -4,7 +4,7 @@ export const projects = [
     "repo": "https://github.com/LxNx-Hn/KT-10",
     "label": "이동취약자 맞춤 경로 추천 · 동넷",
     "featured": true,
-    "overview": "이동취약자에게 가장 빠른 경로가 항상 가장 좋은 경로는 아니라는 문제에서 시작했습니다. 경사, 도보거리, 환승, 접근성, 환경처럼 볼 항목은 있었지만 프로필마다 무엇을 얼마나 중요하게 볼지 정량 기준이 없었습니다. 실제 경로 후보를 LLM으로 1차 평가한 뒤 점수와 근거를 다시 분석해 고정된 평가 rubric과 bootstrap 학습 데이터를 만들고, 6개 사용자 프로필별 XGBRanker baseline을 학습했습니다. 이후 후보 재정렬과 백엔드·서비스 연결까지 맡았습니다.",
+    "overview": "동넷은 이동취약자가 경로를 고를 때 소요시간만 보는 대신 경사, 도보거리, 환승, 계단·승강기, 저상버스, 접근성 정보와 시간대별 건물 그늘까지 함께 비교할 수 있게 만든 경로 추천 서비스입니다. 이동취약자에게 가장 빠른 경로가 항상 가장 좋은 경로는 아니라는 문제에서 시작했고, 경로를 볼 항목은 있었지만 프로필마다 무엇을 얼마나 중요하게 볼지 정량 기준이 없었습니다. 실제 경로 후보를 LLM으로 1차 평가한 뒤 점수와 근거를 다시 분석해 고정된 평가 rubric과 bootstrap 학습 데이터를 만들고, 6개 사용자 프로필별 XGBRanker baseline을 학습했습니다. 이후 후보 재정렬과 백엔드·서비스 연결까지 맡았습니다.",
     "stack": [
       {
         "label": "AI / Ranking",
@@ -47,7 +47,7 @@ export const projects = [
       }
     ],
     "contributions": [
-      "경사·도보·환승·접근성·환경 정보를 실제 경로 후보 단위로 정리해 평가와 추천 모델 입력까지 연결했습니다.",
+      "경사·도보·환승·접근성·환경 정보를 실제 경로 후보 단위로 정리하고, VWorld 건물 정보와 태양 위치를 이용한 시간대별 건물 그늘 정보까지 평가·추천 모델 입력과 서비스 화면에 연결했습니다.",
       "평가 항목은 있었지만 프로필별 정량 기준이 없어서 실제 후보를 LLM으로 1차 평가하고, 점수와 근거를 다시 분석해 고정된 평가 rubric으로 정리했습니다.",
       "LLM 1차 평가의 점수와 근거를 재분석해 고정 rubric으로 옮기고, 이를 적용해 6,822개 bootstrap label과 6개 프로필별 XGBRanker baseline을 만들었습니다.",
       "화면에 보여줄 경로 수와 모델이 비교할 내부 candidate pool을 분리해, 개인화 모델이 더 넓은 후보를 비교한 뒤 최종 경로를 선택하도록 구성했습니다.",
@@ -107,7 +107,8 @@ export const projects = [
       "6개 프로필 XGBRanker baseline · NDCG@3 0.9166~0.9596",
       "UI topN과 내부 candidate pool을 분리해 개인화 전 후보 다양성 보존",
       "bootstrap_baseline과 human_validated 모델을 명시적으로 구분",
-      "확인된 값과 estimated / unavailable 값을 추천·표시 단계에서 구분"
+      "확인된 값과 estimated / unavailable 값을 추천·표시 단계에서 구분",
+      "VWorld 건물 정보와 태양 위치를 이용해 출발 시각별 건물 그늘 비율·그늘 도보거리를 경로에 반영"
     ],
     "media": {
       "items": [
@@ -120,6 +121,11 @@ export const projects = [
           "src": "https://raw.githubusercontent.com/LxNx-Hn/KT-10/main/docs/app/route-detail.webp",
           "alt": "동넷 경로 상세 정보 화면",
           "caption": "경로 상세 및 접근성 정보"
+        },
+        {
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/KT-10/main/docs/app/shade-overlay.webp",
+          "alt": "동넷 시간대별 건물 그늘 오버레이 화면",
+          "caption": "출발 시각별 건물 그늘 오버레이"
         }
       ],
       "links": [
@@ -131,7 +137,7 @@ export const projects = [
     },
     "slug": "dongnet",
     "selected": {
-      "summary": "실제 경로 후보를 LLM으로 1차 평가한 뒤 결과를 재분석해 bootstrap 학습 데이터를 만들고, 6개 프로필별 XGBRanker로 다시 평가했습니다.",
+      "summary": "경사·환승·접근성·시간대별 건물 그늘까지 함께 보는 이동취약자 경로 추천 서비스에서, 실제 경로 후보를 LLM으로 1차 평가하고 재분석해 6개 프로필별 XGBRanker 학습 데이터로 연결했습니다.",
       "role": "Ranking · Data Pipeline · Backend",
       "evidence": "380 OD · 1,137 routes · bootstrap NDCG@3 0.9166–0.9596"
     }

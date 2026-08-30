@@ -300,3 +300,13 @@ test("M_RAG is presented as an ongoing thesis with draft documents", async () =>
   assert.ok(mrag.media.links.some((link) => link.label === "영문 논문 초안 PDF"));
   assert.ok(mrag.commits.some((item) => item.label === "논문 초안 결과 정렬"));
 });
+
+
+test("Dongnet explains the product before the ranking details and includes shade", () => {
+  const dongnet = projects.find((project) => project.title === "동넷");
+  assert.ok(dongnet.overview.startsWith("동넷은 이동취약자가 경로를 고를 때"));
+  assert.ok(dongnet.overview.includes("시간대별 건물 그늘"));
+  assert.ok(dongnet.selected.summary.includes("시간대별 건물 그늘"));
+  assert.ok(dongnet.contributions.some((item) => item.includes("VWorld 건물 정보와 태양 위치")));
+  assert.ok(dongnet.media.items.some((item) => item.src.endsWith("/docs/app/shade-overlay.webp")));
+});

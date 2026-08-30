@@ -519,7 +519,7 @@ img { max-width: 100%; }
   font-style: normal;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1100px) {
   .rag-journey-card {
     grid-template-columns: 44px 1fr;
   }

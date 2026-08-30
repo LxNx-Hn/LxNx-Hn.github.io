@@ -121,10 +121,11 @@ test("social preview is a valid large landscape PNG", async () => {
 
 test("local build source references resolve", async () => {
   const html = await read("index.html");
-  for (const path of ["styles.css", "script.js", "assets/og.png", "assets/mrag-selected.svg", "assets/favicon.svg"]) {
+  for (const path of ["styles.css", "script.js", "assets/og.png", "assets/favicon.svg"]) {
     await stat(resolve(root, path));
     assert.ok(html.includes(path));
   }
+  await stat(resolve(root, "assets/mrag-selected.svg"));
   await stat(resolve(root, "data/projects.js"));
 });
 

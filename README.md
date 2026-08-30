@@ -8,7 +8,8 @@ RAG, Search, Ranking, Reinforcement Learning을 실험에서 서비스까지 연
 ## 사이트 구성
 
 - Selected Work — 대표 프로젝트 3개 요약
-- Project Case Studies — 5개 프로젝트의 역할, 시각 자료, 판단 과정, 결과와 코드
+- Project Case Studies — 동넷, M_RAG, CODE BLUE 대표 3개 프로젝트의 상세 과정과 근거
+- RAG를 다뤄온 과정 — 첫 서비스형 RAG → 검색 구조 재설계 → M_RAG 평가 연구로 이어지는 성장 흐름
 - AI in Development — AI를 설계·구현·검토·검증에 사용하는 방식
 - Working Stack / Working Notes
 
@@ -30,4 +31,4 @@ python -m http.server 4173 -d dist
 
 ## 콘텐츠 원칙
 
-프로젝트 상세는 `소개 → 시각 자료/구조 → 내가 맡은 부분 → Tech Stack → 프로젝트에서 고민했던 지점 → 확인한 결과 → 관련 코드` 순서로 구성합니다. 상단 Selected Work는 빠른 탐색용이며 상세 Case Study를 대체하지 않습니다.
+대표 3개 프로젝트 상세는 `소개 → 시각 자료/구조 → 내가 맡은 부분 → Tech Stack → 프로젝트에서 고민했던 지점 → 확인한 결과 → Evidence → 관련 코드` 순서로 구성합니다. Hot's POD와 첫 RAG 프로젝트는 별도 RAG 성장 섹션에서 연결합니다.

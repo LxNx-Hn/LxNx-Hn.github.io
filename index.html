@@ -99,11 +99,30 @@
           <div class="section-heading">
             <div>
               <p class="section-index">02 · PROJECT CASE STUDIES</p>
-              <h2 id="projects-title">프로젝트와 과정</h2>
+              <h2 id="projects-title">대표 프로젝트 Case Study</h2>
             </div>
-            <p>결과만 요약하지 않고 맡은 부분, 기술 스택, 프로젝트에서 판단이 필요했던 지점과 관련 코드를 함께 정리했습니다.</p>
+            <p>동넷, M_RAG, CODE BLUE 세 프로젝트는 맡은 부분과 판단 과정, 결과 근거까지 상세하게 정리했습니다.</p>
           </div>
           <div class="project-grid" data-project-list aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="section rag-journey-section" id="rag-journey" aria-labelledby="rag-journey-title">
+        <div class="shell">
+          <div class="section-heading">
+            <div>
+              <p class="section-index">03 · ADDITIONAL WORK</p>
+              <h2 id="rag-journey-title">RAG를 다뤄온 과정</h2>
+            </div>
+            <p>
+              첫 서비스형 RAG에서 전체 흐름을 경험한 뒤, Hot's POD에서 검색 구조를 직접 다시 설계했습니다.
+              이후 M_RAG에서는 이를 cross-lingual RAG의 평가 문제까지 확장했습니다.
+            </p>
+          </div>
+          <div class="rag-journey" data-rag-journey></div>
+          <a class="rag-journey-next" href="#project-m-rag">
+            M_RAG에서 평가 문제로 확장 <span aria-hidden="true">↑</span>
+          </a>
         </div>
       </section>
 
@@ -111,7 +130,7 @@
         <div class="shell">
           <div class="section-heading workflow-heading">
             <div>
-              <p class="section-index">03 · AI IN DEVELOPMENT</p>
+              <p class="section-index">04 · AI IN DEVELOPMENT</p>
               <h2 id="workflow-title">AI를 개발 전 과정에 사용합니다.</h2>
             </div>
             <p>
@@ -178,15 +197,10 @@
             </div>
           </section>
 
-          <div class="ai-principles">
-            <p class="content-label">검증 기준</p>
-            <div class="ai-principle-grid">
-              <div><strong>Small diff</strong><span>한 번에 바꾸는 범위를 작게 유지</span></div>
-              <div><strong>Context control</strong><span>필요한 코드와 조건만 전달</span></div>
-              <div><strong>Human review</strong><span>상태·예외·side effect를 직접 확인</span></div>
-              <div><strong>Test / Log</strong><span>설명보다 실행 결과로 판단</span></div>
-            </div>
-          </div>
+          <p class="ai-validation-note">
+            <strong>검증 원칙</strong>
+            작업 범위를 작게 유지하고 필요한 context만 전달한 뒤, 변경 코드를 직접 읽고 test·log·실제 결과로 확인합니다.
+          </p>
         </div>
       </section>
 
@@ -194,7 +208,7 @@
         <div class="shell">
           <div class="section-heading">
             <div>
-              <p class="section-index">04 · WORKING STACK</p>
+              <p class="section-index">05 · WORKING STACK</p>
               <h2 id="stack-title">주로 사용한 기술</h2>
             </div>
             <p>프로젝트별 상세 기술은 각 Case Study에 적고, 여기에는 여러 프로젝트에서 반복해서 사용한 기술만 모았습니다.</p>
@@ -211,7 +225,7 @@
       <section class="section approach-section" id="approach" aria-labelledby="approach-title">
         <div class="shell">
           <div class="approach-intro">
-            <p class="section-index">05 · WORKING NOTES</p>
+            <p class="section-index">06 · WORKING NOTES</p>
             <h2 id="approach-title">개발하면서 반복해서 확인하는 기준</h2>
             <p>프로젝트마다 방법은 달랐지만, 결과가 이상할 때 무엇부터 볼지, 확인하지 못한 값을 어떻게 남길지, 실험 수치를 어디까지 믿을지는 비슷한 기준으로 판단해왔습니다.</p>
           </div>

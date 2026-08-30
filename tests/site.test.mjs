@@ -94,8 +94,11 @@ test("project renderer keeps case studies closed and renders selected work", asy
   }
 
   assert.ok(script.includes("[data-selected-project-list]"));
+  assert.ok(script.includes("[data-rag-journey]"));
   assert.ok(script.includes("renderSelected"));
   assert.ok(script.includes("renderDiagram"));
+  assert.ok(script.includes("renderEvidence"));
+  assert.ok(script.includes("projects.filter((project) => project.featured).map(renderProject)"));
   assert.ok(script.includes('class="story-block"'));
   assert.equal(/<details class="story-block"[^>]*open/.test(script), false);
   assert.equal(script.includes("\uFFFD"), false);
@@ -132,7 +135,7 @@ test("selected work evidence stays precise", () => {
   );
   assert.equal(
     byTitle["M_RAG"].selected.evidence,
-    "한국어 비율 +0.2203 · 76쌍 중 68쌍 개선",
+    "한국어 문자 비율 +0.2203 · 76쌍 중 68쌍 개선",
   );
   assert.equal(
     byTitle["CODE BLUE · PPO Boss Agent"].selected.evidence,
@@ -146,4 +149,26 @@ test("AI workflow is compact but keeps the four validation stages", async () => 
   for (const label of ["문제·구조 정리", "작업 분해·구현", "코드 검토", "실행 검증"]) {
     assert.ok(html.includes(label));
   }
+});
+
+
+test("RAG journey keeps the intended growth order", () => {
+  const journey = projects
+    .filter((project) => !project.featured && project.journey)
+    .sort((a, b) => a.journey.order - b.journey.order);
+
+  assert.deepEqual(journey.map((project) => project.title), [
+    "창업지원 RAG 챗봇",
+    "Hot's POD",
+  ]);
+});
+
+test("CODE BLUE results link directly to result evidence", () => {
+  const codeBlue = projects.find((project) => project.title === "CODE BLUE · PPO Boss Agent");
+  assert.ok(codeBlue.evidence?.some((item) =>
+    item.url.endsWith("/docs/rl_final/PPO_1M_CLEAR_FINAL_REPORT.md")
+  ));
+  assert.ok(codeBlue.evidence?.some((item) =>
+    item.url.endsWith("/videos/05_late_clever_clear.mp4")
+  ));
 });

@@ -255,7 +255,7 @@ export const projects = [
     ],
     "results": [
       "19 queries × 8 HyDE/CAD/SCD configs = 152 generations",
-      "reference SCD 한국어 비율 paired +0.2203 · 68/76 쌍 개선",
+      "reference SCD 한국어 문자 비율 paired +0.2203 · 68/76 쌍 개선",
       "동일 검색 context 38쌍으로 영어/한국어 대칭 평가 구성",
       "한국어 유지 효과는 확인했지만 judge에 강건한 RAG-quality 차이는 확인하지 못함"
     ],
@@ -287,7 +287,7 @@ export const projects = [
     "selected": {
       "summary": "한국어 질문으로 영어 논문을 검색하는 RAG에서 HyDE·CAD·SCD를 비교하고, cross-lingual 평가 조건 자체를 다시 검증했습니다.",
       "role": "Experiment Design · RAG · Evaluation",
-      "evidence": "한국어 비율 +0.2203 · 76쌍 중 68쌍 개선"
+      "evidence": "한국어 문자 비율 +0.2203 · 76쌍 중 68쌍 개선"
     }
   },
   {
@@ -456,7 +456,19 @@ export const projects = [
       "summary": "컴퓨터게임 과제로 만든 CODE BLUE의 보스전을 실제 플레이 조건에 맞춘 PPO 환경으로 연결해 학습했습니다.",
       "role": "Game Environment · PPO · Evaluation",
       "evidence": "1M PPO · 199 boss clears · recent 100 clear rate 80%"
-    }
+    },
+    "evidence": [
+      {
+        "label": "1M PPO 결과 보고서",
+        "url": "https://github.com/LxNx-Hn/AI_FinalTerm/blob/main/docs/rl_final/PPO_1M_CLEAR_FINAL_REPORT.md",
+        "note": "892 episodes · boss_dead 199 · recent 100 clear rate 80%"
+      },
+      {
+        "label": "1M PPO 클리어 영상",
+        "url": "https://github.com/LxNx-Hn/AI_FinalTerm/blob/main/videos/05_late_clever_clear.mp4",
+        "note": "1M PPO inference 실제 gameplay"
+      }
+    ]
   },
   {
     "title": "Hot's POD",
@@ -573,6 +585,19 @@ export const projects = [
         {
           "title": "LLM Response",
           "note": "확인된 결과만 설명"
+        }
+      ]
+    },
+    "journey": {
+      "order": 2,
+      "stage": "검색 구조 직접 재설계",
+      "summary": "첫 RAG 프로젝트 이후 retrieval 구조를 직접 다시 구성하면서 Semantic Retrieval과 장소·category 같은 hard constraint를 분리했습니다.",
+      "focus": "Vector similarity를 DB filtering 뒤에도 유지하고, LLM은 확인된 검색 결과를 설명하는 마지막 단계로 제한했습니다.",
+      "evidence": "Semantic Retrieval → Structured Filter → Re-rank → LLM",
+      "links": [
+        {
+          "label": "Repository",
+          "url": "https://github.com/LxNx-Hn/Hot-s-Pod"
         }
       ]
     }
@@ -696,6 +721,23 @@ export const projects = [
         }
       ]
     },
-    "slug": "startup-rag"
+    "slug": "startup-rag",
+    "journey": {
+      "order": 1,
+      "stage": "첫 서비스형 RAG",
+      "summary": "Project Leader로 질문 분류와 routing부터 검색·응답, FastAPI–React 연결, Cloud Run·Netlify 배포까지 전체 흐름을 맞췄습니다.",
+      "focus": "질문 범위와 데이터 경로를 먼저 나누고, 모델·백엔드·secret·비용을 함께 운영 조건으로 봤습니다.",
+      "evidence": "Classifier F1 97.60 · Cloud Run + Netlify",
+      "links": [
+        {
+          "label": "Repository",
+          "url": "https://github.com/LxNx-Hn/chatbot-with-kt-dgucenter"
+        },
+        {
+          "label": "Live Demo",
+          "url": "https://dgu-chat-bot.netlify.app/"
+        }
+      ]
+    }
   }
 ];

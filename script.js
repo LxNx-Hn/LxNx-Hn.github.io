@@ -2,6 +2,7 @@ import { projects } from "./data/projects.js";
 
 const projectList = document.querySelector("[data-project-list]");
 const selectedProjectList = document.querySelector("[data-selected-project-list]");
+const ragJourney = document.querySelector("[data-rag-journey]");
 const externalLinkAttributes = 'target="_blank" rel="noopener noreferrer"';
 
 const renderList = (items) => items.map((item) => `<li>${item}</li>`).join("");
@@ -96,6 +97,45 @@ const renderResults = (items) =>
       <ul class="result-list">${renderList(items)}</ul>
     </section>` : "";
 
+const renderEvidence = (items) =>
+  items?.length ? `
+    <section class="project-evidence" aria-label="결과 근거">
+      <p class="content-label">Evidence</p>
+      <div class="project-evidence-list">
+        ${items.map((item) => `
+          <a href="${item.url}" ${externalLinkAttributes}>
+            <strong>${item.label}</strong>
+            <span>${item.note}</span>
+            <i aria-hidden="true">↗</i>
+          </a>`).join("")}
+      </div>
+    </section>` : "";
+
+const renderJourney = (project) => {
+  const image = project.media?.items?.[0];
+  const links = project.journey.links.map((link) =>
+    `<a href="${link.url}" ${externalLinkAttributes}>${link.label} <span aria-hidden="true">↗</span></a>`
+  ).join("");
+
+  return `
+    <article class="rag-journey-card">
+      <div class="rag-journey-index">0${project.journey.order}</div>
+      <div class="rag-journey-copy">
+        <p class="project-label">${project.journey.stage}</p>
+        <h3>${project.title}</h3>
+        <p class="rag-journey-summary">${project.journey.summary}</p>
+        <p class="rag-journey-focus">${project.journey.focus}</p>
+        <strong class="rag-journey-evidence">${project.journey.evidence}</strong>
+        ${project.diagram ? renderDiagram(project.diagram) : ""}
+        <div class="rag-journey-links">${links}</div>
+      </div>
+      ${image ? `
+        <div class="rag-journey-media">
+          <img src="${image.src}" alt="${image.alt}" loading="lazy" decoding="async" />
+        </div>` : ""}
+    </article>`;
+};
+
 const renderProject = (project, index) => {
   const commits = project.commits.map((commit) => `
     <a class="commit-link" href="${commit.url}" ${externalLinkAttributes}>
@@ -142,6 +182,7 @@ const renderProject = (project, index) => {
       </section>
 
       ${renderResults(project.results)}
+      ${renderEvidence(project.evidence)}
       ${aiNote}
 
       <footer class="project-footer">
@@ -155,5 +196,12 @@ if (selectedProjectList) {
   selectedProjectList.innerHTML = projects.filter((project) => project.featured).map(renderSelected).join("");
 }
 if (projectList) {
-  projectList.innerHTML = projects.map(renderProject).join("");
+  projectList.innerHTML = projects.filter((project) => project.featured).map(renderProject).join("");
+}
+if (ragJourney) {
+  ragJourney.innerHTML = projects
+    .filter((project) => !project.featured && project.journey)
+    .sort((a, b) => a.journey.order - b.journey.order)
+    .map(renderJourney)
+    .join("");
 }

@@ -1,45 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="450" viewBox="0 0 720 450" role="img" aria-labelledby="title desc">
   <title id="title">M_RAG cross-lingual RAG</title>
-  <desc id="desc">Korean query, English paper retrieval, Korean answer, and bilingual evaluation</desc>
+  <desc id="desc">Korean query, English paper retrieval, Korean answer, HyDE CAD SCD comparison, and bilingual evaluation</desc>
 
   <rect width="720" height="450" rx="24" fill="#f0f2ee"/>
-  <rect x="42" y="40" width="76" height="6" rx="3" fill="#e2303d"/>
-  <text x="42" y="82" fill="#b51e2a" font-family="Arial,sans-serif" font-size="16" font-weight="800" letter-spacing="2">CROSS-LINGUAL RAG</text>
-  <text x="42" y="132" fill="#142033" font-family="Arial,sans-serif" font-size="34" font-weight="800">KR → EN → KR</text>
 
-  <line x1="105" y1="232" x2="615" y2="232" stroke="#cdd4cc" stroke-width="3"/>
+  <rect x="42" y="40" width="88" height="7" rx="3.5" fill="#e2303d"/>
+  <text x="42" y="88" fill="#b51e2a" font-family="Arial,sans-serif" font-size="22" font-weight="800" letter-spacing="1.7">CROSS-LINGUAL RAG</text>
+  <text x="42" y="145" fill="#142033" font-family="Arial,sans-serif" font-size="44" font-weight="800">KR → EN → KR</text>
 
-  <g transform="translate(42 183)">
-    <rect width="170" height="102" rx="18" fill="#ffffff" stroke="#d7ddd5" stroke-width="2"/>
-    <circle cx="31" cy="28" r="12" fill="#16243b"/>
-    <text x="31" y="32" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="10" font-weight="800">KR</text>
-    <text x="22" y="72" fill="#142033" font-family="Arial,sans-serif" font-size="23" font-weight="800">Query</text>
-  </g>
-  <circle cx="241" cy="232" r="14" fill="#e2303d"/>
-  <text x="241" y="238" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="18" font-weight="800">→</text>
-
-  <g transform="translate(275 183)">
-    <rect width="170" height="102" rx="18" fill="#16243b"/>
-    <circle cx="31" cy="28" r="12" fill="#ffffff"/>
-    <text x="31" y="32" text-anchor="middle" fill="#16243b" font-family="Arial,sans-serif" font-size="10" font-weight="800">EN</text>
-    <text x="22" y="72" fill="#ffffff" font-family="Arial,sans-serif" font-size="23" font-weight="800">Papers</text>
-  </g>
-  <circle cx="474" cy="232" r="14" fill="#e2303d"/>
-  <text x="474" y="238" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="18" font-weight="800">→</text>
-
-  <g transform="translate(508 183)">
-    <rect width="170" height="102" rx="18" fill="#ffffff" stroke="#d7ddd5" stroke-width="2"/>
-    <circle cx="31" cy="28" r="12" fill="#16243b"/>
-    <text x="31" y="32" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="10" font-weight="800">KR</text>
-    <text x="22" y="72" fill="#142033" font-family="Arial,sans-serif" font-size="23" font-weight="800">Answer</text>
+  <g transform="translate(42 190)">
+    <rect width="184" height="118" rx="18" fill="#ffffff" stroke="#d7ddd5" stroke-width="2"/>
+    <text x="92" y="48" text-anchor="middle" fill="#b51e2a" font-family="Arial,sans-serif" font-size="16" font-weight="800" letter-spacing="1.2">KR</text>
+    <text x="92" y="83" text-anchor="middle" fill="#142033" font-family="Arial,sans-serif" font-size="28" font-weight="800">QUERY</text>
   </g>
 
-  <g transform="translate(42 330)">
-    <rect width="326" height="60" rx="14" fill="#16243b"/>
-    <text x="20" y="38" fill="#ffffff" font-family="Arial,sans-serif" font-size="19" font-weight="800">HyDE · CAD · SCD</text>
+  <text x="246" y="264" fill="#e2303d" font-family="Arial,sans-serif" font-size="34" font-weight="800">→</text>
+
+  <g transform="translate(268 190)">
+    <rect width="184" height="118" rx="18" fill="#16243b"/>
+    <text x="92" y="48" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="16" font-weight="800" letter-spacing="1.2">EN</text>
+    <text x="92" y="83" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="28" font-weight="800">PAPERS</text>
   </g>
-  <g transform="translate(386 330)">
-    <rect width="292" height="60" rx="14" fill="#ffffff" stroke="#d7ddd5" stroke-width="2"/>
-    <text x="20" y="38" fill="#b51e2a" font-family="Arial,sans-serif" font-size="19" font-weight="800">Bilingual Evaluation</text>
+
+  <text x="472" y="264" fill="#e2303d" font-family="Arial,sans-serif" font-size="34" font-weight="800">→</text>
+
+  <g transform="translate(494 190)">
+    <rect width="184" height="118" rx="18" fill="#ffffff" stroke="#d7ddd5" stroke-width="2"/>
+    <text x="92" y="48" text-anchor="middle" fill="#b51e2a" font-family="Arial,sans-serif" font-size="16" font-weight="800" letter-spacing="1.2">KR</text>
+    <text x="92" y="83" text-anchor="middle" fill="#142033" font-family="Arial,sans-serif" font-size="28" font-weight="800">ANSWER</text>
+  </g>
+
+  <g transform="translate(42 344)">
+    <rect width="326" height="66" rx="14" fill="#16243b"/>
+    <text x="163" y="42" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="22" font-weight="800">HyDE · CAD · SCD</text>
+  </g>
+
+  <g transform="translate(386 344)">
+    <rect width="292" height="66" rx="14" fill="#ffffff" stroke="#d7ddd5" stroke-width="2"/>
+    <text x="146" y="42" text-anchor="middle" fill="#b51e2a" font-family="Arial,sans-serif" font-size="20" font-weight="800">Bilingual Evaluation</text>
   </g>
 </svg>

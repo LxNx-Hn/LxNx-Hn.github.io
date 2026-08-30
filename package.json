@@ -4,8 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node --check script.js && node --check data/projects.js && node tests/site.test.mjs",
+    "check": "node --check script.js && node --check data/projects.js && node --check tests/responsive.smoke.mjs && node tests/site.test.mjs",
     "build": "node scripts/build.mjs",
-    "test": "npm run check"
+    "test": "npm run check",
+    "smoke": "node tests/responsive.smoke.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.55.0"
   }
 }

@@ -71,13 +71,15 @@ test("project data stays inside the verified public repository set", () => {
 test("document keeps the required semantic structure and contact", async () => {
   const html = await read("index.html");
   const requiredElements = ["<header", "<nav", "<main", "<section", "<footer"];
-  const requiredIds = ["top", "selected-work", "projects", "ai-workflow", "stack", "approach", "contact"];
+  const requiredIds = ["top", "selected-work", "projects", "rag-journey", "ai-workflow", "experience", "stack", "approach", "contact"];
 
   assert.match(html, /<html lang="ko">/);
   for (const element of requiredElements) assert.ok(html.includes(element), `missing ${element}`);
   for (const id of requiredIds) assert.ok(html.includes(`id="${id}"`), `missing section #${id}`);
   assert.ok(html.includes("AI Engineer"));
   assert.ok(html.includes("mailto:lxnx.kiki@gmail.com"));
+  assert.ok(html.includes('href="#contact">Contact</a>'));
+  assert.ok(html.includes('data-copy-email="lxnx.kiki@gmail.com"'));
   assert.equal(html.includes("AI Archive"), false);
   assert.equal(html.includes("/notes/"), false);
   assert.equal(html.includes("\uFFFD"), false);
@@ -171,4 +173,33 @@ test("CODE BLUE results link directly to result evidence", () => {
   assert.ok(codeBlue.evidence?.some((item) =>
     item.url.endsWith("/videos/05_late_clever_clear.mp4")
   ));
+});
+
+
+test("experience section records the verified timeline and technical leadership", async () => {
+  const html = await read("index.html");
+  for (const text of [
+    "KT디지털인재장학생",
+    "KT그룹희망나눔재단 · 2022.03–2026.12",
+    "2025.08",
+    "Project Leader · Technical Lead",
+    "2026.07–08",
+    "AI Team Lead",
+    "동국대학교 WISE캠퍼스",
+    "컴퓨터공학과 · 2021.03–2027.02",
+    "2023.02–2024.08",
+  ]) {
+    assert.ok(html.includes(text), `missing experience text: ${text}`);
+  }
+});
+
+test("contact works without requiring a configured mail client", async () => {
+  const html = await read("index.html");
+  const script = await read("script.js");
+
+  assert.ok(html.includes('href="#contact">Contact</a>'));
+  assert.ok(html.includes('data-copy-email="lxnx.kiki@gmail.com"'));
+  assert.ok(script.includes("navigator.clipboard"));
+  assert.ok(script.includes("fallbackCopyText"));
+  assert.ok(script.includes('document.execCommand("copy")'));
 });

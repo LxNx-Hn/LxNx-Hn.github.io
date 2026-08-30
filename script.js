@@ -205,3 +205,49 @@ if (ragJourney) {
     .map(renderJourney)
     .join("");
 }
+
+
+const copyEmailButton = document.querySelector("[data-copy-email]");
+const copyStatus = document.querySelector("[data-copy-status]");
+
+const fallbackCopyText = (text) => {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  const copied = document.execCommand("copy");
+  textarea.remove();
+  return copied;
+};
+
+if (copyEmailButton) {
+  copyEmailButton.addEventListener("click", async () => {
+    const email = copyEmailButton.dataset.copyEmail;
+    let copied = false;
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(email);
+        copied = true;
+      } else {
+        copied = fallbackCopyText(email);
+      }
+    } catch {
+      copied = fallbackCopyText(email);
+    }
+
+    copyEmailButton.textContent = copied ? "Copied" : "Copy failed";
+    if (copyStatus) {
+      copyStatus.textContent = copied
+        ? "이메일 주소를 복사했습니다."
+        : `복사하지 못했습니다. ${email} 주소를 직접 복사해주세요.`;
+    }
+
+    window.setTimeout(() => {
+      copyEmailButton.textContent = "Copy Email";
+    }, 1800);
+  });
+}

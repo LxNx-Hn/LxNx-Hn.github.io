@@ -77,6 +77,19 @@ try {
       { timeout: 15_000 },
     );
 
+    await page.waitForFunction(
+      () => [...document.querySelectorAll(".project-media-frame img, .rag-journey-media img")]
+        .every((img) => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0),
+      { timeout: 20_000 },
+    );
+
+    const brokenProjectMedia = await page.locator(".project-media-frame img, .rag-journey-media img").evaluateAll(
+      (images) => images
+        .filter((img) => !img.complete || img.naturalWidth === 0 || img.naturalHeight === 0)
+        .map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
+    );
+    assert.deepEqual(brokenProjectMedia, [], `${viewport.name}: broken project media`);
+
     if (viewport.width <= 1100) {
       const hotPod = page.locator(".rag-journey-card").filter({ hasText: "Hot's POD" });
       const columns = await hotPod.locator(".diagram-flow").evaluate(

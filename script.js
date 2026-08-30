@@ -68,7 +68,7 @@ const renderMedia = (media) => {
 
   return `
     <section class="project-media" aria-label="프로젝트 화면 및 자료">
-      <div class="project-media-grid">${items}</div>
+      <div class="project-media-grid${media.layout ? ` project-media-grid--${media.layout}` : ""}">${items}</div>
       ${links}
     </section>`;
 };

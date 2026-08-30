@@ -110,21 +110,19 @@ export const projects = [
       "VWorld 건물 정보와 태양 위치로 출발 시각별 그늘 비율·그늘 도보거리를 반영하고, 데이터 확인 수준을 exact / estimated / unavailable로 구분"
     ],
     "media": {
+      "layout": "portrait",
       "items": [
         {
-          "src": "https://raw.githubusercontent.com/LxNx-Hn/KT-10/main/docs/app/hero-app.webp",
-          "alt": "동넷 경로 추천 서비스 메인 화면",
-          "caption": "실제 서비스 화면"
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/KT-10/main/presentation/public/app/kt-route-compare.png",
+          "alt": "동넷 추천 경로 비교 화면",
+          "caption": "추천 경로 비교",
+          "sourceSha": "ce52a5e67ede0bd7ad233f1924404aa567ea2b39"
         },
         {
-          "src": "https://raw.githubusercontent.com/LxNx-Hn/KT-10/main/docs/app/route-detail.webp",
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/KT-10/main/presentation/public/app/kt-route-detail.png",
           "alt": "동넷 경로 상세 정보 화면",
-          "caption": "경로 상세 및 접근성 정보"
-        },
-        {
-          "src": "https://raw.githubusercontent.com/LxNx-Hn/KT-10/main/docs/app/shade-overlay.webp",
-          "alt": "동넷 시간대별 건물 그늘 오버레이 화면",
-          "caption": "출발 시각별 건물 그늘 오버레이"
+          "caption": "경로 상세 및 접근성 정보",
+          "sourceSha": "f2b87c354834d6c7b79ae78718babd9abcb3f080"
         }
       ],
       "links": [
@@ -272,12 +270,14 @@ export const projects = [
         {
           "src": "https://raw.githubusercontent.com/LxNx-Hn/M_RAG/main/docs/PAPER/figures/system_overview.svg",
           "alt": "M_RAG 전체 시스템 및 실험 구조",
-          "caption": "System overview"
+          "caption": "System overview",
+          "sourceSha": "ea3846565160abfa2c463a17ccbb678f0594e5e3"
         },
         {
           "src": "https://raw.githubusercontent.com/LxNx-Hn/M_RAG/main/docs/PAPER/figures/factorial_design.svg",
           "alt": "HyDE CAD SCD factorial experiment design",
-          "caption": "HyDE × CAD × SCD 실험 설계"
+          "caption": "HyDE × CAD × SCD 실험 설계",
+          "sourceSha": "3a8601e3961f3b4a43ee8f9c89988bafa2702bea"
         }
       ],
       "links": [
@@ -440,13 +440,15 @@ export const projects = [
       "items": [
         {
           "src": "https://raw.githubusercontent.com/LxNx-Hn/AI_FinalTerm/main/presentations/final/assets/source_images/game_warning_tile.png",
-          "alt": "CODE BLUE 보스전 warning tile 게임 화면",
-          "caption": "직접 만든 CODE BLUE 보스전"
+          "alt": "CODE BLUE 보스전 게임 화면",
+          "caption": "직접 만든 CODE BLUE 보스전",
+          "sourceSha": "d2b03e4d596f2586860274563575a5d2025dc746"
         },
         {
           "src": "https://raw.githubusercontent.com/LxNx-Hn/AI_FinalTerm/main/docs/rl_final/figures/clear_rate_by_step.png",
           "alt": "PPO 학습 step별 클리어율 그래프",
-          "caption": "1M PPO 학습 중 클리어율 변화"
+          "caption": "1M PPO 학습 중 클리어율 변화",
+          "sourceSha": "32be07d3eb86197aa12705f4020d97b5d12bfeef"
         }
       ],
       "links": [
@@ -718,12 +720,14 @@ export const projects = [
         {
           "src": "https://raw.githubusercontent.com/LxNx-Hn/chatbot-with-kt-dgucenter/main/ops/images/Screenshot/%EB%B0%98%EC%9D%91%ED%98%95UI.png",
           "alt": "창업지원 RAG 챗봇 반응형 UI",
-          "caption": "Desktop / Mobile UI"
+          "caption": "Desktop / Mobile UI",
+          "sourceSha": "2943dd623db082667af7b2fca4f24f7f30f6aa8e"
         },
         {
           "src": "https://raw.githubusercontent.com/LxNx-Hn/chatbot-with-kt-dgucenter/main/ops/images/Screenshot/%EC%98%88%EC%8B%9C_%EC%A0%95%EC%B1%85.png",
           "alt": "창업지원 RAG 챗봇 정책 질문 응답 예시",
-          "caption": "정책 질문 응답 예시"
+          "caption": "정책 질문 응답 예시",
+          "sourceSha": "a49cf07747fe4ffcc2c62306cdd4a8e30f3d9793"
         }
       ],
       "links": [

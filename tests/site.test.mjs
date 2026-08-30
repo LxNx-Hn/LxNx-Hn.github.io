@@ -308,7 +308,10 @@ test("Dongnet explains the product before the ranking details and includes shade
   assert.ok(dongnet.intro.includes("시간대별 건물 그늘"));
   assert.ok(dongnet.selected.summary.includes("시간대별 건물 그늘"));
   assert.ok(dongnet.contributions.some((item) => item.includes("VWorld 건물 정보와 태양 위치")));
-  assert.ok(dongnet.media.items.some((item) => item.src.endsWith("/docs/app/shade-overlay.webp")));
+  assert.equal(dongnet.media.items.some((item) => item.src.includes("shade-overlay")), false);
+  assert.equal(dongnet.media.layout, "portrait");
+  assert.ok(dongnet.media.items.some((item) => item.src.endsWith("/presentation/public/app/kt-route-compare.png")));
+  assert.ok(dongnet.media.items.some((item) => item.src.endsWith("/presentation/public/app/kt-route-detail.png")));
 });
 
 
@@ -335,4 +338,30 @@ test("project identity is rendered before implementation detail", async () => {
   assert.ok(script.includes("project-intro selected-intro"));
   assert.ok(script.includes("project-intro rag-journey-intro"));
   assert.ok(script.includes("project-intro project-intro-main"));
+});
+
+
+test("portfolio media uses verified unique source blobs", () => {
+  const seen = new Map();
+
+  for (const project of projects) {
+    for (const item of project.media?.items || []) {
+      assert.match(item.sourceSha || "", /^[a-f0-9]{40}$/, `missing verified source SHA: ${project.title} / ${item.caption}`);
+      const previous = seen.get(item.sourceSha);
+      assert.equal(
+        previous,
+        undefined,
+        `same source blob exposed twice with different media labels: ${previous} / ${project.title} · ${item.caption}`,
+      );
+      seen.set(item.sourceSha, `${project.title} · ${item.caption}`);
+    }
+  }
+});
+
+test("Dongnet no longer exposes the mislabeled shade screenshot alias", () => {
+  const dongnet = projects.find((project) => project.title === "동넷");
+  const serialized = JSON.stringify(dongnet.media);
+  assert.equal(serialized.includes("shade-overlay.webp"), false);
+  assert.equal(serialized.includes("docs/app/hero-app.webp"), false);
+  assert.equal(serialized.includes("docs/app/route-detail.webp"), false);
 });

@@ -958,3 +958,24 @@ img { max-width: 100%; }
   .selected-intro,
   .selected-summary { min-height: 0; }
 }
+
+
+/* Verified media layouts */
+.project-media-grid--portrait {
+  grid-template-columns: repeat(2, minmax(220px, 340px));
+  justify-content: center;
+  gap: 28px;
+}
+.project-media-grid--portrait .project-media-frame {
+  aspect-ratio: 1 / 2;
+  max-height: 560px;
+  background: #f4f5f2;
+}
+.project-media-grid--portrait .project-media-frame img {
+  object-fit: contain;
+}
+@media (max-width: 760px) {
+  .project-media-grid--portrait {
+    grid-template-columns: minmax(0, 340px);
+  }
+}

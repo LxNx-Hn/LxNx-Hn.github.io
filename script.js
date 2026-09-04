@@ -6,7 +6,7 @@ const ragJourney = document.querySelector("[data-rag-journey]");
 const externalLinkAttributes = 'target="_blank" rel="noopener noreferrer"';
 
 const collaborationLabels = {
-  "동넷": "한국도로교통공단 협업",
+  "동넷": "한국교통안전공단 협업",
   "창업지원 RAG 챗봇": "대구광역시 협업",
 };
 

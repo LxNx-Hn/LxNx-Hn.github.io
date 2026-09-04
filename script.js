@@ -5,6 +5,16 @@ const selectedProjectList = document.querySelector("[data-selected-project-list]
 const ragJourney = document.querySelector("[data-rag-journey]");
 const externalLinkAttributes = 'target="_blank" rel="noopener noreferrer"';
 
+const collaborationLabels = {
+  "동넷": "한국도로교통공단 협업",
+  "창업지원 RAG 챗봇": "대구광역시 협업",
+};
+
+const renderProjectLabel = (project, label) => {
+  const collaboration = collaborationLabels[project.title];
+  return collaboration ? `${collaboration} · ${label}` : label;
+};
+
 const renderList = (items) => items.map((item) => `<li>${item}</li>`).join("");
 
 const renderStack = (stack) =>
@@ -23,7 +33,7 @@ const renderSelected = (project) => {
           <img src="${image.src}" alt="" loading="eager" decoding="async" />
         </a>` : ""}
       <div class="selected-copy">
-        <p class="project-label">${project.label}</p>
+        <p class="project-label">${renderProjectLabel(project, project.label)}</p>
         <h3>${project.title}</h3>
         <p class="project-intro selected-intro">${project.intro}</p>
         <p class="selected-summary">${project.selected.summary}</p>
@@ -149,7 +159,7 @@ const renderJourney = (project) => {
       <header class="rag-journey-header">
         <div class="rag-journey-index">0${project.journey.order}</div>
         <div>
-          <p class="project-label">${project.journey.stage}</p>
+          <p class="project-label">${renderProjectLabel(project, project.journey.stage)}</p>
           <h3>${project.title}</h3>
           <p class="project-intro rag-journey-intro">${project.intro}</p>
           <p class="rag-journey-role">${project.journey.role}</p>
@@ -211,7 +221,7 @@ const renderProject = (project, index) => {
     <article class="project-chapter" id="project-${project.slug}" aria-labelledby="project-title-${index + 1}">
       <header class="project-header">
         <div class="project-heading-copy">
-          <p class="project-label">${project.label}</p>
+          <p class="project-label">${renderProjectLabel(project, project.label)}</p>
           <h3 id="project-title-${index + 1}">${project.title}</h3>
           <p class="project-intro project-intro-main">${project.intro}</p>
           <p class="project-overview-copy">${project.overview}</p>

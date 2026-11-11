@@ -141,18 +141,18 @@ export const projects = [
     "intro": "이동취약자가 경로를 고를 때 소요시간뿐 아니라 경사·보행 부담·환승·접근성·시간대별 건물 그늘까지 함께 비교할 수 있게 만든 맞춤 경로 추천 서비스입니다."
   },
   {
-    "title": "M_RAG",
+    "title": "Cube-RAG",
     "repo": "https://github.com/LxNx-Hn/M_RAG",
-    "label": "Cross-lingual RAG 졸업논문 연구 진행 중 · M_RAG",
+    "label": "Cross-lingual RAG 졸업논문 · Cube-RAG",
     "featured": true,
-    "overview": "같은 Paper-RAG backbone에서 HyDE, CAD, SCD 8개 조합을 비교했고, 모델 효과뿐 아니라 서로 다른 언어가 섞인 결과를 어떤 조건에서 평가해야 하는지도 실험의 한 부분으로 다뤘습니다. 한국어 유지 정도, 번역이 평가에 주는 영향, judge가 바뀌어도 같은 차이가 남는지를 나눠 확인하고 있습니다.",
+    "overview": "한국어 질문으로 영어 학술·기술 문서를 검색해 한국어로 답하는 고정 Paper-RAG 파이프라인에서, 검색 단계의 HyDE와 생성 단계의 CAD·SCD를 켜고 끈 8개 조건을 같은 질문 60개에 적용해 480개 답변을 생성·평가했습니다. 전체 평균에 더해 질문을 수치·방법·개념과 결과 세 유형으로 나눠 다시 비교하고, 점수가 크게 바뀐 질문은 실제 검색 근거와 답변을 대조해 유형마다 어떤 기법 조합을 고를지 기준을 정리했습니다. 2026년 11월 졸업자격실험보고서와 A1 포스터로 제출했습니다.",
     "stack": [
       {
         "label": "RAG / Retrieval",
         "items": [
           "BGE-M3",
           "BM25",
-          "RRF",
+          "Weighted RRF",
           "CrossEncoder",
           "HyDE"
         ]
@@ -170,10 +170,10 @@ export const projects = [
       {
         "label": "Evaluation",
         "items": [
-          "RAGAS",
-          "NVIDIA NIM Judge",
-          "paired factor analysis",
-          "language adherence"
+          "RAGAS 0.2.15",
+          "GPT-4o Judge",
+          "질문 유형별 사후 분석",
+          "한국어 문자 비율"
         ]
       },
       {
@@ -181,19 +181,35 @@ export const projects = [
         "items": [
           "Python",
           "ChromaDB",
-          "PostgreSQL",
           "A100 80GB",
+          "FastAPI / React",
           "provenance / guarded runner"
         ]
       }
     ],
     "contributions": [
-      "한국어 질의–영어 논문 환경에서 HyDE, CAD, SCD 8개 조합의 생성·평가 실험을 구성했습니다.",
-      "SCD의 한국어 유지 효과를 RAGAS 점수와 분리해 생성 답변의 언어 준수율로 직접 측정했습니다.",
-      "번역 여부가 SCD 효과와 섞이는 문제를 확인하고 영어·한국어 대칭 평가와 번역 integrity check를 설계했습니다.",
-      "같은 평가 입력을 서로 다른 judge로 다시 채점해 특정 judge에서만 나타나는 차이를 최종 결론에서 분리했습니다."
+      "한국어 질문 60개 × HyDE·CAD·SCD 8개 조건, 480개 답변의 생성·평가 실험을 고정 파이프라인 위에서 구성했습니다.",
+      "검색·재정렬·생성 설정은 평가와 분리한 튜닝 질문에서만 정하고, 본 실험에서는 세 기법의 적용 여부만 바꿨습니다.",
+      "질문을 수치·방법·개념과 결과 유형으로 나눠 기법별 이득과 비용을 비교하고, 크게 바뀐 질문은 실제 답변까지 대조했습니다.",
+      "SCD를 원 논문 방식으로 다시 구현하고, 번역이 섞인 cross-lingual 평가 조건을 대칭 평가와 judge 교차 채점으로 검증했습니다."
     ],
     "cases": [
+      {
+        "title": "질문 유형에 따라 달라진 기법 효과",
+        "problem": "8개 조건의 전체 평균만 보면 HyDE 단독의 답변 관련성이 가장 높았고, 두 기법 이상을 조합한 조건은 모두 그보다 낮았습니다. 평균만으로는 어떤 질문에 어떤 기법을 써야 하는지 기준이 나오지 않았습니다.",
+        "cause": "문서 질의응답에서는 수치를 옮기는 질문, 과정을 설명하는 질문, 개념을 해석하는 질문이 요구하는 작업이 다르고, 같은 기법도 질문 종류에 따라 이득과 손실이 엇갈릴 수 있었습니다.",
+        "approach": "60개 질문을 수치형 18개, 방법형 25개, 개념과 결과형 17개로 나눠 같은 비교를 반복하고, 유형 안에서 점수가 크게 오르거나 내린 질문은 검색 근거와 답변을 같은 질문의 미적용 결과와 나란히 놓고 봤습니다.",
+        "solution": "유형별 평균 표, 질문 하나를 선 하나로 그린 평행좌표 그림, 실제 답변 사례 9개를 부록으로 정리해 평균 아래의 원인을 확인할 수 있게 했습니다.",
+        "result": "HyDE는 방법형 질문의 답변 관련성을 0.575에서 0.745로 높였고, CAD는 수치형 질문의 근거 충실도를 0.826에서 0.896으로 높였지만 개념과 결과형 질문의 관련성은 0.778에서 0.663으로 낮췄습니다. 이를 바탕으로 관련성 우선이면 HyDE, 한국어 답변이 필요하면 HyDE+SCD, 수치형 충실도 우선이면 HyDE+CAD라는 선택 기준을 제시했습니다."
+      },
+      {
+        "title": "방법과 구현 효과 분리",
+        "problem": "초기 penalty_additive SCD는 한국어 유지에 거의 도움이 되지 않았고 일부 이미 한국어인 답변을 오히려 악화시켰습니다.",
+        "cause": "원 논문과 코드를 다시 대조해보니 target-language boost와 warm-up이 빠져 있었고, reference의 multiplicative scaling 대신 additive penalty를 사용하고 있었습니다.",
+        "approach": "기존 결과를 지우고 새 구현으로 덮으면 실패 원인을 잃는다고 봤습니다. '내 구현에서의 결과'와 '논문 방식 자체의 결과'를 분리해야 했습니다.",
+        "solution": "기존 penalty_additive를 그대로 보존하고 reference_scd를 별도 mode로 구현해 같은 실험 구조에서 다시 생성·평가했습니다.",
+        "result": "reference_scd에서 한국어 비율 paired +0.2203, 76쌍 중 68쌍 개선을 확인했습니다. 초기 null result를 SCD 방법 자체의 실패로 잘못 결론내리지 않게 됐습니다."
+      },
       {
         "title": "Cross-lingual 평가 조건",
         "problem": "질문은 한국어, 검색 context와 reference는 영어, SCD가 켜진 답변은 한국어에 가까웠습니다. 이 상태에서 RAGAS를 돌리면 내용 품질과 언어 차이가 같은 점수 안에 섞입니다.",
@@ -217,14 +233,6 @@ export const projects = [
         "approach": "첫 결과를 유리하거나 불리하다는 이유로 버리지 않고 입력을 그대로 고정한 채, normalization에 사용하지 않은 별도 고정 judge가 같은 방향을 재현하는지 확인했습니다.",
         "solution": "같은 영어·한국어 패널을 gpt-4.1-2025-04-14로 다시 채점하고 19개 query cluster 기준 paired bootstrap 신뢰구간을 비교했습니다.",
         "result": "gpt-4o에서 보였던 answer-relevancy의 비영점 음의 구간이 gpt-4.1에서는 재현되지 않았습니다. 최종 결론을 '한국어 유지 효과는 확인, judge에 강건한 RAG 품질 차이는 미확인'으로 제한했습니다."
-      },
-      {
-        "title": "방법과 구현 효과 분리",
-        "problem": "초기 penalty_additive SCD는 한국어 유지에 거의 도움이 되지 않았고 일부 이미 한국어인 답변을 오히려 악화시켰습니다.",
-        "cause": "원 논문과 코드를 다시 대조해보니 target-language boost와 warm-up이 빠져 있었고, reference의 multiplicative scaling 대신 additive penalty를 사용하고 있었습니다.",
-        "approach": "기존 결과를 지우고 새 구현으로 덮으면 실패 원인을 잃는다고 봤습니다. '내 구현에서의 결과'와 '논문 방식 자체의 결과'를 분리해야 했습니다.",
-        "solution": "기존 penalty_additive를 그대로 보존하고 reference_scd를 별도 mode로 구현해 같은 실험 구조에서 다시 생성·평가했습니다.",
-        "result": "reference_scd에서 한국어 비율 paired +0.2203, 76쌍 중 68쌍 개선을 확인했습니다. 초기 null result를 SCD 방법 자체의 실패로 잘못 결론내리지 않게 됐습니다."
       }
     ],
     "commits": [
@@ -254,54 +262,55 @@ export const projects = [
         "url": "https://github.com/LxNx-Hn/M_RAG/commit/ae5b64e87b5ae4c02c2bfa80da0ec4ced068bfcb"
       },
       {
-        "label": "논문 초안 결과 정렬",
-        "sha": "a5c15d2",
-        "url": "https://github.com/LxNx-Hn/M_RAG/commit/a5c15d2539698acfb02e5eb56758bee48e292702"
+        "label": "최종 60문항 논문·포스터 패키지 정리",
+        "sha": "f62b7ff",
+        "url": "https://github.com/LxNx-Hn/M_RAG/commit/f62b7fff6387efe9cf9b823a080b6ad0a5000a85"
       }
     ],
     "results": [
-      "19 queries × 8 HyDE/CAD/SCD configs = 152 generations",
-      "reference SCD 한국어 문자 비율 paired +0.2203 · 68/76 쌍 개선",
-      "동일 검색 context 38쌍으로 영어/한국어 대칭 평가 구성",
-      "한국어 유지 효과는 확인했지만 judge에 강건한 RAG-quality 차이는 확인하지 못함"
+      "한국어 질문 60개 × 8 HyDE/CAD/SCD 조건 = 480 generations",
+      "HyDE 답변 관련성 0.683 → 0.763, 8개 조건 중 최고",
+      "SCD 적용 4개 조건의 한국어 문자 비율 0.699–0.807, 미적용 0.488–0.556",
+      "CAD 근거 충실도 0.810 → 0.839(58문항), 처리 시간은 약 3배",
+      "방법형 질문에서 HyDE 답변 관련성 0.575 → 0.745"
     ],
     "media": {
       "items": [
         {
-          "src": "https://raw.githubusercontent.com/LxNx-Hn/M_RAG/main/docs/PAPER/figures/system_overview.svg",
-          "alt": "M_RAG 전체 시스템 및 실험 구조",
-          "caption": "System overview",
-          "sourceSha": "ea3846565160abfa2c463a17ccbb678f0594e5e3"
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/M_RAG/main/FINALDOCS/FIGURES/fig1_1_research_setting.png",
+          "alt": "Paper-RAG의 검색 단계와 생성 단계에서 HyDE, CAD, SCD가 적용되는 위치",
+          "caption": "HyDE · CAD · SCD 적용 위치",
+          "sourceSha": "39aecd85f1f3b3bc5abc1d34c3fb7e5025661fc4"
         },
         {
-          "src": "https://raw.githubusercontent.com/LxNx-Hn/M_RAG/main/docs/PAPER/figures/factorial_design.svg",
-          "alt": "HyDE CAD SCD factorial experiment design",
-          "caption": "HyDE × CAD × SCD 실험 설계",
-          "sourceSha": "3a8601e3961f3b4a43ee8f9c89988bafa2702bea"
+          "src": "https://raw.githubusercontent.com/LxNx-Hn/M_RAG/main/FINALDOCS/FIGURES/fig5_4_parallel_method.png",
+          "alt": "방법형 질문의 조건별 평가 지표를 질문 하나당 선 하나로 그린 평행좌표 그림",
+          "caption": "방법형 질문의 조건별 점수",
+          "sourceSha": "e8e787bd569d68856cb0b9f55126b175d6e526e5"
         }
       ],
       "links": [
         {
-          "label": "국문 논문 초안 PDF",
-          "url": "https://github.com/LxNx-Hn/M_RAG/blob/main/docs/PAPER/output/M_RAG_THESIS_KO.pdf"
+          "label": "졸업자격실험보고서 PDF",
+          "url": "https://github.com/LxNx-Hn/M_RAG/blob/main/FINALDOCS/DELIVERY/GRADUATION_REPORT_60Q_FINAL.pdf"
         },
         {
-          "label": "영문 논문 초안 PDF",
-          "url": "https://github.com/LxNx-Hn/M_RAG/blob/main/docs/PAPER/output/M_RAG_THESIS_EN.pdf"
+          "label": "A1 포스터 PDF",
+          "url": "https://github.com/LxNx-Hn/M_RAG/blob/main/FINALDOCS/POSTER/FINAL/M_RAG_A1_FINAL_PRINT.pdf"
         }
       ]
     },
-    "slug": "m-rag",
+    "slug": "cube-rag",
     "selected": {
-      "summary": "한국어 질문으로 영어 논문을 검색하는 RAG에서 HyDE·CAD·SCD를 비교하고, cross-lingual 평가 조건 자체를 다시 검증했습니다.",
+      "summary": "한국어 질문으로 영어 논문을 검색하는 RAG에서 HyDE·CAD·SCD 8개 조합을 질문 유형별로 비교해, 유형마다 적합한 기법 조합을 고르는 기준을 정리했습니다.",
       "role": "Experiment Design · RAG · Evaluation",
-      "evidence": "한국어 문자 비율 +0.2203 · 76쌍 중 68쌍 개선",
+      "evidence": "60문항 × 8조건 = 480 답변 · HyDE 관련성 0.683 → 0.763",
       "thumbnail": {
         "src": "./assets/mrag-selected.svg",
-        "alt": "한국어 질의에서 영어 논문 검색, HyDE·CAD·SCD 비교와 cross-lingual 평가로 이어지는 M_RAG 요약 도식"
+        "alt": "한국어 질의로 영어 논문을 검색하는 cross-lingual RAG에서 HyDE·CAD·SCD 8개 조건을 질문 유형별로 비교한 Cube-RAG 요약 도식"
       }
     },
-    "intro": "한국어 질문으로 영어 논문을 검색하고 한국어로 답하는 cross-lingual RAG의 검색·생성·평가 조건을 비교하는 졸업논문 연구 프로젝트입니다."
+    "intro": "한국어 질문으로 영어 논문을 검색하고 한국어로 답하는 cross-lingual RAG에서 HyDE·CAD·SCD와 그 조합을 질문 유형별로 비교한 졸업논문 연구 프로젝트입니다."
   },
   {
     "title": "CODE BLUE · PPO Boss Agent",

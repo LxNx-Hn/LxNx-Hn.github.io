@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="450" viewBox="0 0 720 450" role="img" aria-labelledby="title desc">
-  <title id="title">M_RAG HyDE CAD SCD factor analysis</title>
-  <desc id="desc">HyDE, CAD, and SCD factor analysis for Korean-query English-paper RAG with bilingual evaluation</desc>
+  <title id="title">Cube-RAG HyDE CAD SCD question-type analysis</title>
+  <desc id="desc">HyDE, CAD, and SCD factor analysis across 60 Korean questions and 8 conditions for Korean-query English-paper RAG</desc>
 
   <rect width="720" height="450" rx="24" fill="#f0f2ee"/>
 
   <rect x="42" y="40" width="88" height="7" rx="3.5" fill="#e2303d"/>
-  <text x="42" y="87" fill="#b51e2a" font-family="Arial,sans-serif" font-size="21" font-weight="800" letter-spacing="1.8">M_RAG · THESIS</text>
+  <text x="42" y="87" fill="#b51e2a" font-family="Arial,sans-serif" font-size="21" font-weight="800" letter-spacing="1.8">CUBE-RAG · THESIS</text>
 
   <text x="42" y="157" fill="#142033" font-family="Arial,sans-serif" font-size="48" font-weight="800">HyDE × CAD × SCD</text>
-  <text x="42" y="202" fill="#142033" font-family="Arial,sans-serif" font-size="27" font-weight="800" letter-spacing="2.2">FACTOR ANALYSIS</text>
+  <text x="42" y="202" fill="#142033" font-family="Arial,sans-serif" font-size="27" font-weight="800" letter-spacing="2.2">QUESTION-TYPE ANALYSIS</text>
 
   <g transform="translate(42 246)">
     <rect width="196" height="84" rx="16" fill="#ffffff" stroke="#d7ddd5" stroke-width="2"/>
@@ -30,6 +30,6 @@
 
   <g transform="translate(42 355)">
     <rect width="636" height="55" rx="14" fill="#ffffff" stroke="#d7ddd5" stroke-width="2"/>
-    <text x="318" y="35" text-anchor="middle" fill="#b51e2a" font-family="Arial,sans-serif" font-size="20" font-weight="800">Korean-query · English-paper RAG · Bilingual Evaluation</text>
+    <text x="318" y="35" text-anchor="middle" fill="#b51e2a" font-family="Arial,sans-serif" font-size="20" font-weight="800">Korean-query · English-paper RAG · 60 Q × 8 Conditions</text>
   </g>
 </svg>

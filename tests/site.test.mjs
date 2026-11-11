@@ -137,8 +137,8 @@ test("selected work evidence stays precise", () => {
     "380 OD · 1,137 routes · bootstrap NDCG@3 0.9166–0.9596",
   );
   assert.equal(
-    byTitle["M_RAG"].selected.evidence,
-    "한국어 문자 비율 +0.2203 · 76쌍 중 68쌍 개선",
+    byTitle["Cube-RAG"].selected.evidence,
+    "60문항 × 8조건 = 480 답변 · HyDE 관련성 0.683 → 0.763",
   );
   assert.equal(
     byTitle["CODE BLUE · PPO Boss Agent"].selected.evidence,
@@ -254,8 +254,8 @@ test("experience is surfaced immediately after selected work", async () => {
   assert.ok(html.includes('href="#experience">Experience</a>'));
 });
 
-test("M_RAG uses a dedicated selected-work thumbnail", () => {
-  const mrag = projects.find((project) => project.title === "M_RAG");
+test("Cube-RAG uses a dedicated selected-work thumbnail", () => {
+  const mrag = projects.find((project) => project.title === "Cube-RAG");
   assert.equal(mrag.selected.thumbnail?.src, "./assets/mrag-selected.svg");
   assert.ok(mrag.selected.thumbnail?.alt.includes("cross-lingual"));
 });
@@ -282,16 +282,21 @@ test("Dongnet case copy avoids defensive negative phrasing", () => {
 });
 
 
-test("M_RAG is presented as an ongoing thesis with draft documents", async () => {
+test("Cube-RAG is presented as a completed thesis with submitted documents", async () => {
   const html = await read("index.html");
-  const mrag = projects.find((project) => project.title === "M_RAG");
+  const cube = projects.find((project) => project.title === "Cube-RAG");
 
-  assert.ok(html.includes("졸업논문 주제로 cross-lingual RAG의 평가 조건을 다룬 M_RAG를 진행 중입니다."));
-  assert.ok(mrag.label.includes("졸업논문 연구 진행 중"));
-  assert.ok(mrag.intro.includes("졸업논문 연구 프로젝트"));
-  assert.ok(mrag.media.links.some((link) => link.label === "국문 논문 초안 PDF"));
-  assert.ok(mrag.media.links.some((link) => link.label === "영문 논문 초안 PDF"));
-  assert.ok(mrag.commits.some((item) => item.label === "논문 초안 결과 정렬"));
+  assert.ok(html.includes("HyDE·CAD·SCD를 질문 유형별로 비교한 Cube-RAG를 마쳤습니다."));
+  assert.equal(html.includes("M_RAG"), false);
+  assert.equal(cube.slug, "cube-rag");
+  assert.ok(html.includes('href="#project-cube-rag"'));
+  assert.equal(cube.label.includes("진행 중"), false);
+  assert.ok(cube.intro.includes("졸업논문 연구 프로젝트"));
+  assert.ok(cube.results.some((item) => item.includes("480 generations")));
+  assert.ok(cube.media.links.some((link) => link.label === "졸업자격실험보고서 PDF"));
+  assert.ok(cube.media.links.some((link) => link.label === "A1 포스터 PDF"));
+  assert.ok(cube.media.items.every((item) => item.src.includes("/FINALDOCS/FIGURES/")));
+  assert.ok(cube.commits.some((item) => item.label === "최종 60문항 논문·포스터 패키지 정리"));
 });
 
 
@@ -311,7 +316,7 @@ test("Dongnet explains the product before the ranking details and includes shade
 test("every portfolio project states what the project is before technical detail", () => {
   const expected = {
     "동넷": "맞춤 경로 추천 서비스",
-    "M_RAG": "졸업논문 연구 프로젝트",
+    "Cube-RAG": "졸업논문 연구 프로젝트",
     "CODE BLUE · PPO Boss Agent": "게임 AI 프로젝트",
     "Hot's POD": "검색 서비스",
     "창업지원 RAG 챗봇": "RAG 챗봇 서비스",
@@ -365,9 +370,9 @@ test("README does not present a fabricated portfolio screenshot", async () => {
   assert.equal(readme.includes("portfolio-preview.svg"), false);
 });
 
-test("M_RAG selected thumbnail stays intentionally simple", async () => {
+test("Cube-RAG selected thumbnail stays intentionally simple", async () => {
   const svg = await read("assets/mrag-selected.svg");
-  for (const label of ["M_RAG · THESIS", "HyDE × CAD × SCD", "FACTOR ANALYSIS", "Bilingual Evaluation"]) {
+  for (const label of ["CUBE-RAG · THESIS", "HyDE × CAD × SCD", "QUESTION-TYPE ANALYSIS", "60 Q × 8 Conditions"]) {
     assert.ok(svg.includes(label), `missing thumbnail label: ${label}`);
   }
   for (const noisyText of ["KR → EN → KR", "19 queries", "translation confound", "judge-robust", "Korean maintenance", "user question", "retrieval context"]) {
